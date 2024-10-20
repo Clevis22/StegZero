@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StegZero</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1a1b1e;
+            --bg-secondary: #2d2e32;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --accent-primary: #5865f2;
+            --accent-secondary: #4752c4;
+            --success: #43b581;
+            --danger: #f04747;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), #7289da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .section-title i {
+            margin-right: 0.75rem;
+            color: var(--accent-primary);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            background-color: var(--bg-primary);
+            border: 2px solid #3f4147;
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #3ca374;
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+        }
+
+        .result {
+            background-color: var(--bg-primary);
+            border: 2px solid #3f4147;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            font-family: monospace;
+            color: var(--text-primary);
+            word-break: break-all;
+            min-height: 60px;
+        }
+
+        .separator {
+            border: none;
+            height: 1px;
+            background-color: #3f4147;
+            margin: 2rem 0;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-section {
+            margin-bottom: 3rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+
+        .info-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+            margin-left: 1.5rem;
+        }
+
+        .info-card li {
+            position: relative;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .info-card li::before {
+            content: "•";
+            color: var(--accent-primary);
+            position: absolute;
+            left: -1.5rem;
+        }
+
+        .warning-box {
+            background-color: rgba(250, 166, 26, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .warning-box h4 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar {
+    background-color: var(--bg-secondary);
+    padding: 1rem 0;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    z-index: 100;
+}
+
+.nav-logo i {
+    color: var(--accent-primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link:hover {
+    color: var(--accent-primary);
+}
+
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .menu-button {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -250px;
+        height: 100vh;
+        width: 250px;
+        background-color: var(--bg-secondary);
+        flex-direction: column;
+        padding: 5rem 2rem 2rem;
+        transition: transform 0.3s ease;
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+        z-index: 95;
+    }
+
+    .nav-links.active {
+        transform: translateX(-250px);
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 90;
+    }
+
+    .overlay.active {
+        display: block;
+    }
+}
+
+        /* New Footer Styles */
+        .footer {
+            background-color: var(--bg-secondary);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-link a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-link a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <i class="fas fa-ghost"></i>
+                StegZero
+            </a>
+            <button class="menu-button" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="#how-it-works" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    How It Works
+                </a>
+                <a href="#encode" class="nav-link">
+                    <i class="fas fa-lock"></i>
+                    Encode
+                </a>
+                <a href="#decode" class="nav-link">
+                    <i class="fas fa-unlock"></i>
+                    Decode
+                </a>
+                <a href="https://github.com" target="_blank" class="nav-link">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>StegZero</h1>
+            <p>Hide secret messages within regular text using zero-width characters</p>
+        </div>
+
+        <div class="card" id="encode">
+            <h2 class="section-title">
+                <i class="fas fa-lock"></i>
+                Encode Message
+            </h2>
+            <div class="input-group">
+                <label for="visibleText">Visible Text</label>
+                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="hiddenMessage">Hidden Message</label>
+                <input type="text" id="hiddenMessage" placeholder="Enter your secret message...">
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="encode()">
+                    <i class="fas fa-shield-alt"></i>
+                    Encode
+                </button>
+            </div>
+
+            <div class="result-container">
+                <label>Result</label>
+                <div class="result" id="encodedResult">Encoded message will appear here.</div>
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')">
+                        <i class="fas fa-copy"></i>
+                        Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="decode"> 
+            <h2 class="section-title">
+                <i class="fas fa-unlock"></i>
+                Decode Message
+            </h2>
+            <div class="input-group">
+                <label for="encodedText">Text to Decode</label>
+                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="decode()">
+                    <i class="fas fa-eye"></i>
+                    Decode
+                </button>
+            </div>
+
+            <div class="result-container">
+                <label>Hidden Message</label>
+                <div class="result" id="decodedResult">Decoded message will appear here.</div>
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')">
+                        <i class="fas fa-copy"></i>
+                        Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    <div class="info-section" id="how-it-works">
+        <h2 class="section-title">
+            <i class="fas fa-info-circle"></i>
+            How It Works
+        </h2>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <h3><i class="fas fa-cogs"></i> Technical Process</h3>
+                <ul>
+                    <li>Uses invisible zero-width characters (​ and ‌) to encode messages</li>
+                    <li>Converts your hidden message into binary</li>
+                    <li>Replaces 0s and 1s with different invisible characters</li>
+                    <li>Embeds these characters within your visible text</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-shield-alt"></i> Best Practices</h3>
+                <ul>
+                    <li>Keep hidden messages short and concise</li>
+                    <li>Use simple visible text that won't be modified</li>
+                    <li>Test the encoded message before important use</li>
+                    <li>Always keep a backup of important messages</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Limitations</h3>
+                <ul>
+                    <li>Not all platforms preserve invisible characters</li>
+                    <li>Some text editors may strip hidden content</li>
+                    <li>Not suitable for secure communication</li>
+                    <li>Can be detected by those who know what to look for</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h4><i class="fas fa-exclamation-circle"></i> Important Note</h4>
+            <p>This tool is for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive information. For secure communication, please use proper encryption tools.</p>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="toast" id="toast"></div>
+<footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">
+                            <a href="#"><i class="fas fa-dollar"></i>Buy me a Coffee</a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="#"><i class="fas fa-star"></i> Star on github</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">
+                            <a href="#"><i class="fas fa-graduation-cap"></i> Learn Steganography</a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="#"><i class="fas fa-book-open"></i> Blog</a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="#"><i class="fas fa-question-circle"></i> Readme</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">
+                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 StegZero. All rights reserved. Built with <i class="fas fa-heart" style="color: var(--danger)"></i> for the community.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const ZERO_WIDTH_SPACE = '\u200B';
+        const ZERO_WIDTH_NON_JOINER = '\u200C';
+
+        function encode() {
+            const visibleText = document.getElementById('visibleText').value;
+            const hiddenMessage = document.getElementById('hiddenMessage').value;
+
+            const binaryMessage = hiddenMessage
+                .split('')
+                .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
+                .join('');
+
+            const encodedMessage = binaryMessage
+                .split('')
+                .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
+                .join('');
+
+            const result = visibleText + encodedMessage;
+            document.getElementById('encodedResult').textContent = result;
+        }
+
+        function decode() {
+            const encodedText = document.getElementById('encodedText').value;
+
+            const binaryMessage = encodedText
+                .split('')
+                .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
+                .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
+                .join('');
+
+            let decodedMessage = '';
+            for (let i = 0; i < binaryMessage.length; i += 8) {
+                const byte = binaryMessage.slice(i, i + 8);
+                if (byte.length === 8) {
+                    decodedMessage += String.fromCharCode(parseInt(byte, 2));
+                }
+            }
+
+            document.getElementById('decodedResult').textContent = decodedMessage || 'No hidden message found';
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text)
+                .then(() => showToast('Copied to clipboard!'))
+                .catch(err => showToast('Failed to copy: ' + err));
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.menu-button');
+            const navLinks = document.querySelector('.nav-links');
+            const overlay = document.querySelector('.overlay');
+
+            function toggleMenu() {
+                navLinks.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                // Toggle menu icon
+                const icon = menuButton.querySelector('i');
+                if (navLinks.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+
+            menuButton.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            // Close menu when clicking a link
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Close menu when screen is resized above mobile breakpoint
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
