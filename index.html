@@ -36,6 +36,7 @@
             max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1.5rem;
+            
         }
 
         .header {
@@ -352,20 +353,22 @@
     }
 }
 
-        /* New Footer Styles */
-        .footer {
+.footer {
+            flex-shrink: 0;
             background-color: var(--bg-secondary);
             padding: 4rem 0 2rem;
-            margin-top: 4rem;
+            width: 100%;
+            margin-top: auto;
             box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .footer-container {
-            max-width: 1000px;
+            max-width: 100%;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
 
+        /* Rest of the footer styles remain the same */
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -442,7 +445,7 @@
         <div class="nav-container">
             <a href="#" class="nav-logo">
                 <i class="fas fa-ghost"></i>
-                StegZero
+                StegZero​‌​​‌‌​​​‌​​‌‌‌‌​‌​​‌‌​​​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​​‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​
             </a>
             <button class="menu-button" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
@@ -472,7 +475,7 @@
     <div class="container">
         <div class="header">
             <h1>StegZero</h1>
-            <p>Hide secret messages within regular text using zero-width characters</p>
+            <p>Hide secret messages in plain sight using zero-width characters</p>
         </div>
 
         <div class="card" id="encode">
@@ -538,101 +541,100 @@
             </div>
         </div>
         
-    <div class="info-section" id="how-it-works">
-        <h2 class="section-title">
-            <i class="fas fa-info-circle"></i>
-            How It Works
-        </h2>
+        <div class="info-section" id="how-it-works" aria-label="How Zero-Width Steganography Works">
+    <h2 class="section-title">
+        <i class="fas fa-info-circle" aria-hidden="true"></i>
+        How Our Steganography Tool Hides Messages Using Zero-Width Characters
+    </h2>
+    
+    <div class="info-grid">
+        <div class="info-card">
+            <h3><i class="fas fa-cogs" aria-hidden="true"></i> The Technical Process of Hiding Messages</h3>
+            <ul>
+                <li>Converts your hidden message into binary format, using an 8-bit binary string for each character.</li>
+                <li>Uses zero-width characters to represent binary digits: zero-width space (​) represents '0,' and zero-width non-joiner (‌) represents '1.'</li>
+                <li>Embeds these invisible characters into the visible text, making the hidden message undetectable at first glance.</li>
+                <li>The hidden message remains concealed within the visible content, without affecting its appearance.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3><i class="fas fa-shield-alt" aria-hidden="true"></i> Best Practices for Hiding Text with Zero-Width Characters</h3>
+            <ul>
+                <li>Keep hidden messages short and concise to avoid detection.</li>
+                <li>Use simple, unmodified visible text for embedding the hidden message.</li>
+                <li>Test the encoded message on the intended platform to ensure the zero-width characters are preserved.</li>
+                <li>Maintain a backup of important hidden messages in case the invisible characters are removed by text editors.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Limitations of Zero-Width Steganography</h3>
+            <ul>
+                <li>Not all platforms or text editors preserve zero-width characters, which can result in the loss of the hidden message.</li>
+                <li>Zero-width steganography is not suitable for secure communication, as it can be detected by those familiar with the method.</li>
+                <li>Some text editors or platforms may strip invisible characters, rendering the hidden message unreadable.</li>
+                <li>This method should only be used where security is not a primary concern.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <h4><i class="fas fa-exclamation-circle" aria-hidden="true"></i> Important Note</h4>
+        <p>This tool is intended for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive or confidential information. For secure communication, consider using proper encryption tools.</p>
+    </div>
+</div>
+</div>
         
-        <div class="info-grid">
-            <div class="info-card">
-                <h3><i class="fas fa-cogs"></i> Technical Process</h3>
-                <ul>
-                    <li>Uses invisible zero-width characters (​ and ‌) to encode messages</li>
-                    <li>Converts your hidden message into binary</li>
-                    <li>Replaces 0s and 1s with different invisible characters</li>
-                    <li>Embeds these characters within your visible text</li>
-                </ul>
-            </div>
 
-            <div class="info-card">
-                <h3><i class="fas fa-shield-alt"></i> Best Practices</h3>
-                <ul>
-                    <li>Keep hidden messages short and concise</li>
-                    <li>Use simple visible text that won't be modified</li>
-                    <li>Test the encoded message before important use</li>
-                    <li>Always keep a backup of important messages</li>
-                </ul>
-            </div>
+<div class="toast" id="toast"></div>
 
-            <div class="info-card">
-                <h3><i class="fas fa-exclamation-triangle"></i> Limitations</h3>
-                <ul>
-                    <li>Not all platforms preserve invisible characters</li>
-                    <li>Some text editors may strip hidden content</li>
-                    <li>Not suitable for secure communication</li>
-                    <li>Can be detected by those who know what to look for</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="warning-box">
-            <h4><i class="fas fa-exclamation-circle"></i> Important Note</h4>
-            <p>This tool is for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive information. For secure communication, please use proper encryption tools.</p>
-        </div>
-    </div>
-    </div>
-
-
-    <div class="toast" id="toast"></div>
 <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link">
-                            <a href="#"><i class="fas fa-dollar"></i>Buy me a Coffee</a>
-                        </li>
-                        <li class="footer-link">
-                            <a href="https://github.com/Clevis22/StegZero/stargazers"><i class="fas fa-star"></i> Star on github</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link">
-                            <a href="https://www.naegeliusa.com/blog/what-is-a-stenographer"><i class="fas fa-graduation-cap"></i> Learn Steganography</a>
-                        </li>
-                        <li class="footer-link">
-                            <a href="https://github.com/Clevis22/StegZero/blob/main/README.md"><i class="fas fa-question-circle"></i> Readme</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Community</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link">
-                            <a href="#"><i class="fab fa-github"></i> GitHub</a>
-                        </li>
-                        <li class="footer-link">
-                            <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li class="footer-link">
+                        <a href="#"><i class="fas fa-dollar"></i>Buy me a Coffee</a>
+                    </li>
+                    <li class="footer-link">
+                        <a href="https://github.com/Clevis22/StegZero/stargazers"><i class="fas fa-star"></i> Star on github</a>
+                    </li>
+                </ul>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2024 StegZero. All rights reserved. Built with <i class="fas fa-heart" style="color: var(--danger)"></i> for the community.</p>
-                <div class="social-links">
-                    <a href="https://github.com/Clevis22/StegZero/" class="social-link"><i class="fab fa-github"></i></a>
-                </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li class="footer-link">
+                        <a href="https://www.naegeliusa.com/blog/what-is-a-stenographer"><i class="fas fa-graduation-cap"></i> Learn Steganography</a>
+                    </li>
+                    <li class="footer-link">
+                        <a href="https://github.com/Clevis22/StegZero/blob/main/README.md"><i class="fas fa-question-circle"></i> Readme</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Community</h3>
+                <ul class="footer-links">
+                    <li class="footer-link">
+                        <a href="https://github.com/Clevis22/StegZero/"><i class="fab fa-github"></i> GitHub</a>
+                    </li>
+                    <li class="footer-link">
+                        <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </footer>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 StegZero. All rights reserved. Built with <i class="fas fa-heart" style="color: var(--danger)"></i> for the community.</p>
+        </div>
+    </div>
+</footer>
+
     <script>
         const ZERO_WIDTH_SPACE = '\u200B';
         const ZERO_WIDTH_NON_JOINER = '\u200C';
