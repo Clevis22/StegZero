@@ -36,4 +36,5 @@ This tool is for educational purposes only. It's not meant for secure communicat
 
 ## License
 
-MIT License
+GNU Affero General Public License v3.0
+
