@@ -664,45 +664,52 @@
 
     <script>
         const ZERO_WIDTH_SPACE = '\u200B';
-        const ZERO_WIDTH_NON_JOINER = '\u200C';
+const ZERO_WIDTH_NON_JOINER = '\u200C';
+const ZERO_WIDTH_JOINER = '\u200D';  // Third character if we need it
 
-        function encode() {
-            const visibleText = document.getElementById('visibleText').value;
-            const hiddenMessage = document.getElementById('hiddenMessage').value;
+function encode() {
+    const visibleText = document.getElementById('visibleText').value;
+    const hiddenMessage = document.getElementById('hiddenMessage').value;
 
-            const binaryMessage = hiddenMessage
-                .split('')
-                .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
-                .join('');
+    // Convert each character to 8-bit binary and group into 6-bit chunks
+    const binaryMessage = hiddenMessage
+        .split('')
+        .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
+        .join('')
+        .match(/.{1,6}/g)
+        .map(bits => bits.padEnd(6, '0'));  // Pad the last 6-bit chunk if needed
 
-            const encodedMessage = binaryMessage
-                .split('')
-                .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
-                .join('');
+    // Encode binary message into zero-width characters
+    const encodedMessage = binaryMessage
+        .map(bits => bits
+            .split('')
+            .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
+            .join('')
+        ).join('');
 
-            const result = visibleText + encodedMessage;
-            document.getElementById('encodedResult').textContent = result;
-        }
+    const result = visibleText + encodedMessage;
+    document.getElementById('encodedResult').textContent = result;
+}
 
-        function decode() {
-            const encodedText = document.getElementById('encodedText').value;
+function decode() {
+    const encodedText = document.getElementById('encodedText').value;
 
-            const binaryMessage = encodedText
-                .split('')
-                .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
-                .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
-                .join('');
+    // Extract only zero-width characters and convert them back to binary
+    const binaryMessage = Array.from(encodedText)
+        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
+        .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
+        .join('');
 
-            let decodedMessage = '';
-            for (let i = 0; i < binaryMessage.length; i += 8) {
-                const byte = binaryMessage.slice(i, i + 8);
-                if (byte.length === 8) {
-                    decodedMessage += String.fromCharCode(parseInt(byte, 2));
-                }
-            }
+    // Group binary message into 8-bit chunks and decode
+    let decodedMessage = '';
+    for (let i = 0; i < binaryMessage.length; i += 8) {
+        const byte = binaryMessage.slice(i, i + 8).padEnd(8, '0');
+        decodedMessage += String.fromCharCode(parseInt(byte, 2));
+    }
 
-            document.getElementById('decodedResult').textContent = decodedMessage || 'No hidden message found';
-        }
+    document.getElementById('decodedResult').textContent = decodedMessage || 'No hidden message found';
+}
+
 
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).textContent;
