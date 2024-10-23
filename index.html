@@ -464,6 +464,11 @@
             .footer-grid {
                 grid-template-columns: 1fr;
             }
+            .info-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: .5rem;
+        }
         }
     </style>
 </head>
@@ -591,14 +596,17 @@
         </div>
 
         <div class="info-card">
-            <h3><i class="fas fa-cogs" aria-hidden="true"></i> The Technical Process of Hiding Messages</h3>
-            <ul>
-                <li>Converts your hidden message into binary format, using an 8-bit binary string for each character.</li>
-                <li>Uses zero-width characters to represent binary digits: zero-width space (​) represents '0,' and zero-width non-joiner (‌) represents '1.'</li>
-                <li>Embeds these invisible characters into the visible text, making the hidden message undetectable at first glance.</li>
-                <li>The hidden message remains concealed within the visible content, without affecting its appearance.</li>
-            </ul>
-        </div>
+        <h3><i class="fas fa-cogs" aria-hidden="true"></i> The Technical Process of Hiding Messages</h3>
+        <ul>
+            <li>Converts your hidden message into binary format, using an 8-bit binary string for each character.</li>
+            <li>Splits the binary message into 6-bit chunks and pads the last chunk if necessary.</li>
+            <li>Uses zero-width characters to represent binary digits: zero-width space (​) represents '0,' and zero-width non-joiner (‌) represents '1.'</li>
+            <li>Embeds these invisible characters into the visible text, making the hidden message undetectable at first glance.</li>
+            <li>The hidden message remains concealed within the visible content, without affecting its appearance.</li>
+            <li>During decoding, extracts zero-width characters from the encoded text and converts them back to binary.</li>
+            <li>Groups the binary message into 8-bit chunks and decodes it back to the original message.</li>
+        </ul>
+    </div>
 
         <div class="info-card">
             <h3><i class="fas fa-shield-alt" aria-hidden="true"></i> Best Practices for Hiding Text with Zero-Width Characters</h3>
