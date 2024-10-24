@@ -46,6 +46,9 @@
     --warning: #f59e0b;
     --border-radius: 12px;
     --transition: all 0.2s ease-in-out;
+    --section-spacing: 3rem;    /* Reduced from 4rem */
+    --card-padding: 2rem;       /* Reduced from 2.5rem */
+    --content-max-width: 900px;
 }
 
 * {
@@ -66,16 +69,15 @@ body {
 }
 
 .container {
-    max-width: 1100px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 1.5rem auto;        /* Reduced from 2rem */
+    padding: 0 1.25rem;         /* Reduced from 1.5rem */
 }
 
 .header {
-    text-align: center;
-    margin-bottom: 4rem;
-    padding: 2rem 0;
+    margin-bottom: 3rem;        /* Reduced from 4rem */
+    padding: 1.5rem 0;          /* Reduced from 2rem */
+    text-align:center;
 }
 
 .header h1 {
@@ -97,8 +99,8 @@ body {
 .card {
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
-    padding: 2.5rem;
-    margin-bottom: 2.5rem;
+    padding: var(--card-padding);
+    margin-bottom: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: var(--transition);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -180,6 +182,31 @@ input[type="text"] {
     transition: var(--transition);
     white-space: nowrap;
     min-width: 150px;
+}
+
+.btn-copy {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-copy:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+/* Option 2: Gradient accent button */
+.btn-copy-accent {
+    background: var(--text-secondary);
+    color: white;
+    border: none;
+}
+
+.btn-copy-accent:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .btn i {
@@ -311,15 +338,18 @@ input[type="text"] {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background-color: var(--success);
+    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
     color: white;
     padding: 1rem 2rem;
     border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
     display: none;
     animation: slideIn 0.3s ease;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
+
 
 @keyframes slideIn {
     from {
@@ -452,7 +482,7 @@ input[type="text"] {
     }
 
     .card, .info-section {
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
     .nav-links {
@@ -588,7 +618,7 @@ input[type="text"] {
                 <label>Result</label>
                 <div class="result" id="encodedResult">Encoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')">
+                    <button class="btn btn-copy-accent" onclick="copyToClipboard('encodedResult')">
                         <i class="fas fa-copy"></i>
                         Copy to Clipboard
                     </button>
@@ -617,7 +647,7 @@ input[type="text"] {
                 <label>Hidden Message</label>
                 <div class="result" id="decodedResult">Decoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')">
+                    <button class="btn btn-copy-accent" onclick="copyToClipboard('decodedResult')">
                         <i class="fas fa-copy"></i>
                         Copy to Clipboard
                     </button>
