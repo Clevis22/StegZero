@@ -489,19 +489,21 @@ input[type="text"] {
     .nav-links {
         position: fixed;
         top: 0;
-        right: -280px;
+        right: 0;
         height: 100vh;
         width: 280px;
         background-color: var(--bg-secondary);
         flex-direction: column;
         padding: 6rem 2rem 2rem;
         transition: transform 0.3s ease;
+        transform: translateX(100%);
         box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
     }
 
     .nav-links.active {
-        transform: translateX(-280px);
+        transform: translateX(0);
     }
+}
 
     .menu-button {
         display: block;
@@ -767,27 +769,31 @@ input[type="text"] {
 </footer>
 
     <script>
-        const ZERO_WIDTH_SPACE = '\u200B';
+const ZERO_WIDTH_SPACE = '\u200B';
 const ZERO_WIDTH_NON_JOINER = '\u200C';
-const ZERO_WIDTH_JOINER = '\u200D';  // Third character if we need it
+const ZERO_WIDTH_JOINER = '\u200D';
 
 function encode() {
     const visibleText = document.getElementById('visibleText').value;
     const hiddenMessage = document.getElementById('hiddenMessage').value;
 
-    // Convert each character to 8-bit binary and group into 6-bit chunks
+    // Convert each character to 8-bit binary and group into 4-bit chunks
     const binaryMessage = hiddenMessage
         .split('')
         .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
         .join('')
-        .match(/.{1,6}/g)
-        .map(bits => bits.padEnd(6, '0'));  // Pad the last 6-bit chunk if needed
+        .match(/.{1,4}/g)
+        .map(bits => bits.padEnd(4, '0'));  // Pad the last 4-bit chunk if needed
 
-    // Encode binary message into zero-width characters
+    // Encode binary message into zero-width characters using base-3 encoding
     const encodedMessage = binaryMessage
         .map(bits => bits
             .split('')
-            .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
+            .map(bit => {
+                if (bit === '0') return ZERO_WIDTH_SPACE;
+                if (bit === '1') return ZERO_WIDTH_NON_JOINER;
+                return ZERO_WIDTH_JOINER;
+            })
             .join('')
         ).join('');
 
@@ -798,10 +804,14 @@ function encode() {
 function decode() {
     const encodedText = document.getElementById('encodedText').value;
 
-    // Extract only zero-width characters and convert them back to binary
+    // Extract only zero-width characters and convert them back to binary using base-3 decoding
     const binaryMessage = Array.from(encodedText)
-        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
-        .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
+        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER || char === ZERO_WIDTH_JOINER)
+        .map(char => {
+            if (char === ZERO_WIDTH_SPACE) return '0';
+            if (char === ZERO_WIDTH_NON_JOINER) return '1';
+            return '2';
+        })
         .join('');
 
     // Group binary message into 8-bit chunks and decode
