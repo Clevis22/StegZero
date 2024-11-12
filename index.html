@@ -29,7 +29,6 @@
     
 
     <meta charset="UTF-8">
-    <meta name="theme-color" content="#0f172a">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StegZero - Zero Width Steganography</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -47,9 +46,6 @@
     --warning: #f59e0b;
     --border-radius: 12px;
     --transition: all 0.2s ease-in-out;
-    --section-spacing: 3rem;    /* Reduced from 4rem */
-    --card-padding: 1.75rem;       /* Reduced from 2.5rem */
-    --content-max-width: 900px;
 }
 
 * {
@@ -69,16 +65,21 @@ body {
     overflow-x: hidden;
 }
 
+.menu-button {
+    display: none; 
+}
+
 .container {
-    max-width: var(--content-max-width);
-    margin: 1.25rem auto;        /* Reduced from 2rem */
-    padding: 0 1.25rem;         /* Reduced from 1.5rem */
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    width: 100%;
 }
 
 .header {
-    margin-bottom: 3rem;        /* Reduced from 4rem */
-    padding: 1.5rem 0;          /* Reduced from 2rem */
-    text-align:center;
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 2rem 0;
 }
 
 .header h1 {
@@ -100,8 +101,8 @@ body {
 .card {
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
-    padding: var(--card-padding);
-    margin-bottom: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: var(--transition);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -128,7 +129,7 @@ body {
 }
 
 .input-group {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 label {
@@ -165,8 +166,8 @@ input[type="text"] {
 
 .button-group {
     display: flex;
-    gap: .75rem;
-    margin-top: 1rem;
+    gap: 1rem;
+    margin-top: 1.5rem;
     flex-wrap: wrap;
 }
 
@@ -174,7 +175,7 @@ input[type="text"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.875rem 1.5rem;
+    padding: 0.875rem 1.75rem;
     border: none;
     border-radius: var(--border-radius);
     font-size: 1rem;
@@ -183,31 +184,6 @@ input[type="text"] {
     transition: var(--transition);
     white-space: nowrap;
     min-width: 150px;
-}
-
-.btn-copy {
-    background-color: transparent;
-    color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn-copy:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: var(--accent-primary);
-    color: var(--text-primary);
-    transform: translateY(-1px);
-}
-
-/* Option 2: Gradient accent button */
-.btn-copy-accent {
-    background: var(--text-secondary);
-    color: white;
-    border: none;
-}
-
-.btn-copy-accent:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
 }
 
 .btn i {
@@ -339,18 +315,15 @@ input[type="text"] {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+    background-color: var(--success);
     color: white;
     padding: 1rem 2rem;
     border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
     display: none;
     animation: slideIn 0.3s ease;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-
 
 @keyframes slideIn {
     from {
@@ -483,27 +456,25 @@ input[type="text"] {
     }
 
     .card, .info-section {
-        padding: 1.25rem;
+        padding: 1.5rem;
     }
 
     .nav-links {
         position: fixed;
         top: 0;
-        right: 0;
+        right: -280px;
         height: 100vh;
         width: 280px;
         background-color: var(--bg-secondary);
         flex-direction: column;
         padding: 6rem 2rem 2rem;
         transition: transform 0.3s ease;
-        transform: translateX(100%);
         box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
     }
 
     .nav-links.active {
-        transform: translateX(0);
+        transform: translateX(-280px);
     }
-}
 
     .menu-button {
         display: block;
@@ -621,7 +592,7 @@ input[type="text"] {
                 <label>Result</label>
                 <div class="result" id="encodedResult">Encoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-copy-accent" onclick="copyToClipboard('encodedResult')">
+                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')">
                         <i class="fas fa-copy"></i>
                         Copy to Clipboard
                     </button>
@@ -650,7 +621,7 @@ input[type="text"] {
                 <label>Hidden Message</label>
                 <div class="result" id="decodedResult">Decoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-copy-accent" onclick="copyToClipboard('decodedResult')">
+                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')">
                         <i class="fas fa-copy"></i>
                         Copy to Clipboard
                     </button>
@@ -769,31 +740,27 @@ input[type="text"] {
 </footer>
 
     <script>
-const ZERO_WIDTH_SPACE = '\u200B';
+        const ZERO_WIDTH_SPACE = '\u200B';
 const ZERO_WIDTH_NON_JOINER = '\u200C';
-const ZERO_WIDTH_JOINER = '\u200D';
+const ZERO_WIDTH_JOINER = '\u200D';  // Third character if we need it
 
 function encode() {
     const visibleText = document.getElementById('visibleText').value;
     const hiddenMessage = document.getElementById('hiddenMessage').value;
 
-    // Convert each character to 8-bit binary and group into 4-bit chunks
+    // Convert each character to 8-bit binary and group into 6-bit chunks
     const binaryMessage = hiddenMessage
         .split('')
         .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
         .join('')
-        .match(/.{1,4}/g)
-        .map(bits => bits.padEnd(4, '0'));  // Pad the last 4-bit chunk if needed
+        .match(/.{1,6}/g)
+        .map(bits => bits.padEnd(6, '0'));  // Pad the last 6-bit chunk if needed
 
-    // Encode binary message into zero-width characters using base-3 encoding
+    // Encode binary message into zero-width characters
     const encodedMessage = binaryMessage
         .map(bits => bits
             .split('')
-            .map(bit => {
-                if (bit === '0') return ZERO_WIDTH_SPACE;
-                if (bit === '1') return ZERO_WIDTH_NON_JOINER;
-                return ZERO_WIDTH_JOINER;
-            })
+            .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
             .join('')
         ).join('');
 
@@ -804,14 +771,10 @@ function encode() {
 function decode() {
     const encodedText = document.getElementById('encodedText').value;
 
-    // Extract only zero-width characters and convert them back to binary using base-3 decoding
+    // Extract only zero-width characters and convert them back to binary
     const binaryMessage = Array.from(encodedText)
-        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER || char === ZERO_WIDTH_JOINER)
-        .map(char => {
-            if (char === ZERO_WIDTH_SPACE) return '0';
-            if (char === ZERO_WIDTH_NON_JOINER) return '1';
-            return '2';
-        })
+        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
+        .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
         .join('');
 
     // Group binary message into 8-bit chunks and decode
