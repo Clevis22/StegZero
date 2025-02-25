@@ -740,53 +740,46 @@ input[type="text"] {
 </footer>
 
     <script>
-        const ZERO_WIDTH_SPACE = '\u200B';
+const ZERO_WIDTH_SPACE = '\u200B';
 const ZERO_WIDTH_NON_JOINER = '\u200C';
-const ZERO_WIDTH_JOINER = '\u200D';  // Third character if we need it
 
 function encode() {
     const visibleText = document.getElementById('visibleText').value;
     const hiddenMessage = document.getElementById('hiddenMessage').value;
 
-    // Convert each character to 8-bit binary and group into 6-bit chunks
-    const binaryMessage = hiddenMessage
-        .split('')
+    // Convert each character to 8-bit binary string
+    const binaryMessage = hiddenMessage.split('')
         .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
-        .join('')
-        .match(/.{1,6}/g)
-        .map(bits => bits.padEnd(6, '0'));  // Pad the last 6-bit chunk if needed
+        .join('');
 
-    // Encode binary message into zero-width characters
-    const encodedMessage = binaryMessage
-        .map(bits => bits
-            .split('')
-            .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
-            .join('')
-        ).join('');
+    // Map each bit to zero-width characters
+    const encodedMessage = binaryMessage.split('')
+        .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
+        .join('');
 
-    const result = visibleText + encodedMessage;
-    document.getElementById('encodedResult').textContent = result;
+    document.getElementById('encodedResult').textContent = visibleText + encodedMessage;
 }
 
 function decode() {
     const encodedText = document.getElementById('encodedText').value;
 
-    // Extract only zero-width characters and convert them back to binary
+    // Extract binary string from zero-width characters
     const binaryMessage = Array.from(encodedText)
         .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
         .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
         .join('');
 
-    // Group binary message into 8-bit chunks and decode
+    // Convert 8-bit chunks to original message
     let decodedMessage = '';
     for (let i = 0; i < binaryMessage.length; i += 8) {
-        const byte = binaryMessage.slice(i, i + 8).padEnd(8, '0');
-        decodedMessage += String.fromCharCode(parseInt(byte, 2));
+        const byte = binaryMessage.slice(i, i + 8);
+        if (byte.length === 8) {
+            decodedMessage += String.fromCharCode(parseInt(byte, 2));
+        }
     }
 
     document.getElementById('decodedResult').textContent = decodedMessage || 'No hidden message found';
 }
-
 
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).textContent;
@@ -867,6 +860,37 @@ function decode() {
         "Educational resources"
       ]
     }
+
+    // Add smooth scroll behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Add input validation
+    const inputs = document.querySelectorAll('textarea, input');
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            if (input.value.length > 0) {
+                input.parentElement.classList.add('has-value');
+            } else {
+                input.parentElement.classList.remove('has-value');
+            }
+        });
+    });
+
+    // Add loading states
+    function encode() {
+        const encodeButton = document.querySelector('.encode-button');
+        encodeButton.classList.add('loading');
+        // Original encode logic
+        setTimeout(() => encodeButton.classList.remove('loading'), 500);
+    }
+
     </script>
 </body>
 </html>
