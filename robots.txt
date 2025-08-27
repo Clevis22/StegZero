@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: 
+
+# Sitemap location
+Sitemap: https://stegzero.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1

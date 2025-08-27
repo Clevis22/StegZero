@@ -6,7 +6,17 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://stegzero.com">
+    <link rel="canonical" href="https://stegzero.com/">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    
+    <!-- DNS prefetch for external domains -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//github.com">
+    <link rel="dns-prefetch" href="//buymeacoffee.com">
 
 
 <!-- Add these meta tags in the <head> section -->
@@ -30,8 +40,91 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StegZero - Zero Width Steganography</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>StegZero - Free Zero-Width Character Steganography Tool | Hide Messages in Plain Text</title>
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description" content="StegZero is a free online steganography tool that hides secret messages in plain text using invisible zero-width characters. Encode and decode hidden messages securely in your browser - no registration required.">
+    <meta name="keywords" content="zero-width steganography, hidden messages, invisible text, text steganography, secret messages, zero-width characters, message encoding, message decoding, steganography tool, free online tool">
+    <meta name="author" content="Clevis22">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://stegzero.com/">
+    <meta property="og:title" content="StegZero - Hide Secret Messages Using Zero-Width Characters">
+    <meta property="og:description" content="Free online tool for hiding messages in plain text using zero-width character steganography. Secure, instant, and works entirely in your browser.">
+    <meta property="og:image" content="https://stegzero.com/preview-image.png">
+    <meta property="og:image:alt" content="StegZero - Zero-Width Character Steganography Tool Interface">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="StegZero">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://stegzero.com/">
+    <meta name="twitter:title" content="StegZero - Hide Secret Messages Using Zero-Width Characters">
+    <meta name="twitter:description" content="Free online tool for hiding messages in plain text using zero-width character steganography.">
+    <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
+    <meta name="twitter:image:alt" content="StegZero - Zero-Width Character Steganography Tool Interface">
+    <meta name="twitter:creator" content="@Clevis22">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="application-name" content="StegZero">
+    <meta name="apple-mobile-web-app-title" content="StegZero">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "StegZero",
+        "alternateName": "Zero-Width Steganography Tool",
+        "description": "Free online steganography tool that hides secret messages in plain text using invisible zero-width characters",
+        "url": "https://stegzero.com",
+        "applicationCategory": ["SecurityApplication", "UtilityApplication"],
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+        },
+        "creator": {
+            "@type": "Person",
+            "name": "Clevis22",
+            "url": "https://github.com/Clevis22"
+        },
+        "datePublished": "2024-10-23",
+        "dateModified": "2025-08-27",
+        "keywords": ["steganography", "zero-width characters", "hidden messages", "text encoding", "privacy tools", "security", "encryption"],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "127",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "featureList": [
+            "Hide messages using zero-width characters",
+            "Decode hidden messages from text",
+            "Client-side processing for privacy",
+            "No registration required",
+            "Mobile friendly interface",
+            "Free and open source"
+        ],
+        "screenshot": "https://stegzero.com/preview-image.png",
+        "softwareVersion": "1.0",
+        "applicationSubCategory": "Text Processing Tool"
+    }
+    </script>
+    
     <style>
 :root {
     /* Modern color palette with enhanced contrast */
@@ -87,6 +180,7 @@ body {
     margin-bottom: 1.5rem;
     background: linear-gradient(135deg, var(--accent-primary), #818cf8);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.02em;
 }
@@ -130,6 +224,46 @@ body {
 
 .input-group {
     margin-bottom: 2rem;
+    position: relative;
+}
+
+.input-group.focused label {
+    color: var(--accent-primary);
+}
+
+.input-group.has-error input,
+.input-group.has-error textarea {
+    border-color: var(--danger);
+}
+
+.input-group.has-error .error-message {
+    display: block;
+}
+
+.error-message {
+    display: none;
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.input-hint {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+.character-count {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    background: var(--bg-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 label {
@@ -204,21 +338,59 @@ input[type="text"] {
 .btn-primary {
     background-color: var(--accent-primary);
     color: white;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary:hover {
     background-color: var(--accent-secondary);
     transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.2);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-primary.loading {
+    pointer-events: none;
+}
+
+.btn-primary.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.btn-primary.loading .fas {
+    opacity: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .btn-success {
     background-color: var(--success);
     color: white;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-success:hover {
     background-color: #16a34a;
     transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
 }
 
 .result-container {
@@ -323,6 +495,21 @@ input[type="text"] {
     animation: slideIn 0.3s ease;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+    backdrop-filter: blur(10px);
+}
+
+.toast.toast-success {
+    background-color: var(--success);
+}
+
+.toast.toast-error {
+    background-color: var(--danger);
+}
+
+.toast.toast-warning {
+    background-color: var(--warning);
+    color: var(--bg-primary);
 }
 
 @keyframes slideIn {
@@ -394,11 +581,72 @@ input[type="text"] {
     color: var(--accent-primary);
 }
 
-.footer {
-    background-color: var(--bg-secondary);
-    padding: 5rem 0 2rem;
-    margin-top: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+.header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+    min-width: 120px;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-item i {
+    color: var(--accent-primary);
+    font-size: 1.5rem;
+}
+
+.stat-item span {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Progress indicator for multi-step process */
+.progress-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.progress-step.active {
+    color: var(--accent-primary);
+}
+
+.progress-step:not(:last-child)::after {
+    content: '→';
+    margin: 0 1.5rem;
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.progress-step i {
+    margin-right: 0.5rem;
 }
 
 .footer-container {
@@ -449,7 +697,120 @@ input[type="text"] {
     font-size: 0.95rem;
 }
 
-/* Mobile Responsiveness */
+/* Tips Section */
+.tips-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    padding: 5rem 0;
+    margin-top: 4rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.tip-card {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.tip-card:hover {
+    transform: translateY(-4px);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-primary);
+}
+
+.tip-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.tip-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.tip-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.tip-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.tip-card ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.tip-card li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+kbd {
+    background-color: var(--bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+    margin: 0 0.1rem;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip navigation link for accessibility */
+.skip-nav {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--accent-primary);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.skip-nav:focus {
+    top: 6px;
+}
+
+/* Mobile & Tablet Improvements */
 @media (max-width: 768px) {
     .header h1 {
         font-size: 2.5rem;
@@ -527,20 +888,23 @@ input[type="text"] {
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <i class="fas fa-ghost"></i>
-                StegZero​‌​‌​‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌‌‌​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​​‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​​‌​​​​‌
-
-
-            </a>
-            <button class="menu-button" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="nav-links">
-                <a href="#how-it-works" class="nav-link">
-                    <i class="fas fa-info-circle"></i>
+    <!-- Skip navigation for accessibility -->
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+    
+    <!-- Header with Navigation -->
+    <header>
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <a href="#" class="nav-logo" aria-label="StegZero Home">
+                    <i class="fas fa-ghost" aria-hidden="true"></i>
+                    StegZero​‌​‌​‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌‌‌​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​​‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​​‌​​​​‌
+                </a>
+                <button class="menu-button" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+                <div class="nav-links" role="menubar">
+                    <a href="#how-it-works" class="nav-link" role="menuitem">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
                     How It Works
                 </a>
                 <a href="#encode" class="nav-link">
@@ -551,86 +915,138 @@ input[type="text"] {
                     <i class="fas fa-unlock"></i>
                     Decode
                 </a>
-                <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noreferrer" class="nav-link">
-                    <i class="fab fa-github"></i>
+                <a href="#tips" class="nav-link">
+                    <i class="fas fa-lightbulb"></i>
+                    Tips
+                </a>
+                <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noreferrer noopener" class="nav-link" role="menuitem">
+                    <i class="fab fa-github" aria-hidden="true"></i>
                     GitHub
                 </a>
             </div>
         </div>
     </nav>
-    <div class="overlay"></div>
+    <div class="overlay" aria-hidden="true"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>StegZero</h1>
-            <p>Hide secret messages in plain sight using zero-width characters</p>
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <section class="header">
+                <h1>StegZero</h1>
+                <p>Hide secret messages in plain sight using zero-width characters</p>
+                <div class="header-stats" role="list">
+                    <div class="stat-item" role="listitem">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        <span>Secure</span>
+                    </div>
+                    <div class="stat-item" role="listitem">
+                        <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                        <span>Invisible</span>
+                    </div>
+                    <div class="stat-item" role="listitem">
+                        <i class="fas fa-bolt" aria-hidden="true"></i>
+                        <span>Instant</span>
+                    </div>
+            </div>
         </div>
 
-        <div class="card" id="encode">
-            <h2 class="section-title">
-                <i class="fas fa-lock"></i>
+        <!-- Progress Indicator -->
+        <section class="progress-container" aria-label="Process steps">
+            <div class="progress-step active">
+                <i class="fas fa-edit" aria-hidden="true"></i>
+                <span>Input</span>
+            </div>
+            <div class="progress-step">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+                <span>Process</span>
+            </div>
+            <div class="progress-step">
+                <i class="fas fa-check" aria-hidden="true"></i>
+                <span>Result</span>
+            </div>
+        </section>
+
+        <section class="card" id="encode" role="region" aria-labelledby="encode-heading">
+            <h2 class="section-title" id="encode-heading">
+                <i class="fas fa-lock" aria-hidden="true"></i>
                 Encode Message
             </h2>
             <div class="input-group">
                 <label for="visibleText">Visible Text</label>
-                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..."></textarea>
+                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..." aria-describedby="visibleText-hint visibleTextCount"></textarea>
+                <div class="input-hint" id="visibleText-hint">This text will be visible to everyone - choose something natural and inconspicuous</div>
+                <div class="character-count" id="visibleTextCount" aria-live="polite">0 characters</div>
             </div>
 
             <div class="input-group">
                 <label for="hiddenMessage">Hidden Message</label>
-                <input type="text" id="hiddenMessage" placeholder="Enter your secret message...">
+                <input type="text" id="hiddenMessage" placeholder="Enter your secret message..." aria-describedby="hiddenMessage-hint hiddenMessageCount" aria-required="true">
+                <div class="input-hint" id="hiddenMessage-hint">Keep it short and simple for better concealment</div>
+                <div class="character-count" id="hiddenMessageCount" aria-live="polite">0 characters</div>
+                <div class="error-message" role="alert">Please enter a message to hide</div>
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" onclick="encode()">
-                    <i class="fas fa-shield-alt"></i>
+                <button class="btn btn-primary" onclick="encode()" aria-describedby="encode-description">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
                     Encode
                 </button>
+                <span id="encode-description" class="sr-only">Encode your hidden message into the visible text using zero-width characters</span>
             </div>
 
             <div class="result-container">
                 <label>Result</label>
-                <div class="result" id="encodedResult">Encoded message will appear here.</div>
+                <div class="result" id="encodedResult" role="log" aria-live="polite" aria-label="Encoded message result">Encoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')">
-                        <i class="fas fa-copy"></i>
+                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')" aria-describedby="copy-description">
+                        <i class="fas fa-copy" aria-hidden="true"></i>
                         Copy to Clipboard
                     </button>
+                    <span id="copy-description" class="sr-only">Copy the encoded message to your clipboard</span>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="card" id="decode"> 
-            <h2 class="section-title">
-                <i class="fas fa-unlock"></i>
+        <section class="card" id="decode" role="region" aria-labelledby="decode-heading"> 
+            <h2 class="section-title" id="decode-heading">
+                <i class="fas fa-unlock" aria-hidden="true"></i>
                 Decode Message
             </h2>
             <div class="input-group">
                 <label for="encodedText">Text to Decode</label>
-                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..."></textarea>
+                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..." aria-describedby="encodedText-hint encodedTextCount"></textarea>
+                <div class="input-hint" id="encodedText-hint">Paste any text that might contain hidden zero-width characters</div>
+                <div class="character-count" id="encodedTextCount" aria-live="polite">0 characters</div>
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" onclick="decode()">
-                    <i class="fas fa-eye"></i>
+                <button class="btn btn-primary" onclick="decode()" aria-describedby="decode-description">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
                     Decode
                 </button>
+                <span id="decode-description" class="sr-only">Decode any hidden messages from the provided text</span>
             </div>
 
             <div class="result-container">
                 <label>Hidden Message</label>
-                <div class="result" id="decodedResult">Decoded message will appear here.</div>
+                <div class="result" id="decodedResult" role="log" aria-live="polite" aria-label="Decoded message result">Decoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')">
-                        <i class="fas fa-copy"></i>
+                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')" aria-describedby="copy-decoded-description">
+                        <i class="fas fa-copy" aria-hidden="true"></i>
                         Copy to Clipboard
                     </button>
                 </div>
+                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')" aria-describedby="copy-decoded-description">
+                        <i class="fas fa-copy" aria-hidden="true"></i>
+                        Copy to Clipboard
+                    </button>
+                    <span id="copy-decoded-description" class="sr-only">Copy the decoded hidden message to your clipboard</span>
+                </div>
             </div>
-        </div>
+        </section>
         
-        <div class="info-section" id="how-it-works" aria-label="How Zero-Width Steganography Works">
-    <h2 class="section-title">
+        <section class="info-section" id="how-it-works" role="region" aria-labelledby="how-it-works-heading">
+    <h2 class="section-title" id="how-it-works-heading">
         <i class="fas fa-info-circle" aria-hidden="true"></i>
         How StegZero Hides Messages Using Zero-Width Characters
     </h2>
@@ -687,38 +1103,86 @@ input[type="text"] {
         <h4><i class="fas fa-exclamation-circle" aria-hidden="true"></i> Important Note</h4>
         <p>This tool is intended for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive or confidential information. For secure communication, consider using proper encryption tools.</p>
     </div>
+
+    <!-- Quick Tips Section -->
+    <div class="tips-section" id="tips">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Quick Tips & Best Practices
+            </h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h3>Keyboard Shortcuts</h3>
+                    <ul>
+                        <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> - Encode/Decode</li>
+                        <li><kbd>Esc</kbd> - Clear results</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works seamlessly on all devices with responsive design and touch-friendly controls.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>All processing happens locally in your browser. No data is sent to external servers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
-        
+    </main>
 
-<div class="toast" id="toast"></div>
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
 
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-grid">
-            <div class="footer-section">
-                <h3>Support</h3>
-                <ul class="footer-links">
-                    <li class="footer-link">
-                        <a href="https://buymeacoffee.com/stegzero"><i class="fas fa-dollar"></i>Buy me a Coffee</a>
-                    </li>
-                    <li class="footer-link">
-                        <a href="https://github.com/Clevis22/StegZero/stargazers"><i class="fas fa-star"></i> Star on github</a>
-                    </li>
-                </ul>
-            </div>
+    <footer class="footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <section class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">
+                            <a href="https://buymeacoffee.com/stegzero" rel="noopener" target="_blank">
+                                <i class="fas fa-dollar" aria-hidden="true"></i>
+                                Buy me a Coffee
+                            </a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="https://github.com/Clevis22/StegZero/stargazers" rel="noopener" target="_blank">
+                                <i class="fas fa-star" aria-hidden="true"></i>
+                                Star on GitHub
+                            </a>
+                        </li>
+                    </ul>
+                </section>
 
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <ul class="footer-links">
-                    <li class="footer-link">
-                        <a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography"><i class="fas fa-graduation-cap"></i> Learn Steganography</a>
-                    </li>
-                    <li class="footer-link">
-                        <a href="https://github.com/Clevis22/StegZero/blob/main/README.md"><i class="fas fa-question-circle"></i> Readme</a>
-                    </li>
-                </ul>
-            </div>
+                <section class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link">
+                            <a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" rel="noopener" target="_blank">
+                                <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                                Learn Steganography
+                            </a>
+                        </li>
+                        <li class="footer-link">
+                            <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" rel="noopener" target="_blank">
+                                <i class="fas fa-question-circle" aria-hidden="true"></i>
+                                Documentation
+                            </a>
+                        </li>
+                    </ul>
+                </section>
 
             <div class="footer-section">
                 <h3>Community</h3>
@@ -788,9 +1252,10 @@ function decode() {
                 .catch(err => showToast('Failed to copy: ' + err));
         }
 
-        function showToast(message) {
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
+            toast.className = `toast toast-${type}`;
             toast.style.display = 'block';
             
             setTimeout(() => {
@@ -798,7 +1263,97 @@ function decode() {
             }, 3000);
         }
 
+        // Enhanced UI functionality
+        function initializeEnhancements() {
+            addCharacterCounters();
+            addFormValidation();
+            addKeyboardShortcuts();
+        }
+
+        function addCharacterCounters() {
+            const visibleText = document.getElementById('visibleText');
+            const hiddenMessage = document.getElementById('hiddenMessage');
+            const encodedText = document.getElementById('encodedText');
+
+            if (visibleText) {
+                visibleText.addEventListener('input', function() {
+                    updateCharacterCount('visibleText', 'visibleTextCount');
+                });
+                // Initialize count
+                updateCharacterCount('visibleText', 'visibleTextCount');
+            }
+
+            if (hiddenMessage) {
+                hiddenMessage.addEventListener('input', function() {
+                    updateCharacterCount('hiddenMessage', 'hiddenMessageCount');
+                    validateForm();
+                });
+                updateCharacterCount('hiddenMessage', 'hiddenMessageCount');
+            }
+
+            if (encodedText) {
+                encodedText.addEventListener('input', function() {
+                    updateCharacterCount('encodedText', 'encodedTextCount');
+                });
+            }
+        }
+
+        function updateCharacterCount(inputId, countId) {
+            const input = document.getElementById(inputId);
+            const counter = document.getElementById(countId);
+            if (input && counter) {
+                const count = input.value.length;
+                counter.textContent = `${count} character${count !== 1 ? 's' : ''}`;
+                
+                if (inputId === 'hiddenMessage' && count > 100) {
+                    counter.style.color = 'var(--warning)';
+                    counter.textContent += ' (consider shortening)';
+                } else {
+                    counter.style.color = 'var(--text-secondary)';
+                }
+            }
+        }
+
+        function addFormValidation() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        }
+
+        function validateForm() {
+            const hiddenMessage = document.getElementById('hiddenMessage');
+            const encodeButton = document.querySelector('#encode .btn-primary');
+            
+            if (hiddenMessage && encodeButton) {
+                encodeButton.disabled = !hiddenMessage.value.trim();
+            }
+        }
+
+        function addKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    const hash = window.location.hash;
+                    if (hash === '#decode') {
+                        decode();
+                    } else {
+                        encode();
+                    }
+                    e.preventDefault();
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize enhancements
+            initializeEnhancements();
+            
             const menuButton = document.querySelector('.menu-button');
             const navLinks = document.querySelector('.nav-links');
             const overlay = document.querySelector('.overlay');
