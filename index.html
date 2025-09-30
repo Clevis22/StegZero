@@ -996,13 +996,13 @@ kbd {
         <div class="info-card">
         <h3><i class="fas fa-cogs" aria-hidden="true"></i> The Technical Process of Hiding Messages</h3>
         <ul>
-            <li>Converts your hidden message into binary format, using an 8-bit binary string for each character.</li>
-            <li>Splits the binary message into 6-bit chunks and pads the last chunk if necessary.</li>
-            <li>Uses zero-width characters to represent binary digits: zero-width space (​) represents '0,' and zero-width non-joiner (‌) represents '1.'</li>
-            <li>Embeds these invisible characters into the visible text, making the hidden message undetectable at first glance.</li>
-            <li>The hidden message remains concealed within the visible content, without affecting its appearance.</li>
-            <li>During decoding, extracts zero-width characters from the encoded text and converts them back to binary.</li>
-            <li>Groups the binary message into 8-bit chunks and decodes it back to the original message.</li>
+            <li>Converts your hidden message to UTF-8 bytes for full Unicode support.</li>
+            <li>Adds a compact header with a magic marker, version, random nonce, length, and CRC32 for integrity.</li>
+            <li>Obfuscates only the payload bits using a nonce-seeded PRNG (not encryption) to reduce easy pattern detection.</li>
+            <li>Maps 3-bit groups to a diversified set of eight zero-width/invisible characters (not just a single 0/1 pair).</li>
+            <li>Evenly interleaves the hidden characters across the visible text so they are not clustered at the end.</li>
+            <li>On decoding, extracts the zero-width alphabet, validates the header and CRC, then restores the UTF-8 message.</li>
+            <li>Includes a legacy fallback decoder for older texts that used a simple two-character (0/1) scheme.</li>
         </ul>
     </div>
 
@@ -1089,167 +1089,357 @@ kbd {
     </div>
 </footer>
 
-    <script>
-const ZERO_WIDTH_SPACE = '\u200B';
-const ZERO_WIDTH_NON_JOINER = '\u200C';
+        <script>
+// Advanced zero-width steganography implementation
+// Goals: diversify code points, interleave across text, UTF-8 support, header+CRC, legacy fallback.
+
+// Diversified zero-width/invisible alphabet (8 symbols -> 3 bits)
+// Chosen to reduce the chance that ALL are stripped by a sanitizer.
+const ZW_ALPHABET = [
+    '\u200B', // ZERO WIDTH SPACE
+    '\u200C', // ZERO WIDTH NON-JOINER
+    '\u200D', // ZERO WIDTH JOINER
+    '\u2060', // WORD JOINER
+    '\u2062', // INVISIBLE TIMES
+    '\u2063', // INVISIBLE SEPARATOR
+    '\u2064', // INVISIBLE PLUS
+    '\uFEFF'  // ZERO WIDTH NO-BREAK SPACE (BOM)
+].map(s => JSON.parse('"' + s.replace(/\\u/g, '\\u') + '"'));
+
+// Legacy two-symbols for fallback
+const LEGACY_0 = '\u200B';
+const LEGACY_1 = '\u200C';
+
+// Header constants
+const MAGIC = 0xA55A; // 16-bit magic to detect V2 payloads
+const VERSION = 1;     // 1 byte
+
+// Utilities
+const te = new TextEncoder();
+const td = new TextDecoder();
+
+function bytesToBits(bytes) {
+    let bits = '';
+    for (let i = 0; i < bytes.length; i++) {
+        bits += bytes[i].toString(2).padStart(8, '0');
+    }
+    return bits;
+}
+
+function bitsToBytes(bits) {
+    const out = [];
+    for (let i = 0; i + 8 <= bits.length; i += 8) {
+        out.push(parseInt(bits.slice(i, i + 8), 2));
+    }
+    return new Uint8Array(out);
+}
+
+// CRC32 (polynomial 0xEDB88320)
+const CRC_TABLE = (() => {
+    const t = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) {
+        let c = i;
+        for (let k = 0; k < 8; k++) {
+            c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        }
+        t[i] = c >>> 0;
+    }
+    return t;
+})();
+
+function crc32(bytes) {
+    let c = 0xFFFFFFFF >>> 0;
+    for (let i = 0; i < bytes.length; i++) {
+        c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    }
+    return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+function numToBytesBE(num, byteLen) {
+    const out = new Uint8Array(byteLen);
+    for (let i = byteLen - 1; i >= 0; i--) {
+        out[i] = num & 0xFF;
+        num >>>= 8;
+    }
+    return out;
+}
+
+function concatBytes(...arrays) {
+    const total = arrays.reduce((s, a) => s + a.length, 0);
+    const out = new Uint8Array(total);
+    let off = 0;
+    for (const a of arrays) { out.set(a, off); off += a.length; }
+    return out;
+}
+
+// Simple xorshift32 PRNG for obfuscation (not encryption)
+function xorshift32(seed) {
+    let x = seed >>> 0;
+    return () => {
+        // Avoid zero lock
+        if (x === 0) x = 0x9E3779B9;
+        x ^= x << 13; x >>>= 0;
+        x ^= x >>> 17; x >>>= 0;
+        x ^= x << 5;  x >>>= 0;
+        return x >>> 0;
+    };
+}
+
+function obfuscateBits(bits, seed) {
+    const next = xorshift32(seed);
+    let acc = 0, remain = 0;
+    let out = '';
+    for (let i = 0; i < bits.length; i++) {
+        if (remain === 0) { acc = next(); remain = 32; }
+        const prnBit = (acc & 1);
+        acc >>>= 1; remain--;
+        out += ((bits.charCodeAt(i) & 1) ^ prnBit) ? '1' : '0';
+    }
+    return out;
+}
+
+// Map 3-bit groups <-> zero-width alphabet
+function bitsToAlphabet(bits) {
+    let out = '';
+    for (let i = 0; i < bits.length; i += 3) {
+        const chunk = bits.slice(i, i + 3).padEnd(3, '0');
+        const idx = parseInt(chunk, 2);
+        out += ZW_ALPHABET[idx];
+    }
+    return out;
+}
+
+function alphabetToBits(str) {
+    const map = new Map(ZW_ALPHABET.map((ch, i) => [ch, i]));
+    let bits = '';
+    for (const ch of Array.from(str)) {
+        if (map.has(ch)) {
+            bits += map.get(ch).toString(2).padStart(3, '0');
+        }
+    }
+    return bits;
+}
+
+// Build header: [MAGIC(2B) | VERSION(1B) | NONCE(2B) | LENGTH(2B) | CRC32(4B)]
+function buildHeader(nonce, msgBytes) {
+    const len = msgBytes.length;
+    const crc = crc32(msgBytes);
+    return concatBytes(
+        numToBytesBE(MAGIC, 2),
+        numToBytesBE(VERSION, 1),
+        numToBytesBE(nonce, 2),
+        numToBytesBE(len, 2),
+        numToBytesBE(crc, 4)
+    );
+}
+
+function parseHeader(headerBytes) {
+    if (headerBytes.length < 11) return null;
+    const dv = headerBytes; // Uint8Array
+    const magic = (dv[0] << 8) | dv[1];
+    if (magic !== (MAGIC & 0xFFFF)) return null;
+    const version = dv[2];
+    const nonce = (dv[3] << 8) | dv[4];
+    const len = (dv[5] << 8) | dv[6];
+    const crc = (dv[7] * 2**24) | (dv[8] << 16) | (dv[9] << 8) | dv[10];
+    return { version, nonce, len, crc };
+}
+
+// Evenly interleave the zero-width payload across visible text
+function interleavePayload(visible, payload) {
+    if (!visible) return payload; // no cover text
+    const chars = Array.from(visible);
+    const payloadChars = Array.from(payload);
+    const n = chars.length;
+    if (payloadChars.length === 0) return visible;
+    const perSlot = Math.ceil(payloadChars.length / Math.max(1, n));
+    let idx = 0;
+    let out = '';
+    for (let i = 0; i < n; i++) {
+        out += chars[i];
+        // insert up to perSlot code points after each char
+        for (let k = 0; k < perSlot && idx < payloadChars.length; k++, idx++) {
+            out += payloadChars[idx];
+        }
+    }
+    // any remaining go to the end
+    while (idx < payloadChars.length) out += payloadChars[idx++];
+    return out;
+}
 
 function encode() {
-    const visibleText = document.getElementById('visibleText').value;
-    const hiddenMessage = document.getElementById('hiddenMessage').value;
+    const visibleText = document.getElementById('visibleText').value || '';
+    const hiddenMessage = document.getElementById('hiddenMessage').value || '';
 
-    // Convert each character to 8-bit binary string
-    const binaryMessage = hiddenMessage.split('')
-        .map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
+    const resultEl = document.getElementById('encodedResult');
+    if (!hiddenMessage) {
+        resultEl.textContent = visibleText || 'Please enter a message to hide';
+        return;
+    }
+
+    // UTF-8 bytes of the message
+    const msgBytes = te.encode(hiddenMessage);
+    // Random 16-bit nonce for obfuscation seed
+    const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
+    const header = buildHeader(nonce, msgBytes);
+
+    const headerBits = bytesToBits(header);
+    const msgBits = bytesToBits(msgBytes);
+
+    // Obfuscate only payload (not header) to keep header parseable
+    const seed = (nonce << 16) | MAGIC; // derive 32-bit seed
+    const obfMsgBits = obfuscateBits(msgBits, seed >>> 0);
+
+    const fullBits = headerBits + obfMsgBits;
+    const payload = bitsToAlphabet(fullBits);
+    const stego = interleavePayload(visibleText, payload);
+    resultEl.textContent = stego;
+}
+
+function tryDecodeV2(encodedText) {
+    // Extract only our 8-symbol alphabet
+    const alphaSet = new Set(ZW_ALPHABET);
+    let extracted = '';
+    for (const ch of Array.from(encodedText)) {
+        if (alphaSet.has(ch)) extracted += ch;
+    }
+    if (extracted.length === 0) return null;
+
+    const bits = alphabetToBits(extracted);
+    // Need at least header (11 bytes = 88 bits)
+    if (bits.length < 88) return null;
+    const headerBytes = bitsToBytes(bits.slice(0, 88));
+    const hdr = parseHeader(headerBytes);
+    if (!hdr) return null;
+
+    const needBits = hdr.len * 8;
+    const payloadBits = bits.slice(88, 88 + needBits);
+    if (payloadBits.length < needBits) return null; // incomplete
+
+    // De-obfuscate
+    const seed = (hdr.nonce << 16) | MAGIC;
+    const msgBits = obfuscateBits(payloadBits, seed >>> 0);
+    const msgBytes = bitsToBytes(msgBits);
+    if (msgBytes.length !== hdr.len) return null;
+
+    const calcCrc = crc32(msgBytes);
+    if (calcCrc !== (hdr.crc >>> 0)) return null;
+
+    try {
+        return td.decode(msgBytes);
+    } catch {
+        return null;
+    }
+}
+
+function tryDecodeLegacy(encodedText) {
+    const ZERO = LEGACY_0;
+    const ONE = LEGACY_1;
+    const bits = Array.from(encodedText)
+        .filter(ch => ch === ZERO || ch === ONE)
+        .map(ch => ch === ZERO ? '0' : '1')
         .join('');
-
-    // Map each bit to zero-width characters
-    const encodedMessage = binaryMessage.split('')
-        .map(bit => bit === '0' ? ZERO_WIDTH_SPACE : ZERO_WIDTH_NON_JOINER)
-        .join('');
-
-    document.getElementById('encodedResult').textContent = visibleText + encodedMessage;
+    if (bits.length < 8) return null;
+    const bytes = bitsToBytes(bits);
+    try {
+        const msg = td.decode(bytes);
+        // Heuristic: filter out non-printable control-only results
+        if (msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g, '').length === msg.length) return null;
+        return msg.replace(/\x00+$/g, '');
+    } catch {
+        return null;
+    }
 }
 
 function decode() {
-    const encodedText = document.getElementById('encodedText').value;
+    const encodedText = document.getElementById('encodedText').value || '';
+    const resultEl = document.getElementById('decodedResult');
 
-    // Extract binary string from zero-width characters
-    const binaryMessage = Array.from(encodedText)
-        .filter(char => char === ZERO_WIDTH_SPACE || char === ZERO_WIDTH_NON_JOINER)
-        .map(char => char === ZERO_WIDTH_SPACE ? '0' : '1')
-        .join('');
-
-    // Convert 8-bit chunks to original message
-    let decodedMessage = '';
-    for (let i = 0; i < binaryMessage.length; i += 8) {
-        const byte = binaryMessage.slice(i, i + 8);
-        if (byte.length === 8) {
-            decodedMessage += String.fromCharCode(parseInt(byte, 2));
-        }
+    // Try V2 first
+    let decoded = tryDecodeV2(encodedText);
+    if (decoded == null) {
+        // Fallback to legacy
+        decoded = tryDecodeLegacy(encodedText);
     }
 
-    document.getElementById('decodedResult').textContent = decodedMessage || 'No hidden message found';
+    resultEl.textContent = decoded || 'No hidden message found';
 }
 
-        function copyToClipboard(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text)
-                .then(() => showToast('Copied to clipboard!'))
-                .catch(err => showToast('Failed to copy: ' + err));
+function copyToClipboard(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text)
+        .then(() => showToast('Copied to clipboard!'))
+        .catch(err => showToast('Failed to copy: ' + err, 'error'));
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast toast-${type}`;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
+
+// Enhanced UI functionality
+function initializeEnhancements() {
+    addFormValidation();
+    addKeyboardShortcuts();
+}
+
+function addFormValidation() {
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() { this.parentElement.classList.add('focused'); });
+        input.addEventListener('blur', function() { this.parentElement.classList.remove('focused'); });
+    });
+}
+
+function addKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            const hash = window.location.hash;
+            if (hash === '#decode') decode(); else encode();
+            e.preventDefault();
         }
+    });
+}
 
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast toast-${type}`;
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+document.addEventListener('DOMContentLoaded', function() {
+    initializeEnhancements();
+
+    const menuButton = document.querySelector('.menu-button');
+    const navLinks = document.querySelector('.nav-links');
+    const overlay = document.querySelector('.overlay');
+
+    function toggleMenu() {
+        const isOpening = !navLinks.classList.contains('active');
+        navLinks.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('no-scroll', isOpening);
+        menuButton.setAttribute('aria-expanded', String(isOpening));
+        const icon = menuButton.querySelector('i');
+        if (navLinks.classList.contains('active')) { icon.classList.remove('fa-bars'); icon.classList.add('fa-times'); }
+        else { icon.classList.remove('fa-times'); icon.classList.add('fa-bars'); }
+    }
+
+    menuButton.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => { if (navLinks.classList.contains('active')) toggleMenu(); });
+    });
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            menuButton.setAttribute('aria-expanded', 'false');
+            const icon = menuButton.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
         }
-
-        // Enhanced UI functionality
-        function initializeEnhancements() {
-            // Character counters removed
-            addFormValidation();
-            addKeyboardShortcuts();
-        }
-
-        // addCharacterCounters removed
-
-        // updateCharacterCount removed
-
-        function addFormValidation() {
-            const inputs = document.querySelectorAll('input, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('focused');
-                });
-
-                input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('focused');
-                });
-            });
-        }
-
-        function validateForm() {
-            const hiddenMessage = document.getElementById('hiddenMessage');
-            const encodeButton = document.querySelector('#encode .btn-primary');
-            
-            if (hiddenMessage && encodeButton) {
-                encodeButton.disabled = !hiddenMessage.value.trim();
-            }
-        }
-
-        function addKeyboardShortcuts() {
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    const hash = window.location.hash;
-                    if (hash === '#decode') {
-                        decode();
-                    } else {
-                        encode();
-                    }
-                    e.preventDefault();
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize enhancements
-            initializeEnhancements();
-            
-            const menuButton = document.querySelector('.menu-button');
-            const navLinks = document.querySelector('.nav-links');
-            const overlay = document.querySelector('.overlay');
-
-            function toggleMenu() {
-                const isOpening = !navLinks.classList.contains('active');
-                navLinks.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.classList.toggle('no-scroll', isOpening);
-                menuButton.setAttribute('aria-expanded', String(isOpening));
-                
-                // Toggle menu icon
-                const icon = menuButton.querySelector('i');
-                if (navLinks.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
-
-            menuButton.addEventListener('click', toggleMenu);
-            overlay.addEventListener('click', toggleMenu);
-
-            // Close menu when clicking a link
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (navLinks.classList.contains('active')) {
-                        toggleMenu();
-                    }
-                });
-            });
-
-            // Close menu when screen is resized above mobile breakpoint
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                    // Force close without toggling icon animation flicker
-                    navLinks.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('no-scroll');
-                    menuButton.setAttribute('aria-expanded', 'false');
-                    const icon = menuButton.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
-        });
-    </script>
+    });
+});
+        </script>
 
 <script type="application/ld+json">
     {
@@ -1270,36 +1460,6 @@ function decode() {
         "Copy to clipboard functionality",
         "Educational resources"
       ]
-    }
-
-    // Add smooth scroll behavior
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Add input validation
-    const inputs = document.querySelectorAll('textarea, input');
-    inputs.forEach(input => {
-        input.addEventListener('input', () => {
-            if (input.value.length > 0) {
-                input.parentElement.classList.add('has-value');
-            } else {
-                input.parentElement.classList.remove('has-value');
-            }
-        });
-    });
-
-    // Add loading states
-    function encode() {
-        const encodeButton = document.querySelector('.encode-button');
-        encodeButton.classList.add('loading');
-        // Original encode logic
-        setTimeout(() => encodeButton.classList.remove('loading'), 500);
     }
 
     </script>
