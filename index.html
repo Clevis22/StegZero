@@ -158,6 +158,11 @@ body {
     overflow-x: hidden;
 }
 
+/* Prevent background scroll when mobile menu is open */
+body.no-scroll {
+    overflow: hidden;
+}
+
 .menu-button {
     display: none; 
 }
@@ -697,67 +702,7 @@ input[type="text"] {
     font-size: 0.95rem;
 }
 
-/* Tips Section */
-.tips-section {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    padding: 5rem 0;
-    margin-top: 4rem;
-}
-
-.tips-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.tip-card {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    text-align: center;
-    transition: var(--transition);
-}
-
-.tip-card:hover {
-    transform: translateY(-4px);
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: var(--accent-primary);
-}
-
-.tip-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-}
-
-.tip-icon i {
-    font-size: 1.5rem;
-    color: white;
-}
-
-.tip-card h3 {
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.tip-card p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-.tip-card ul {
-    list-style: none;
-    padding: 0;
-    text-align: left;
-}
+/* Tips Section removed */
 
 .tip-card li {
     color: var(--text-secondary);
@@ -829,12 +774,15 @@ kbd {
         background-color: var(--bg-secondary);
         flex-direction: column;
         padding: 6rem 2rem 2rem;
-        transition: transform 0.3s ease;
+        transition: right 0.3s ease;
         box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+        z-index: 200; /* Ensure above overlay */
+        will-change: right;
+        isolation: isolate; /* avoid backdrop-filter artifacts */
     }
 
     .nav-links.active {
-        transform: translateX(-280px);
+        right: 0;
     }
 
     .menu-button {
@@ -857,6 +805,7 @@ kbd {
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 90;
         backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
     }
 
     .overlay.active {
@@ -889,7 +838,7 @@ kbd {
 </head>
 <body>
     <!-- Skip navigation for accessibility -->
-    <a href="#main-content" class="skip-nav">Skip to main content</a>
+    
     
     <!-- Header with Navigation -->
     <header>
@@ -915,10 +864,7 @@ kbd {
                     <i class="fas fa-unlock"></i>
                     Decode
                 </a>
-                <a href="#tips" class="nav-link">
-                    <i class="fas fa-lightbulb"></i>
-                    Tips
-                </a>
+                
                 <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noreferrer noopener" class="nav-link" role="menuitem">
                     <i class="fab fa-github" aria-hidden="true"></i>
                     GitHub
@@ -1073,15 +1019,7 @@ kbd {
         </ul>
     </div>
 
-        <div class="info-card">
-            <h3><i class="fas fa-shield-alt" aria-hidden="true"></i> Best Practices for Hiding Text with Zero-Width Characters</h3>
-            <ul>
-                <li>Keep hidden messages short and concise to avoid detection.</li>
-                <li>Use simple, unmodified visible text for embedding the hidden message.</li>
-                <li>Test the encoded message on the intended platform to ensure the zero-width characters are preserved.</li>
-                <li>Maintain a backup of important hidden messages in case the invisible characters are removed by text editors.</li>
-            </ul>
-        </div>
+        
 
         <div class="info-card">
             <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Limitations of Zero-Width Steganography</h3>
@@ -1099,38 +1037,7 @@ kbd {
         <p>This tool is intended for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive or confidential information. For secure communication, consider using proper encryption tools.</p>
     </div>
 
-    <!-- Quick Tips Section -->
-    <div class="tips-section" id="tips">
-        <div class="container">
-            <h2 class="section-title">
-                <i class="fas fa-lightbulb"></i>
-                Quick Tips & Best Practices
-            </h2>
-            <div class="tips-grid">
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-text-height"></i>
-                    </div>
-                    <h3>Keep It Short</h3>
-                    <p>Shorter hidden messages are less likely to be detected. Aim for concise and meaningful text.</p>
-                </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile Friendly</h3>
-                    <p>Works seamlessly on all devices with responsive design and touch-friendly controls.</p>
-                </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Privacy First</h3>
-                    <p>All processing happens locally in your browser. No data is sent to external servers.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 </div>
     </main>
@@ -1351,8 +1258,11 @@ function decode() {
             const overlay = document.querySelector('.overlay');
 
             function toggleMenu() {
+                const isOpening = !navLinks.classList.contains('active');
                 navLinks.classList.toggle('active');
                 overlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll', isOpening);
+                menuButton.setAttribute('aria-expanded', String(isOpening));
                 
                 // Toggle menu icon
                 const icon = menuButton.querySelector('i');
@@ -1381,7 +1291,14 @@ function decode() {
             // Close menu when screen is resized above mobile breakpoint
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                    toggleMenu();
+                    // Force close without toggling icon animation flicker
+                    navLinks.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                    const icon = menuButton.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
                 }
             });
         });
