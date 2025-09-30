@@ -259,17 +259,7 @@ body.no-scroll {
     opacity: 0.8;
 }
 
-.character-count {
-    position: absolute;
-    bottom: 0.75rem;
-    right: 0.75rem;
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    background: var(--bg-primary);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
+/* .character-count removed */
 
 label {
     display: block;
@@ -919,16 +909,14 @@ kbd {
             </h2>
             <div class="input-group">
                 <label for="visibleText">Visible Text</label>
-                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..." aria-describedby="visibleText-hint visibleTextCount"></textarea>
+                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..." aria-describedby="visibleText-hint"></textarea>
                 <div class="input-hint" id="visibleText-hint">This text will be visible to everyone - choose something natural and inconspicuous</div>
-                <div class="character-count" id="visibleTextCount" aria-live="polite">0 characters</div>
             </div>
 
             <div class="input-group">
                 <label for="hiddenMessage">Hidden Message</label>
-                <input type="text" id="hiddenMessage" placeholder="Enter your secret message..." aria-describedby="hiddenMessage-hint hiddenMessageCount" aria-required="true">
+                <input type="text" id="hiddenMessage" placeholder="Enter your secret message..." aria-describedby="hiddenMessage-hint" aria-required="true">
                 <div class="input-hint" id="hiddenMessage-hint">Keep it short and simple for better concealment</div>
-                <div class="character-count" id="hiddenMessageCount" aria-live="polite">0 characters</div>
                 <div class="error-message" role="alert">Please enter a message to hide</div>
             </div>
 
@@ -960,9 +948,8 @@ kbd {
             </h2>
             <div class="input-group">
                 <label for="encodedText">Text to Decode</label>
-                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..." aria-describedby="encodedText-hint encodedTextCount"></textarea>
+                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..." aria-describedby="encodedText-hint"></textarea>
                 <div class="input-hint" id="encodedText-hint">Paste any text that might contain hidden zero-width characters</div>
-                <div class="character-count" id="encodedTextCount" aria-live="polite">0 characters</div>
             </div>
 
             <div class="button-group">
@@ -1164,54 +1151,14 @@ function decode() {
 
         // Enhanced UI functionality
         function initializeEnhancements() {
-            addCharacterCounters();
+            // Character counters removed
             addFormValidation();
             addKeyboardShortcuts();
         }
 
-        function addCharacterCounters() {
-            const visibleText = document.getElementById('visibleText');
-            const hiddenMessage = document.getElementById('hiddenMessage');
-            const encodedText = document.getElementById('encodedText');
+        // addCharacterCounters removed
 
-            if (visibleText) {
-                visibleText.addEventListener('input', function() {
-                    updateCharacterCount('visibleText', 'visibleTextCount');
-                });
-                // Initialize count
-                updateCharacterCount('visibleText', 'visibleTextCount');
-            }
-
-            if (hiddenMessage) {
-                hiddenMessage.addEventListener('input', function() {
-                    updateCharacterCount('hiddenMessage', 'hiddenMessageCount');
-                    validateForm();
-                });
-                updateCharacterCount('hiddenMessage', 'hiddenMessageCount');
-            }
-
-            if (encodedText) {
-                encodedText.addEventListener('input', function() {
-                    updateCharacterCount('encodedText', 'encodedTextCount');
-                });
-            }
-        }
-
-        function updateCharacterCount(inputId, countId) {
-            const input = document.getElementById(inputId);
-            const counter = document.getElementById(countId);
-            if (input && counter) {
-                const count = input.value.length;
-                counter.textContent = `${count} character${count !== 1 ? 's' : ''}`;
-                
-                if (inputId === 'hiddenMessage' && count > 100) {
-                    counter.style.color = 'var(--warning)';
-                    counter.textContent += ' (consider shortening)';
-                } else {
-                    counter.style.color = 'var(--text-secondary)';
-                }
-            }
-        }
+        // updateCharacterCount removed
 
         function addFormValidation() {
             const inputs = document.querySelectorAll('input, textarea');
