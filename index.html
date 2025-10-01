@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://stegzero.com/">
+    <link rel="alternate" hreflang="en" href="https://stegzero.com/">
+    <link rel="alternate" hreflang="x-default" href="https://stegzero.com/">
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     
     <!-- Preload critical resources -->
@@ -50,6 +52,7 @@
     <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
     <meta name="twitter:image:alt" content="StegZero - Zero-Width Character Steganography Tool Interface">
     <meta name="twitter:creator" content="@Clevis22">
+    <meta name="twitter:site" content="@Clevis22">
     
     <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#6366f1">
@@ -785,7 +788,7 @@ kbd {
     </style>
 </head>
 <body>
-    <!-- Skip navigation for accessibility -->
+    <!-- Skip navigation removed per request -->
     
     
     <!-- Header with Navigation -->
@@ -811,6 +814,10 @@ kbd {
                 <a href="#decode" class="nav-link">
                     <i class="fas fa-unlock"></i>
                     Decode
+                </a>
+                <a href="#faq" class="nav-link" role="menuitem">
+                    <i class="fas fa-question-circle" aria-hidden="true"></i>
+                    FAQ
                 </a>
                 
                 <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noreferrer noopener" class="nav-link" role="menuitem">
@@ -948,6 +955,14 @@ kbd {
                 <li>It can be used to hide text within images, audio files, video files, or even other text files.</li>
                 <li>The goal is to ensure that the presence of the hidden message is not detectable by casual observation.</li>
                 <li>Steganography is often used in conjunction with cryptography to provide an additional layer of security.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3><i class="fas fa-lightbulb" aria-hidden="true"></i> Use Cases</h3>
+            <ul>
+                <li>Hide text in text in plain sight using zero‑width Unicode characters (ZWSP/ZWNJ/ZWJ)</li>
+                <li>Reveal invisible text encoded with StegZero using a zero‑width decoder</li>
             </ul>
         </div>
 
