@@ -6,32 +6,11 @@
         
 <url>
   <loc>https://stegzero.com/</loc>
-  <lastmod>2025-08-27T12:00:00+00:00</lastmod>
+  <lastmod>2025-10-01T12:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
-<url>
-  <loc>https://stegzero.com/#encode</loc>
-  <lastmod>2025-08-27T12:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.8</priority>
-</url>
-
-<url>
-  <loc>https://stegzero.com/#decode</loc>
-  <lastmod>2025-08-27T12:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.8</priority>
-</url>
-
-<url>
-  <loc>https://stegzero.com/#how-it-works</loc>
-  <lastmod>2025-08-27T12:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<!-- Removed tips section URL -->
+<!-- Section anchors removed intentionally (fragments are ignored by crawlers). If you add separate HTML pages later, include them here. -->
 
 </urlset>
