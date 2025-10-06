@@ -1492,21 +1492,8 @@ document.addEventListener('DOMContentLoaded', function() {
     ]
 }
 </script>
-<script>
-// Minimal GoatCounter beacon without external script
-(function(){
-    try {
-        var endpoint = 'https://stegzero.goatcounter.com/count';
-        var path = location.pathname + location.search + location.hash;
-        var data = new URLSearchParams({ p: path, r: document.referrer || '', t: document.title || '' });
-        if (navigator.sendBeacon) {
-            navigator.sendBeacon(endpoint, data);
-        } else {
-            fetch(endpoint, { method: 'POST', body: data, keepalive: true, mode: 'no-cors' }).catch(function(){});
-        }
-    } catch(e) { /* no-op */ }
-})();
-</script>
+<script data-goatcounter="https://stegzero.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 
 </body>
 </html>
