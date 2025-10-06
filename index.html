@@ -25,8 +25,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StegZero — Zero‑Width Unicode Steganography | Encode & Decode Invisible Text</title>
     
-    <!-- Content Security Policy: allow required third-party resources (GoatCounter, cdnjs) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; connect-src 'self' https://stegzero.goatcounter.com; img-src 'self' data: https://stegzero.goatcounter.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; base-uri 'self'; frame-ancestors 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests">
+    <!-- Content Security Policy: allow required third-party resources (GoatCounter beacons, cdnjs) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://stegzero.goatcounter.com; img-src 'self' data: https://stegzero.goatcounter.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests">
     
     <!-- Enhanced SEO Meta Tags (consolidated) -->
     <meta name="description" content="Free online zero‑width Unicode steganography tool. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. Encode & decode hidden messages in your browser.">
@@ -63,6 +63,7 @@
     <meta name="application-name" content="StegZero">
     <meta name="apple-mobile-web-app-title" content="StegZero">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Structured Data (SoftwareApplication) -->
@@ -1491,8 +1492,21 @@ document.addEventListener('DOMContentLoaded', function() {
     ]
 }
 </script>
-<script data-goatcounter="https://stegzero.goatcounter.com/count"
-    async src="https://gc.zgo.at/count.js"></script>
+<script>
+// Minimal GoatCounter beacon without external script
+(function(){
+    try {
+        var endpoint = 'https://stegzero.goatcounter.com/count';
+        var path = location.pathname + location.search + location.hash;
+        var data = new URLSearchParams({ p: path, r: document.referrer || '', t: document.title || '' });
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(endpoint, data);
+        } else {
+            fetch(endpoint, { method: 'POST', body: data, keepalive: true, mode: 'no-cors' }).catch(function(){});
+        }
+    } catch(e) { /* no-op */ }
+})();
+</script>
 
 </body>
 </html>
