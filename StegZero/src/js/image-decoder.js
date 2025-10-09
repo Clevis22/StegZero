@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Width Unicode Steganography</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Zero-Width Unicode Steganography</h1>
+        <div>
+            <h2>Hide Message in Image</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <textarea id="messageInput" placeholder="Enter your message here..."></textarea>
+            <button id="hideMessageBtn">Hide Message</button>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="outputImage" alt="Output Image" />
+        </div>
+        <div>
+            <h2>Extract Message from Image</h2>
+            <input type="file" id="imageInputExtract" accept="image/*">
+            <button id="extractMessageBtn">Extract Message</button>
+            <p id="extractedMessage"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
