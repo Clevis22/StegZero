@@ -30,7 +30,7 @@
 
     
     <!-- Enhanced SEO Meta Tags (consolidated) -->
-    <meta name="description" content="Free online zero‑width Unicode steganography tool. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. Encode & decode hidden messages in your browser.">
+    <meta name="description" content="Free online zero‑width Unicode steganography tool and steganography decoder. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. Encode & decode hidden messages in your browser.">
     <meta name="keywords" content="zero-width steganography, unicode steganography, invisible text, zero width space, ZWSP, ZWNJ, ZWJ, text steganography, hide text in text, zero-width encoder, zero-width decoder">
     <meta name="author" content="Clevis22">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -83,7 +83,7 @@
       "screenshot": "https://stegzero.com/preview-image.png",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "creator": { "@type": "Person", "name": "Clevis22", "url": "https://github.com/Clevis22" },
-      "keywords": ["zero-width steganography", "unicode steganography", "invisible text", "ZWSP", "ZWNJ", "ZWJ", "text steganography", "encode decode"],
+    "keywords": ["zero-width steganography", "unicode steganography", "invisible text", "ZWSP", "ZWNJ", "ZWJ", "text steganography", "encode decode", "steganography decoder"],
       "sameAs": [
         "https://github.com/Clevis22/StegZero",
         "https://buymeacoffee.com/stegzero"
@@ -933,7 +933,7 @@ kbd {
             <div class="input-group">
                 <label for="encodedText">Text to Decode</label>
                 <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..." aria-describedby="encodedText-hint"></textarea>
-                <div class="input-hint" id="encodedText-hint">Paste any text that might contain hidden zero-width characters</div>
+                <div class="input-hint" id="encodedText-hint">Paste any text that might contain hidden zero-width characters — this page also works as a steganography decoder for invisible Unicode.</div>
             </div>
 
             <div class="button-group">
@@ -1043,6 +1043,12 @@ kbd {
             <h3><i class="fas fa-wrench" aria-hidden="true"></i> How do I encode or decode?</h3>
             <ul>
                 <li>Use the Encode and Decode sections above to generate or reveal invisible text.</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h3><i class="fas fa-search" aria-hidden="true"></i> Do you have a steganography decoder?</h3>
+            <ul>
+                <li>Yes. The Decode section functions as a steganography decoder for zero‑width Unicode text. Paste suspicious text and click Decode to reveal any hidden message.</li>
             </ul>
         </div>
     </div>
@@ -1515,6 +1521,14 @@ document.addEventListener('DOMContentLoaded', function() {
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Use the Encode and Decode sections on the page: enter cover text and a secret message to generate invisible text, or paste text to reveal hidden content."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do you provide a steganography decoder?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. StegZero includes a steganography decoder for zero-width Unicode. Paste any text that might contain invisible characters and press Decode to reveal hidden messages."
             }
         }
     ]
