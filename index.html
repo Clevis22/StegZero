@@ -316,6 +316,17 @@ input[type="text"] {
     box-shadow: none;
 }
 
+.btn-secondary {
+    background-color: rgba(148, 163, 184, 0.18);
+    color: var(--text-secondary);
+    border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(148, 163, 184, 0.3);
+    color: var(--text-primary);
+}
+
 .btn-primary.loading {
     pointer-events: none;
 }
@@ -610,6 +621,18 @@ input[type="text"] {
     margin-right: 0.5rem;
 }
 
+.progress-step .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    font-size: 0.75rem;
+}
+
 .footer-container {
     max-width: 1100px;
     margin: 0 auto;
@@ -853,7 +876,8 @@ kbd {
         <div class="container">
             <section class="header">
                 <h1>StegZero</h1>
-                <p>Hide secret messages in plain sight using zero-width characters</p>
+                <p>Hide secret messages in plain sight using zero-width characters.</p>
+                <p class="input-hint" aria-live="polite">Runs entirely in your browser – no text is sent to a server.</p>
                 <div class="header-stats" role="list">
                     <div class="stat-item" role="listitem">
                         <i class="fas fa-shield-alt" aria-hidden="true"></i>
@@ -871,18 +895,21 @@ kbd {
         </div>
 
         <!-- Progress Indicator -->
-        <section class="progress-container" aria-label="Process steps">
-            <div class="progress-step active">
-                <i class="fas fa-edit" aria-hidden="true"></i>
-                <span>Input</span>
+        <section class="progress-container" aria-label="Usage steps">
+            <div class="progress-step active" id="step-encode">
+                <span class="step-number" aria-hidden="true">1</span>
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <span>Encode</span>
             </div>
-            <div class="progress-step">
-                <i class="fas fa-cog" aria-hidden="true"></i>
-                <span>Process</span>
+            <div class="progress-step" id="step-share">
+                <span class="step-number" aria-hidden="true">2</span>
+                <i class="fas fa-share-alt" aria-hidden="true"></i>
+                <span>Share</span>
             </div>
-            <div class="progress-step">
-                <i class="fas fa-check" aria-hidden="true"></i>
-                <span>Result</span>
+            <div class="progress-step" id="step-decode">
+                <span class="step-number" aria-hidden="true">3</span>
+                <i class="fas fa-unlock" aria-hidden="true"></i>
+                <span>Decode</span>
             </div>
         </section>
 
@@ -905,18 +932,24 @@ kbd {
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" onclick="encode()" aria-describedby="encode-description">
+                <button class="btn btn-primary" type="button" id="encodeButton" onclick="handleEncodeClick()" aria-describedby="encode-description">
                     <i class="fas fa-shield-alt" aria-hidden="true"></i>
                     Encode
                 </button>
+                <button class="btn btn-secondary" type="button" onclick="clearEncodeForm()">
+                    <i class="fas fa-eraser" aria-hidden="true"></i>
+                    Clear
+                </button>
                 <span id="encode-description" class="sr-only">Encode your hidden message into the visible text using zero-width characters</span>
             </div>
+
+            <p id="encodeStatus" class="input-hint" aria-live="polite"></p>
 
             <div class="result-container">
                 <label>Result</label>
                 <div class="result" id="encodedResult" role="log" aria-live="polite" aria-label="Encoded message result">Encoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('encodedResult')" aria-describedby="copy-description">
+                    <button class="btn btn-success" type="button" onclick="copyToClipboard('encodedResult')" aria-describedby="copy-description">
                         <i class="fas fa-copy" aria-hidden="true"></i>
                         Copy to Clipboard
                     </button>
@@ -937,18 +970,28 @@ kbd {
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" onclick="decode()" aria-describedby="decode-description">
+                <button class="btn btn-primary" type="button" id="decodeButton" onclick="handleDecodeClick()" aria-describedby="decode-description">
                     <i class="fas fa-eye" aria-hidden="true"></i>
                     Decode
                 </button>
+                <button class="btn btn-secondary" type="button" onclick="pasteFromClipboard('encodedText')">
+                    <i class="fas fa-paste" aria-hidden="true"></i>
+                    Paste from clipboard
+                </button>
+                <button class="btn btn-secondary" type="button" onclick="clearDecodeForm()">
+                    <i class="fas fa-eraser" aria-hidden="true"></i>
+                    Clear
+                </button>
                 <span id="decode-description" class="sr-only">Decode any hidden messages from the provided text</span>
             </div>
+
+            <p id="decodeStatus" class="input-hint" aria-live="polite"></p>
 
             <div class="result-container">
                 <label>Hidden Message</label>
                 <div class="result" id="decodedResult" role="log" aria-live="polite" aria-label="Decoded message result">Decoded message will appear here.</div>
                 <div class="button-group">
-                    <button class="btn btn-success" onclick="copyToClipboard('decodedResult')" aria-describedby="copy-decoded-description">
+                    <button class="btn btn-success" type="button" onclick="copyToClipboard('decodedResult')" aria-describedby="copy-decoded-description">
                         <i class="fas fa-copy" aria-hidden="true"></i>
                         Copy to Clipboard
                     </button>
@@ -1312,15 +1355,32 @@ function interleavePayload(visible, payload) {
     return out;
 }
 
+function setActiveStep(step) {
+    const steps = ['encode', 'share', 'decode'];
+    steps.forEach(name => {
+        const el = document.getElementById(`step-${name}`);
+        if (el) el.classList.toggle('active', name === step);
+    });
+}
+
 function encode() {
     const visibleText = document.getElementById('visibleText').value || '';
     const hiddenMessage = document.getElementById('hiddenMessage').value || '';
 
     const resultEl = document.getElementById('encodedResult');
+    const statusEl = document.getElementById('encodeStatus');
+    const hiddenInput = document.getElementById('hiddenMessage');
+
     if (!hiddenMessage) {
         resultEl.textContent = visibleText || 'Please enter a message to hide';
+        if (statusEl) statusEl.textContent = 'Add a secret message before encoding.';
+        if (hiddenInput) hiddenInput.setAttribute('aria-invalid', 'true');
+        showToast('Please enter a message to hide', 'warning');
         return;
     }
+
+    if (statusEl) statusEl.textContent = 'Encoding hidden message…';
+    if (hiddenInput) hiddenInput.removeAttribute('aria-invalid');
 
     // UTF-8 bytes of the message
     const msgBytes = te.encode(hiddenMessage);
@@ -1339,6 +1399,9 @@ function encode() {
     const payload = bitsToAlphabet(fullBits);
     const stego = interleavePayload(visibleText, payload);
     resultEl.textContent = stego;
+    if (statusEl) statusEl.textContent = 'Done. Your hidden message is now embedded in the visible text.';
+    setActiveStep('share');
+    showToast('Message encoded. You can now copy and share it.');
 }
 
 function tryDecodeV2(encodedText) {
@@ -1399,6 +1462,10 @@ function tryDecodeLegacy(encodedText) {
 function decode() {
     const encodedText = document.getElementById('encodedText').value || '';
     const resultEl = document.getElementById('decodedResult');
+    const statusEl = document.getElementById('decodeStatus');
+
+    if (statusEl) statusEl.textContent = 'Decoding…';
+    setActiveStep('decode');
 
     // Try V2 first
     let decoded = tryDecodeV2(encodedText);
@@ -1407,7 +1474,20 @@ function decode() {
         decoded = tryDecodeLegacy(encodedText);
     }
 
-    resultEl.textContent = decoded || 'No hidden message found';
+    const finalText = decoded || 'No hidden message found';
+    resultEl.textContent = finalText;
+
+    if (statusEl) {
+        statusEl.textContent = decoded
+            ? 'Hidden message recovered successfully.'
+            : 'No hidden message found in this text.';
+    }
+
+    if (decoded) {
+        showToast('Hidden message decoded.', 'success');
+    } else {
+        showToast('No hidden message found in this text.', 'warning');
+    }
 }
 
 function copyToClipboard(elementId) {
@@ -1415,6 +1495,68 @@ function copyToClipboard(elementId) {
     navigator.clipboard.writeText(text)
         .then(() => showToast('Copied to clipboard!'))
         .catch(err => showToast('Failed to copy: ' + err, 'error'));
+}
+
+function pasteFromClipboard(targetId) {
+    const target = document.getElementById(targetId);
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+        showToast('Clipboard paste is not supported in this browser.', 'warning');
+        return;
+    }
+    navigator.clipboard.readText()
+        .then(text => {
+            target.value = text;
+            target.focus();
+            showToast('Pasted from clipboard. You can now decode it.');
+        })
+        .catch(err => showToast('Failed to paste: ' + err, 'error'));
+}
+
+function clearEncodeForm() {
+    const visibleText = document.getElementById('visibleText');
+    const hiddenMessage = document.getElementById('hiddenMessage');
+    const resultEl = document.getElementById('encodedResult');
+    const statusEl = document.getElementById('encodeStatus');
+
+    if (visibleText) visibleText.value = '';
+    if (hiddenMessage) {
+        hiddenMessage.value = '';
+        hiddenMessage.removeAttribute('aria-invalid');
+    }
+    if (resultEl) resultEl.textContent = 'Encoded message will appear here.';
+    if (statusEl) statusEl.textContent = '';
+}
+
+function clearDecodeForm() {
+    const encodedText = document.getElementById('encodedText');
+    const resultEl = document.getElementById('decodedResult');
+    const statusEl = document.getElementById('decodeStatus');
+
+    if (encodedText) encodedText.value = '';
+    if (resultEl) resultEl.textContent = 'Decoded message will appear here.';
+    if (statusEl) statusEl.textContent = '';
+}
+
+function handleEncodeClick() {
+    const button = document.getElementById('encodeButton');
+    if (!button) {
+        encode();
+        return;
+    }
+    button.disabled = true;
+    encode();
+    setTimeout(() => { button.disabled = false; }, 300);
+}
+
+function handleDecodeClick() {
+    const button = document.getElementById('decodeButton');
+    if (!button) {
+        decode();
+        return;
+    }
+    button.disabled = true;
+    decode();
+    setTimeout(() => { button.disabled = false; }, 300);
 }
 
 function showToast(message, type = 'success') {
@@ -1429,6 +1571,7 @@ function showToast(message, type = 'success') {
 function initializeEnhancements() {
     addFormValidation();
     addKeyboardShortcuts();
+    setActiveStep('encode');
 }
 
 function addFormValidation() {
