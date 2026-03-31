@@ -1,1703 +1,1594 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="canonical" href="https://stegzero.com/">
-    <link rel="alternate" hreflang="en" href="https://stegzero.com/">
-    <link rel="alternate" hreflang="x-default" href="https://stegzero.com/">
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
-    
-    <!-- DNS prefetch for external domains -->
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="//github.com">
-    <link rel="dns-prefetch" href="//buymeacoffee.com">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StegZero — Zero‑Width Unicode Steganography | Encode & Decode Invisible Text</title>
-    
-
-
-    
-    <!-- Enhanced SEO Meta Tags (consolidated) -->
-    <meta name="description" content="Free online zero‑width Unicode steganography tool and steganography decoder. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. Encode & decode hidden messages in your browser.">
-    <meta name="keywords" content="zero-width steganography, unicode steganography, invisible text, zero width space, ZWSP, ZWNJ, ZWJ, text steganography, hide text in text, zero-width encoder, zero-width decoder">
-    <meta name="author" content="Clevis22">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <meta name="language" content="English">
-    
-    <!-- Open Graph / Facebook (single source of truth) -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://stegzero.com/">
-    <meta property="og:title" content="StegZero — Zero‑Width Unicode Steganography">
-    <meta property="og:description" content="Hide and reveal invisible messages using zero‑width Unicode characters. 100% client‑side.">
-    <meta property="og:image" content="https://stegzero.com/preview-image.png">
-    <meta property="og:image:alt" content="StegZero - Zero-Width Character Steganography Tool Interface">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="StegZero">
-    <meta property="og:locale" content="en_US">
-    
-    <!-- Twitter (single source of truth) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://stegzero.com/">
-    <meta name="twitter:title" content="StegZero — Zero‑Width Unicode Steganography">
-    <meta name="twitter:description" content="Encode & decode hidden messages with invisible Unicode characters.">
-    <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
-    <meta name="twitter:image:alt" content="StegZero - Zero-Width Character Steganography Tool Interface">
-    <meta name="twitter:creator" content="@Clevis22">
-    <meta name="twitter:site" content="@Clevis22">
-    
-    <!-- Additional SEO Meta Tags -->
-    <meta name="theme-color" content="#6366f1">
-    <meta name="msapplication-TileColor" content="#6366f1">
-    <meta name="application-name" content="StegZero">
-    <meta name="apple-mobile-web-app-title" content="StegZero">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Structured Data (SoftwareApplication) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "applicationCategory": "SecurityApplication",
-      "applicationSubCategory": "TextProcessingApplication",
-      "name": "StegZero",
-      "alternateName": ["Zero‑Width Steganography Tool", "Unicode Invisible Text Encoder"],
-      "description": "Free online steganography tool that hides and reveals messages in plain text using invisible zero‑width Unicode characters (ZWSP/ZWNJ/ZWJ). Works entirely in your browser.",
-      "url": "https://stegzero.com/",
-      "operatingSystem": "Web",
-      "image": "https://stegzero.com/preview-image.png",
-      "screenshot": "https://stegzero.com/preview-image.png",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "creator": { "@type": "Person", "name": "Clevis22", "url": "https://github.com/Clevis22" },
-    "keywords": ["zero-width steganography", "unicode steganography", "invisible text", "ZWSP", "ZWNJ", "ZWJ", "text steganography", "encode decode", "steganography decoder"],
-      "sameAs": [
-        "https://github.com/Clevis22/StegZero",
-        "https://buymeacoffee.com/stegzero"
-      ]
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StegZero — Zero-Width Unicode Steganography | Encode & Decode Invisible Text</title>
+  <meta name="description" content="Free online zero-width Unicode steganography tool. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. 100% client-side.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #080c14;
+      --bg2: #0e1521;
+      --bg3: #141d2e;
+      --border: rgba(99,179,237,0.12);
+      --border-bright: rgba(99,179,237,0.35);
+      --text: #e2ecf8;
+      --text-muted: #6b839e;
+      --accent: #63b3ed;
+      --accent2: #4299e1;
+      --accent-glow: rgba(99,179,237,0.18);
+      --success: #48bb78;
+      --warn: #ed8936;
+      --danger: #fc8181;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+      --radius: 10px;
+      --transition: all 0.18s ease;
     }
-    </script>
-    
-    <style>
-:root {
-    /* Modern color palette with enhanced contrast */
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --accent-primary: #6366f1;
-    --accent-secondary: #4f46e5;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --border-radius: 12px;
-    --transition: all 0.2s ease-in-out;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.7;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-}
-
-/* Prevent background scroll when mobile menu is open */
-body.no-scroll {
-    overflow: hidden;
-}
-
-.menu-button {
-    display: none; 
-}
-
-.container {
-    max-width: 1100px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-    width: 100%;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 4rem;
-    padding: 2rem 0;
-}
-
-.header h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, var(--accent-primary), #818cf8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.02em;
-}
-
-.header p {
-    color: var(--text-secondary);
-    font-size: 1.25rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.card {
-    background-color: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    padding: 2.5rem;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.section-title i {
-    margin-right: 1rem;
-    color: var(--accent-primary);
-    font-size: 1.25rem;
-}
-
-.input-group {
-    margin-bottom: 2rem;
-    position: relative;
-}
-
-.input-group.focused label {
-    color: var(--accent-primary);
-}
-
-.input-group.has-error input,
-.input-group.has-error textarea {
-    border-color: var(--danger);
-}
-
-.input-group.has-error .error-message {
-    display: block;
-}
-
-.error-message {
-    display: none;
-    color: var(--danger);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-}
-
-.input-hint {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    opacity: 0.8;
-}
-
-/* .character-count removed */
-
-label {
-    display: block;
-    margin-bottom: 0.75rem;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-textarea, input[type="text"] {
-    width: 100%;
-    background-color: var(--bg-primary);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-primary);
-    padding: 1.25rem;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    transition: var(--transition);
-    resize: vertical;
-    min-height: 100px;
-}
-
-textarea:focus, input[type="text"]:focus {
-    outline: none;
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-input[type="text"] {
-    min-height: auto;
-    height: 3.5rem;
-}
-
-.button-group {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.875rem 1.75rem;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    white-space: nowrap;
-    min-width: 150px;
-}
-
-.btn i {
-    margin-right: 0.75rem;
-    font-size: 1.1rem;
-}
-
-.menu-button {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 101;
-}
-
-.btn-primary {
-    background-color: var(--accent-primary);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-primary:hover {
-    background-color: var(--accent-secondary);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.2);
-}
-
-.btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.btn-secondary {
-    background-color: rgba(148, 163, 184, 0.18);
-    color: var(--text-secondary);
-    border: 1px solid rgba(148, 163, 184, 0.5);
-}
-
-.btn-secondary:hover {
-    background-color: rgba(148, 163, 184, 0.3);
-    color: var(--text-primary);
-}
-
-.btn-primary.loading {
-    pointer-events: none;
-}
-
-.btn-primary.loading::after {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    margin: auto;
-    border: 2px solid transparent;
-    border-top-color: #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.btn-primary.loading .fas {
-    opacity: 0;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.btn-success {
-    background-color: var(--success);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-success:hover {
-    background-color: #16a34a;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
-}
-
-.result-container {
-    margin-top: 2rem;
-}
-
-.result {
-    background-color: var(--bg-primary);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
-    padding: 1.25rem;
-    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
-    color: var(--text-primary);
-    word-break: break-all;
-    min-height: 80px;
-    line-height: 1.6;
-}
-
-.info-section {
-    margin: 4rem 0;
-    background-color: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    padding: 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-top: 2.5rem;
-}
-
-.info-card {
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: var(--transition);
-}
-
-.info-card:hover {
-    transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.info-card h3 {
-    color: var(--accent-primary);
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.25rem;
-}
-
-.info-card ul {
-    list-style: none;
-    margin-left: 1.5rem;
-}
-
-.info-card li {
-    position: relative;
-    margin-bottom: 1rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-.info-card li::before {
-    content: "•";
-    color: var(--accent-primary);
-    position: absolute;
-    left: -1.5rem;
-    font-weight: bold;
-}
-
-.warning-box {
-    background-color: rgba(245, 158, 11, 0.1);
-    border-left: 4px solid var(--warning);
-    padding: 1.5rem;
-    margin-top: 2rem;
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-}
-
-.warning-box h4 {
-    color: var(--warning);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.1rem;
-}
-
-.toast {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--success);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: var(--border-radius);
-    display: none;
-    animation: slideIn 0.3s ease;
-    z-index: 1000;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    min-width: 250px;
-    backdrop-filter: blur(10px);
-}
-
-.toast.toast-success {
-    background-color: var(--success);
-}
-
-.toast.toast-error {
-    background-color: var(--danger);
-}
-
-.toast.toast-warning {
-    background-color: var(--warning);
-    color: var(--bg-primary);
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%) translateY(0);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0) translateY(0);
-        opacity: 1;
-    }
-}
-
-.navbar {
-    background-color: var(--bg-secondary);
-    padding: 1.25rem 0;
-    
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.3rem;
-    transition: var(--transition);
-}
-
-.nav-logo:hover {
-    color: var(--accent-primary);
-}
-
-.nav-logo i {
-    color: var(--accent-primary);
-}
-
-.nav-links {
-    display: flex;
-    gap: 2.5rem;
-    align-items: center;
-}
-
-.nav-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-}
-
-.nav-link:hover {
-    color: var(--accent-primary);
-}
-
-.header-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 2.5rem;
-    flex-wrap: wrap;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: var(--transition);
-    min-width: 120px;
-}
-
-.stat-item:hover {
-    transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.stat-item i {
-    color: var(--accent-primary);
-    font-size: 1.5rem;
-}
-
-.stat-item span {
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-/* Progress indicator for multi-step process */
-.progress-container {
-    display: flex;
-    justify-content: center;
-    max-width: 1100px;
-    margin: 0 auto 3rem;
-    padding: 0 1.5rem;
-}
-
-.progress-step {
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.progress-step.active {
-    color: var(--accent-primary);
-}
-
-.progress-step:not(:last-child)::after {
-    content: '→';
-    margin: 0 1.5rem;
-    color: var(--text-secondary);
-    opacity: 0.5;
-}
-
-.progress-step i {
-    margin-right: 0.5rem;
-}
-
-.progress-step .step-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 0.5rem;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.6);
-    font-size: 0.75rem;
-}
-
-.footer-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 3rem;
-    margin-bottom: 4rem;
-}
-
-.footer-section h3 {
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-link {
-    margin-bottom: 1rem;
-}
-
-.footer-link a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.footer-link a:hover {
-    color: var(--accent-primary);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-}
-
-/* Tips Section removed */
-
-.tip-card li {
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-}
-
-kbd {
-    background-color: var(--bg-primary);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    color: var(--text-primary);
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1;
-    padding: 0.25rem 0.4rem;
-    margin: 0 0.1rem;
-}
-
-/* Screen reader only content */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* Skip navigation link for accessibility */
-.skip-nav {
-    position: absolute;
-    top: -40px;
-    left: 6px;
-    background: var(--accent-primary);
-    color: white;
-    padding: 8px;
-    text-decoration: none;
-    border-radius: 4px;
-    z-index: 1000;
-}
-
-.skip-nav:focus {
-    top: 6px;
-}
-
-/* Mobile & Tablet Improvements */
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 2.5rem;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
     }
 
-    .card, .info-section {
-        padding: 1.5rem;
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .nav-links {
-        position: fixed;
-        top: 0;
-        right: -280px;
-        height: 100vh;
-        width: 280px;
-        background-color: var(--bg-secondary);
-        flex-direction: column;
-        padding: 6rem 2rem 2rem;
-        transition: right 0.3s ease;
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-        z-index: 200; /* Ensure above overlay */
-        will-change: right;
-        isolation: isolate; /* avoid backdrop-filter artifacts */
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(8,12,20,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
     }
-
-    .nav-links.active {
-        right: 0;
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-
-    .menu-button {
-        display: block;
-        background: none;
-        border: none;
-        color: var(--text-primary);
-        font-size: 1.5rem;
-        cursor: pointer;
-        z-index: 101;
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-
+    .nav-logo span { color: var(--text-muted); }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-link {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+    .nav-link:hover { color: var(--accent); }
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
     .overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 90;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 150;
+      backdrop-filter: blur(4px);
+    }
+    .overlay.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 1.5rem 3rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--border-bright);
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      background: rgba(99,179,237,0.06);
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #e2ecf8 30%, #63b3ed 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 0.75rem;
+    }
+    .hero-note {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      background: var(--bg2);
+      transition: var(--transition);
+    }
+    .pill i { color: var(--accent); font-size: 0.7rem; }
+    .pill:hover { border-color: var(--border-bright); color: var(--text); }
+
+    /* ── SECURITY WARNING (prominent) ── */
+    .security-banner {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+    }
+    .security-banner-inner {
+      background: rgba(237,137,54,0.08);
+      border: 1px solid rgba(237,137,54,0.3);
+      border-left: 3px solid var(--warn);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: rgba(237,137,54,0.9);
+      line-height: 1.5;
+    }
+    .security-banner-inner i { margin-top: 0.1rem; flex-shrink: 0; }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+      width: 100%;
     }
 
-    .overlay.active {
-        display: block;
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 0;
+      background: var(--bg2);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-right: 1px solid var(--border);
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn.active {
+      background: rgba(99,179,237,0.1);
+      color: var(--accent);
+    }
+    .tab-btn:hover:not(.active) { background: var(--bg3); color: var(--text); }
+
+    /* ── PANEL ── */
+    .panel {
+      display: none;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 2rem;
+    }
+    .panel.active { display: block; }
+
+    /* ── FLOW ARROW between panels ── */
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 0;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-family: var(--mono);
+      gap: 0.5rem;
+      opacity: 0.5;
     }
 
-    .button-group {
-        flex-direction: column;
+    /* ── ENCODE / DECODE PIPE BUTTON ── */
+    .pipe-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: rgba(99,179,237,0.06);
+      border: 1px solid var(--border-bright);
+      color: var(--accent);
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-left: auto;
     }
+    .pipe-btn:hover { background: rgba(99,179,237,0.14); }
 
+    /* ── FORM ELEMENTS ── */
+    .field { margin-bottom: 1.5rem; }
+    .field label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+    }
+    .field label .required { color: var(--danger); margin-left: 3px; }
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.45rem;
+      line-height: 1.5;
+      font-family: var(--mono);
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius);
+      resize: vertical;
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+    textarea { min-height: 110px; }
+    input[type="text"] { height: 3.1rem; }
+    textarea:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .char-counter {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+    .char-counter.warn { color: var(--warn); }
+    .char-counter.danger { color: var(--danger); }
+
+    /* ── PLATFORM WARNING ── */
+    .platform-note {
+      background: rgba(99,179,237,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .platform-note strong { color: var(--text); }
+    .platform-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      margin: 0.2rem 0.1rem;
+      border: 1px solid;
+    }
+    .chip-ok { color: var(--success); border-color: rgba(72,187,120,0.3); background: rgba(72,187,120,0.06); }
+    .chip-warn { color: var(--warn); border-color: rgba(237,137,54,0.3); background: rgba(237,137,54,0.06); }
+    .chip-bad { color: var(--danger); border-color: rgba(252,129,129,0.3); background: rgba(252,129,129,0.06); }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
     .btn {
-        width: 100%;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: var(--radius);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent2);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,179,237,0.25); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-ghost {
+      background: var(--bg3);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--border-bright); color: var(--text); }
+    .btn-success {
+      background: rgba(72,187,120,0.12);
+      color: var(--success);
+      border: 1px solid rgba(72,187,120,0.3);
+    }
+    .btn-success:hover { background: rgba(72,187,120,0.2); }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      word-break: break-all;
+      min-height: 80px;
+      line-height: 1.7;
+      color: var(--text);
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .result-box.has-content { border-color: var(--border-bright); }
+    .result-box.empty { color: var(--text-muted); font-style: italic; }
+    .result-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.55rem;
+    }
+    .result-label span {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .result-label .result-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
     }
 
-    /* Mobile: keep steps horizontal but slightly more compact */
-    .progress-container {
-        flex-direction: row;
-        align-items: center;
-        padding: 0 1.5rem;
-        margin-bottom: 2rem;
+    /* ── LIVE PREVIEW (zero-width highlighting) ── */
+    .preview-section { margin-top: 1.75rem; }
+    .preview-section h3 {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .preview-section h3 i { color: var(--accent); }
+    .preview-display {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      word-break: break-word;
+      min-height: 60px;
+      color: var(--text);
+    }
+    /* Zero-width char highlight */
+    .zw-mark {
+      display: inline-block;
+      background: rgba(99,179,237,0.22);
+      border: 1px solid rgba(99,179,237,0.5);
+      border-radius: 3px;
+      width: 7px;
+      height: 14px;
+      vertical-align: middle;
+      margin: 0 0.5px;
+      position: relative;
+      cursor: default;
+    }
+    .preview-legend {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.65rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .preview-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .zw-sample {
+      display: inline-block;
+      background: rgba(99,179,237,0.22);
+      border: 1px solid rgba(99,179,237,0.5);
+      border-radius: 3px;
+      width: 10px;
+      height: 12px;
+    }
+    .zw-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.55rem;
+      background: rgba(99,179,237,0.08);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
     }
 
-    .progress-step {
-        justify-content: center;
-        font-size: 0.85rem;
-        margin-bottom: 0;
+    /* ── DETECT MODE ── */
+    .detect-result {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+    .detect-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .detect-row:last-child { border-bottom: none; }
+    .detect-row strong { color: var(--text); }
+    .badge-ok { color: var(--success); }
+    .badge-none { color: var(--text-muted); }
+    .badge-found { color: var(--warn); }
+
+    /* ── ROUND-TRIP TEST ── */
+    .rt-result {
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .rt-pass { color: var(--success); }
+    .rt-fail { color: var(--danger); }
+
+    /* ── INFO / FAQ ── */
+    .section-heading {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-heading i { color: var(--accent); font-size: 1rem; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .info-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+    .info-card:hover { border-color: var(--border-bright); }
+    .info-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      font-family: var(--mono);
+    }
+    .info-card ul { list-style: none; }
+    .info-card li {
+      padding: 0.35rem 0;
+      padding-left: 1rem;
+      position: relative;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .info-card li:last-child { border-bottom: none; }
+    .info-card li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
+
+    /* ── PASSPHRASE ── */
+    .passphrase-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 38px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    input:checked + .toggle-track { background: rgba(99,179,237,0.2); border-color: var(--accent); }
+    input:checked + .toggle-track::after { left: 20px; background: var(--accent); }
+    .toggle-label { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); }
+    .passphrase-field { display: none; margin-top: 0.75rem; }
+    .passphrase-field.visible { display: block; }
+
+    /* ── EXPORT ROW ── */
+    .export-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .progress-step:not(:last-child)::after {
-        content: '→';
-        margin: 0 1rem;
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      display: none;
+      z-index: 9999;
+      animation: slideUp 0.25s ease;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+      max-width: 320px;
     }
-}
-
-@media (max-width: 480px) {
-    .header h1 {
-        font-size: 2rem;
-    }
-
-    .header p {
-        font-size: 1.1rem;
-    }
-
-    .card, .info-section {
-        padding: 1.25rem;
-    }
-}
-/* Large screens: narrow cards slightly so they don't span full width */
-@media (min-width: 1024px) {
-    .card {
-        max-width: 1000px; /* adjust as desired */
-        margin-left: auto;
-        margin-right: auto;
+    .toast-success { background: var(--success); color: #fff; }
+    .toast-warn { background: var(--warn); color: #fff; }
+    .toast-error { background: var(--danger); color: #fff; }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    .info-section {
-        max-width: 1000px; /* adjust as desired */
-        margin-left: auto;
-        margin-right: auto;
+    /* ── STATUS LINE ── */
+    .status-line {
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      margin-top: 0.6rem;
+      min-height: 1.1em;
+      color: var(--text-muted);
     }
-}
-    </style>
+    .status-line.ok { color: var(--success); }
+    .status-line.err { color: var(--danger); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      max-width: 1080px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer-section h4 {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.6rem; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .footer-bottom p {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .nav-links {
+        position: fixed;
+        top: 0; right: -260px;
+        height: 100vh;
+        width: 260px;
+        background: var(--bg2);
+        flex-direction: column;
+        padding: 5rem 1.75rem 2rem;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 300;
+        border-left: 1px solid var(--border);
+      }
+      .nav-links.open { right: 0; }
+      .menu-btn { display: block; z-index: 400; }
+      .btn-row { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .export-row { flex-direction: column; }
+      .export-row .btn { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 3.5rem 1rem 2rem; }
+      .panel { padding: 1.25rem; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Skip navigation removed per request -->
-    
-    
-    <!-- Header with Navigation -->
-    <header>
-        <nav class="navbar" role="navigation" aria-label="Main navigation">
-            <div class="nav-container">
-                <a href="#" class="nav-logo" aria-label="StegZero Home">
-                    <i class="fas fa-ghost" aria-hidden="true"></i>
-                    StegZero​‌​‌​‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌‌‌​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​​‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​​‌​​​​‌
-                </a>
-                <button class="menu-button" aria-label="Toggle navigation menu" aria-expanded="false">
-                    <i class="fas fa-bars" aria-hidden="true"></i>
-                </button>
-                <div class="nav-links" role="menubar">
-                    <a href="#how-it-works" class="nav-link" role="menuitem">
-                        <i class="fas fa-info-circle" aria-hidden="true"></i>
-                    How It Works
-                </a>
-                <a href="#encode" class="nav-link">
-                    <i class="fas fa-lock"></i>
-                    Encode
-                </a>
-                <a href="#decode" class="nav-link">
-                    <i class="fas fa-unlock"></i>
-                    Decode
-                </a>
-                <a href="#faq" class="nav-link" role="menuitem">
-                    <i class="fas fa-question-circle" aria-hidden="true"></i>
-                    FAQ
-                </a>
-                <a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noreferrer noopener" class="nav-link" role="menuitem">
-                    <i class="fas fa-heart" aria-hidden="true"></i>
-                    Sponsor
-                </a>
-                
-                <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noreferrer noopener" class="nav-link" role="menuitem">
-                    <i class="fab fa-github" aria-hidden="true"></i>
-                    GitHub
-                </a>
-            </div>
-        </div>
-    </nav>
-    <div class="overlay" aria-hidden="true"></div>
 
-    <!-- Main Content -->
-    <main id="main-content">
-        <div class="container">
-            <section class="header">
-                <h1>StegZero</h1>
-                <p>Hide secret messages in plain sight using zero-width characters.</p>
-                <p class="input-hint" aria-live="polite">Runs entirely in your browser – no text is sent to a server.</p>
-                <div class="header-stats" role="list">
-                    <div class="stat-item" role="listitem">
-                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                        <span>Secure</span>
-                    </div>
-                    <div class="stat-item" role="listitem">
-                        <i class="fas fa-eye-slash" aria-hidden="true"></i>
-                        <span>Invisible</span>
-                    </div>
-                    <div class="stat-item" role="listitem">
-                        <i class="fas fa-bolt" aria-hidden="true"></i>
-                        <span>Instant</span>
-                    </div>
-            </div>
-        </div>
-
-        <!-- Progress Indicator -->
-        <section class="progress-container" aria-label="Usage steps">
-            <div class="progress-step active" id="step-encode">
-                <span class="step-number" aria-hidden="true">1</span>
-                <i class="fas fa-lock" aria-hidden="true"></i>
-                <span>Encode</span>
-            </div>
-            <div class="progress-step" id="step-share">
-                <span class="step-number" aria-hidden="true">2</span>
-                <i class="fas fa-share-alt" aria-hidden="true"></i>
-                <span>Share</span>
-            </div>
-            <div class="progress-step" id="step-decode">
-                <span class="step-number" aria-hidden="true">3</span>
-                <i class="fas fa-unlock" aria-hidden="true"></i>
-                <span>Decode</span>
-            </div>
-        </section>
-
-        <section class="card" id="encode" role="region" aria-labelledby="encode-heading">
-            <h2 class="section-title" id="encode-heading">
-                <i class="fas fa-lock" aria-hidden="true"></i>
-                Encode Message
-            </h2>
-            <div class="input-group">
-                <label for="visibleText">Visible Text</label>
-                <textarea id="visibleText" rows="4" placeholder="Enter the visible text that will contain your hidden message..." aria-describedby="visibleText-hint"></textarea>
-                <div class="input-hint" id="visibleText-hint">This text will be visible to everyone - choose something natural and inconspicuous</div>
-            </div>
-
-            <div class="input-group">
-                <label for="hiddenMessage">Hidden Message</label>
-                <input type="text" id="hiddenMessage" placeholder="Enter your secret message..." aria-describedby="hiddenMessage-hint" aria-required="true">
-                <div class="input-hint" id="hiddenMessage-hint">Keep it short and simple for better concealment</div>
-                <div class="error-message" role="alert">Please enter a message to hide</div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" type="button" id="encodeButton" onclick="handleEncodeClick()" aria-describedby="encode-description">
-                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                    Encode
-                </button>
-                <button class="btn btn-secondary" type="button" onclick="clearEncodeForm()">
-                    <i class="fas fa-eraser" aria-hidden="true"></i>
-                    Clear
-                </button>
-                <span id="encode-description" class="sr-only">Encode your hidden message into the visible text using zero-width characters</span>
-            </div>
-
-            <p id="encodeStatus" class="input-hint" aria-live="polite"></p>
-
-            <div class="result-container">
-                <label>Result</label>
-                <div class="result" id="encodedResult" role="log" aria-live="polite" aria-label="Encoded message result">Encoded message will appear here.</div>
-                <div class="button-group">
-                    <button class="btn btn-success" type="button" onclick="copyToClipboard('encodedResult')" aria-describedby="copy-description">
-                        <i class="fas fa-copy" aria-hidden="true"></i>
-                        Copy to Clipboard
-                    </button>
-                    <span id="copy-description" class="sr-only">Copy the encoded message to your clipboard</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="card" id="decode" role="region" aria-labelledby="decode-heading"> 
-            <h2 class="section-title" id="decode-heading">
-                <i class="fas fa-unlock" aria-hidden="true"></i>
-                Decode Message
-            </h2>
-            <div class="input-group">
-                <label for="encodedText">Text to Decode</label>
-                <textarea id="encodedText" rows="4" placeholder="Paste the text containing a hidden message..." aria-describedby="encodedText-hint"></textarea>
-                <div class="input-hint" id="encodedText-hint">Paste any text that might contain hidden zero-width characters — this page also works as a steganography decoder for invisible Unicode.</div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" type="button" id="decodeButton" onclick="handleDecodeClick()" aria-describedby="decode-description">
-                    <i class="fas fa-eye" aria-hidden="true"></i>
-                    Decode
-                </button>
-                <button class="btn btn-secondary" type="button" onclick="pasteFromClipboard('encodedText')">
-                    <i class="fas fa-paste" aria-hidden="true"></i>
-                    Paste from clipboard
-                </button>
-                <button class="btn btn-secondary" type="button" onclick="clearDecodeForm()">
-                    <i class="fas fa-eraser" aria-hidden="true"></i>
-                    Clear
-                </button>
-                <span id="decode-description" class="sr-only">Decode any hidden messages from the provided text</span>
-            </div>
-
-            <p id="decodeStatus" class="input-hint" aria-live="polite"></p>
-
-            <div class="result-container">
-                <label>Hidden Message</label>
-                <div class="result" id="decodedResult" role="log" aria-live="polite" aria-label="Decoded message result">Decoded message will appear here.</div>
-                <div class="button-group">
-                    <button class="btn btn-success" type="button" onclick="copyToClipboard('decodedResult')" aria-describedby="copy-decoded-description">
-                        <i class="fas fa-copy" aria-hidden="true"></i>
-                        Copy to Clipboard
-                    </button>
-                </div>
-                <span id="copy-decoded-description" class="sr-only">Copy the decoded hidden message to your clipboard</span>
-            </div>
-        </section>
-        
-        <section class="info-section" id="how-it-works" role="region" aria-labelledby="how-it-works-heading">
-    <h2 class="section-title" id="how-it-works-heading">
-        <i class="fas fa-info-circle" aria-hidden="true"></i>
-        How StegZero Hides Messages Using Zero-Width Characters
-    </h2>
-
-    
-    
-    <div class="info-grid">
-
-        <div class="info-card">
-            <h3><i class="fa fa-question-circle" aria-hidden="true"></i> What is Steganography?</h3>
-            <ul>
-                <li>Steganography is the practice of concealing messages or information within other non-secret text or data.</li>
-                <li>It can be used to hide text within images, audio files, video files, or even other text files.</li>
-                <li>The goal is to ensure that the presence of the hidden message is not detectable by casual observation.</li>
-                <li>Steganography is often used in conjunction with cryptography to provide an additional layer of security.</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-            <h3><i class="fas fa-lightbulb" aria-hidden="true"></i> Use Cases</h3>
-            <ul>
-                <li>Hide text in text in plain sight using zero‑width Unicode characters (ZWSP/ZWNJ/ZWJ)</li>
-                <li>Reveal invisible text encoded with StegZero using a zero‑width decoder</li>
-            </ul>
-        </div>
-
-        <div class="info-card">
-        <h3><i class="fas fa-cogs" aria-hidden="true"></i> The Technical Process of Hiding Messages</h3>
-        <ul>
-            <li>Converts your hidden message to UTF-8 bytes for full Unicode support.</li>
-            <li>Adds a compact header with a magic marker, version, random nonce, length, and CRC32 for integrity.</li>
-            <li>Obfuscates only the payload bits using a nonce-seeded PRNG (not encryption) to reduce easy pattern detection.</li>
-            <li>Maps 3-bit groups to a diversified set of eight zero-width/invisible characters (not just a single 0/1 pair).</li>
-            <li>Evenly interleaves the hidden characters across the visible text so they are not clustered at the end.</li>
-            <li>On decoding, extracts the zero-width alphabet, validates the header and CRC, then restores the UTF-8 message.</li>
-            <li>Includes a legacy fallback decoder for older texts that used a simple two-character (0/1) scheme.</li>
-        </ul>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <i class="fas fa-ghost"></i>
+      StegZero<span>.com</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a class="nav-link" href="#tool">Tool</a>
+      <a class="nav-link" href="#how-it-works">How It Works</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-link" href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
+      <a class="nav-link" href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
     </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+      <i class="fas fa-bars" id="menuIcon"></i>
+    </button>
+  </div>
+</nav>
+<div class="overlay" id="overlay"></div>
 
-        
-
-        <div class="info-card">
-            <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Limitations of Zero-Width Steganography</h3>
-            <ul>
-                <li>Not all platforms or text editors preserve zero-width characters, which can result in the loss of the hidden message.</li>
-                <li>Zero-width steganography is not suitable for secure communication, as it can be detected by those familiar with the method.</li>
-                <li>Some text editors or platforms may strip invisible characters, rendering the hidden message unreadable.</li>
-                <li>This method should only be used where security is not a primary concern.</li>
-            </ul>
-        </div>
-    </div>
-
-  
-
-    <!-- Minimal FAQ to support related queries -->
-    <br>
-    <h2 class="section-title" id="faq-heading">
-        <i class="fas fa-question-circle" aria-hidden="true"></i>
-        Frequently Asked Questions
-    </h2>
-    <div class="info-grid" id="faq">
-        <div class="info-card">
-            
-            <h3><i class="fas fa-question-circle" aria-hidden="true"></i> What is zero‑width steganography?</h3>
-            <ul>
-                <li>It hides messages using invisible Unicode characters like zero width space (ZWSP), zero width non‑joiner (ZWNJ), and zero width joiner (ZWJ).</li>
-            </ul>
-        </div>
-        <div class="info-card">
-            <h3><i class="fas fa-shield-alt" aria-hidden="true"></i> Is zero‑width steganography secure?</h3>
-            <ul>
-                <li>No. It’s an obfuscation technique, not encryption. Avoid using it for sensitive data.</li>
-            </ul>
-        </div>
-        <div class="info-card">
-            <h3><i class="fas fa-code" aria-hidden="true"></i> Which characters does StegZero use?</h3>
-            <ul>
-                <li>A diversified set of zero‑width/invisible Unicode characters to encode bits across your visible text.</li>
-            </ul>
-        </div>
-        <div class="info-card">
-            <h3><i class="fas fa-wrench" aria-hidden="true"></i> How do I encode or decode?</h3>
-            <ul>
-                <li>Use the Encode and Decode sections above to generate or reveal invisible text.</li>
-            </ul>
-        </div>
-        <div class="info-card">
-            <h3><i class="fas fa-search" aria-hidden="true"></i> Do you have a steganography decoder?</h3>
-            <ul>
-                <li>Yes. The Decode section functions as a steganography decoder for zero‑width Unicode text. Paste suspicious text and click Decode to reveal any hidden message.</li>
-            </ul>
-        </div>
-    </div>
-      <div class="warning-box">
-        <h4><i class="fas fa-exclamation-circle" aria-hidden="true"></i> Important Note</h4>
-        <p>This tool is intended for educational and entertainment purposes only. It is not a secure encryption method and should not be used for sensitive or confidential information. For secure communication, consider using proper encryption tools.</p>
-    </div>
-    
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><i class="fas fa-lock-open"></i> Unicode Steganography</div>
+  <h1>Hide Messages<br>In Plain Sight</h1>
+  <p>Embed invisible text inside any string using zero-width Unicode characters. No server. No tracking. No traces.</p>
+  <p class="hero-note">// runs 100% in your browser</p>
+  <div class="hero-pills">
+    <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
+    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible chars</span>
+    <span class="pill"><i class="fas fa-bolt"></i> Instant</span>
+    <span class="pill"><i class="fas fa-file-export"></i> Export support</span>
+    <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
+  </div>
 </div>
-</div>
-    </main>
 
-    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
-
-    <footer class="footer" role="contentinfo">
-        <div class="footer-container">
-            <div class="footer-grid">
-                <section class="footer-section">
-                    <h3>Support</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link">
-                            <a href="https://github.com/sponsors/Clevis22" rel="noopener" target="_blank">
-                                <i class="fas fa-heart" aria-hidden="true"></i>
-                                Sponsor on GitHub
-                            </a>
-                        </li>
-                        <li class="footer-link">
-                            <a href="https://github.com/Clevis22/StegZero/stargazers" rel="noopener" target="_blank">
-                                <i class="fas fa-star" aria-hidden="true"></i>
-                                Star on GitHub
-                            </a>
-                        </li>
-                    </ul>
-                </section>
-
-                <section class="footer-section">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link">
-                            <a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" rel="noopener" target="_blank">
-                                <i class="fas fa-graduation-cap" aria-hidden="true"></i>
-                                Learn Steganography
-                            </a>
-                        </li>
-                        <li class="footer-link">
-                            <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" rel="noopener" target="_blank">
-                                <i class="fas fa-question-circle" aria-hidden="true"></i>
-                                Documentation
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </section>
-
-            <div class="footer-section">
-                <h3>Community</h3>
-                <ul class="footer-links">
-                    <li class="footer-link">
-                        <a href="https://github.com/Clevis22/StegZero/"><i class="fab fa-github"></i> GitHub</a>
-                    </li>
-                    <li class="footer-link">
-                        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Hide%20messages%20in%20plain%20sight%20with%20stegzero.com%20%23cybersecurity%20%23webdev"><i class="fab fa-twitter"></i> Share on X</a>
-                    </li>
-                    <li class="footer-link">
-                        <a href="https://alternativeto.net/software/stegzero/about/"><i class="fas fa-thumbs-up"></i>Rate on AlternativeTo</a>
-                    </li>
-                    <li class="footer-link">
-                        <a href="mailto:contact@stegzero.com" rel="noopener" target="_blank"><i class="fa-solid fa-envelope"></i>contact@stegzero.com</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2025 StegZero. Some rights reserved. </p>
-            
-        </div>
+<!-- SECURITY WARNING (prominent, near tool) -->
+<div class="security-banner">
+  <div class="security-banner-inner">
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <strong>Not a replacement for encryption.</strong> Zero-width steganography is an obfuscation technique. Anyone who knows to look will find it. For sensitive data, use a proper encryption tool (e.g. GPG, Signal). This tool is for education and fun only.
     </div>
+  </div>
+</div>
+
+<!-- TOOL -->
+<main id="tool">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('encode')" id="tab-encode">
+      <i class="fas fa-lock"></i> Encode
+    </button>
+    <button class="tab-btn" onclick="switchTab('decode')" id="tab-decode">
+      <i class="fas fa-unlock"></i> Decode
+    </button>
+    <button class="tab-btn" onclick="switchTab('detect')" id="tab-detect">
+      <i class="fas fa-search"></i> Detect
+    </button>
+  </div>
+
+  <!-- ENCODE PANEL -->
+  <div class="panel active" id="panel-encode">
+
+    <div class="field">
+      <label>Cover Text <span style="color:var(--text-muted);font-size:0.68rem">(optional — visible to everyone)</span></label>
+      <textarea id="visibleText" rows="3" placeholder="Enter the visible text that will carry your secret…" oninput="updateEncodePreview()"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Hidden Message <span class="required">*</span></label>
+      <input type="text" id="hiddenMessage" placeholder="Your secret message…" oninput="updateCounter()">
+      <div class="char-counter" id="msgCounter">0 chars</div>
+      <div class="field-hint">Keep it short — longer messages create more zero-width characters</div>
+    </div>
+
+    <!-- Passphrase toggle -->
+    <div class="field">
+      <div class="passphrase-row">
+        <label class="toggle-switch">
+          <input type="checkbox" id="passphraseToggle" onchange="togglePassphrase()">
+          <span class="toggle-track"></span>
+        </label>
+        <span class="toggle-label">Add passphrase layer (XOR obfuscation on top)</span>
+      </div>
+      <div class="passphrase-field" id="passphraseField">
+        <input type="text" id="passphraseInput" placeholder="Enter passphrase…" style="margin-top:0.5rem">
+        <div class="field-hint">The receiver must enter the same passphrase to decode</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="handleEncode()" id="encodeBtn">
+        <i class="fas fa-shield-alt"></i> Encode
+      </button>
+      <button class="btn btn-ghost" onclick="clearEncode()">
+        <i class="fas fa-eraser"></i> Clear
+      </button>
+      <button class="btn btn-ghost" onclick="runRoundTrip()" id="rtBtn" title="Test round-trip: encode then immediately decode to verify">
+        <i class="fas fa-sync-alt"></i> Test Round-Trip
+      </button>
+    </div>
+    <div class="status-line" id="encodeStatus"></div>
+    <div class="rt-result" id="rtResult"></div>
+
+    <!-- Result -->
+    <div style="margin-top:1.5rem">
+      <div class="result-label">
+        <span>Result</span>
+        <span class="result-meta" id="encodedMeta"></span>
+      </div>
+      <div class="result-box empty" id="encodedResult">Encoded message will appear here.</div>
+
+      <div class="export-row">
+        <button class="btn btn-success" onclick="copyResult('encodedResult')">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none">
+          <i class="fas fa-share-alt"></i> Share
+        </button>
+        <button class="btn btn-ghost" onclick="exportTxt('encodedResult','stegzero_encoded.txt')">
+          <i class="fas fa-file-download"></i> Export .txt
+        </button>
+        <button class="pipe-btn" onclick="pipeToDecoder()" title="Send this result directly to the Decode panel">
+          <i class="fas fa-arrow-right"></i> Send to Decoder →
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="preview-section" id="encodePreviewSection" style="display:none">
+      <h3><i class="fas fa-eye"></i> Live Preview — Zero-Width Characters Highlighted</h3>
+      <div class="preview-display" id="encodePreview"></div>
+      <div class="preview-legend">
+        <div class="preview-legend-item">
+          <span class="zw-sample"></span>
+          <span>= one zero-width character</span>
+        </div>
+        <span class="zw-count" id="encodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECODE PANEL -->
+  <div class="panel" id="panel-decode">
+
+    <div class="field">
+      <label>Text to Decode</label>
+      <textarea id="encodedText" rows="4" placeholder="Paste text containing a hidden message…" oninput="updateDecodePreview()"></textarea>
+      <div class="field-hint">Paste any text — zero-width characters are invisible but this tool will find them</div>
+    </div>
+
+    <!-- Passphrase for decode -->
+    <div class="field">
+      <div class="passphrase-row">
+        <label class="toggle-switch">
+          <input type="checkbox" id="decodePassToggle" onchange="toggleDecodePass()">
+          <span class="toggle-track"></span>
+        </label>
+        <span class="toggle-label">Message was encoded with a passphrase</span>
+      </div>
+      <div class="passphrase-field" id="decodePassField">
+        <input type="text" id="decodePassInput" placeholder="Enter passphrase…" style="margin-top:0.5rem">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="handleDecode()" id="decodeBtn">
+        <i class="fas fa-eye"></i> Decode
+      </button>
+      <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')">
+        <i class="fas fa-paste"></i> Paste
+      </button>
+      <button class="btn btn-ghost" onclick="clearDecode()">
+        <i class="fas fa-eraser"></i> Clear
+      </button>
+    </div>
+    <div class="status-line" id="decodeStatus"></div>
+
+    <div style="margin-top:1.5rem">
+      <div class="result-label">
+        <span>Hidden Message</span>
+        <span class="result-meta" id="decodedMeta"></span>
+      </div>
+      <div class="result-box empty" id="decodedResult">Decoded message will appear here.</div>
+      <div class="export-row">
+        <button class="btn btn-success" onclick="copyResult('decodedResult')">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <button class="btn btn-ghost" onclick="exportTxt('decodedResult','stegzero_decoded.txt')">
+          <i class="fas fa-file-download"></i> Export .txt
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="preview-section" id="decodePreviewSection" style="display:none">
+      <h3><i class="fas fa-eye"></i> Zero-Width Characters Found in Input</h3>
+      <div class="preview-display" id="decodePreview"></div>
+      <div class="preview-legend">
+        <div class="preview-legend-item">
+          <span class="zw-sample"></span>
+          <span>= one zero-width character</span>
+        </div>
+        <span class="zw-count" id="decodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETECT PANEL -->
+  <div class="panel" id="panel-detect">
+    <div class="field">
+      <label>Text to Inspect</label>
+      <textarea id="detectText" rows="4" placeholder="Paste any text to check for hidden zero-width characters…" oninput="runDetect()"></textarea>
+    </div>
+
+    <div id="detectResultBox" class="detect-result" style="display:none">
+      <div class="detect-row">
+        <span>Total characters</span>
+        <strong id="det-total">—</strong>
+      </div>
+      <div class="detect-row">
+        <span>Zero-width characters found</span>
+        <strong id="det-zw">—</strong>
+      </div>
+      <div class="detect-row">
+        <span>Distinct ZW types</span>
+        <strong id="det-types">—</strong>
+      </div>
+      <div class="detect-row">
+        <span>StegZero V2 signature</span>
+        <strong id="det-v2">—</strong>
+      </div>
+      <div class="detect-row">
+        <span>Legacy signature</span>
+        <strong id="det-legacy">—</strong>
+      </div>
+      <div class="detect-row">
+        <span>Verdict</span>
+        <strong id="det-verdict">—</strong>
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:1rem">
+      <button class="btn btn-ghost" onclick="clearDetect()">
+        <i class="fas fa-eraser"></i> Clear
+      </button>
+      <button class="btn btn-ghost" onclick="stripZwAndCopy()">
+        <i class="fas fa-broom"></i> Strip ZW chars & Copy
+      </button>
+    </div>
+    <div class="status-line" id="detectStatus"></div>
+  </div>
+
+  <hr class="divider" id="how-it-works">
+
+  <!-- HOW IT WORKS -->
+  <div class="section-heading"><i class="fas fa-info-circle"></i> How It Works</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><i class="fas fa-question-circle"></i> What is Steganography?</h3>
+      <ul>
+        <li>Hiding a message inside another non-secret message or medium</li>
+        <li>Unlike encryption, the goal is to hide the <em>existence</em> of the message</li>
+        <li>This tool uses invisible Unicode characters as the hiding medium</li>
+        <li>The technique is called zero-width steganography</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-cogs"></i> The Encoding Process</h3>
+      <ul>
+        <li>Your message is converted to UTF-8 bytes</li>
+        <li>A header with magic marker, nonce, length + CRC32 is prepended</li>
+        <li>Bits are mapped to 8 zero-width/invisible Unicode characters (3 bits each)</li>
+        <li>Hidden characters are evenly interleaved across the cover text</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-exclamation-triangle"></i> Limitations</h3>
+      <ul>
+        <li>Twitter/X and Facebook strip zero-width characters</li>
+        <li>WhatsApp may strip some — test before relying on it</li>
+        <li>Not secure — anyone who runs the decode will see your message</li>
+        <li>Not suitable for sensitive or confidential information</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-lightbulb"></i> Good Use Cases</h3>
+      <ul>
+        <li>Hiding watermarks in shared text to track leaks</li>
+        <li>Easter eggs in documents or web pages</li>
+        <li>Puzzles and ARGs</li>
+        <li>Learning about Unicode and text encoding</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider" id="faq">
+
+  <!-- FAQ -->
+  <div class="section-heading"><i class="fas fa-question-circle"></i> FAQ</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><i class="fas fa-shield-alt"></i> Is this secure?</h3>
+      <ul>
+        <li>No. It's obfuscation, not encryption. Anyone who pastes your text into this tool will see the message.</li>
+        <li>For real security, layer it with GPG/AES encryption first, then hide the ciphertext.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-code"></i> Which characters are used?</h3>
+      <ul>
+        <li>ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D)</li>
+        <li>Word Joiner (U+2060), Invisible Times (U+2062)</li>
+        <li>Invisible Separator (U+2063), Invisible Plus (U+2064)</li>
+        <li>Zero-Width No-Break Space / BOM (U+FEFF)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-server"></i> Is my data sent anywhere?</h3>
+      <ul>
+        <li>No. Everything runs in your browser via JavaScript.</li>
+        <li>No text is ever sent to a server.</li>
+        <li>The source code is open on GitHub.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-file-import"></i> Can I use it without cover text?</h3>
+      <ul>
+        <li>Yes — cover text is optional. The hidden characters will be output on their own.</li>
+        <li>But this makes detection trivial — always use a natural-looking cover text.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-section">
+      <h4>Support</h4>
+      <ul class="footer-links">
+        <li><a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Sponsor on GitHub</a></li>
+        <li><a href="https://github.com/Clevis22/StegZero/stargazers" target="_blank" rel="noopener"><i class="fas fa-star"></i> Star on GitHub</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Resources</h4>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener"><i class="fas fa-book"></i> Documentation</a></li>
+        <li><a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i> Learn Steganography</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Community</h4>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+        <li><a href="https://twitter.com/intent/tweet?text=Hide%20messages%20in%20plain%20sight%20with%20stegzero.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Share on X</a></li>
+        <li><a href="mailto:contact@stegzero.com"><i class="fas fa-envelope"></i> contact@stegzero.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 StegZero. Some rights reserved.</p>
+    <p style="font-size:0.7rem;opacity:0.5">Built with zero-width love ​​​​</p>
+  </div>
 </footer>
 
-        <script>
-// Advanced zero-width steganography implementation
-// Goals: diversify code points, interleave across text, UTF-8 support, header+CRC, legacy fallback.
+<div id="toast"></div>
 
-// Diversified zero-width/invisible alphabet (8 symbols -> 3 bits)
-// Chosen to reduce the chance that ALL are stripped by a sanitizer.
+<script>
+// ════════════════════════════════════════
+// CORE STEGANOGRAPHY ENGINE (unchanged from original)
+// ════════════════════════════════════════
 const ZW_ALPHABET = [
-    '\u200B', // ZERO WIDTH SPACE
-    '\u200C', // ZERO WIDTH NON-JOINER
-    '\u200D', // ZERO WIDTH JOINER
-    '\u2060', // WORD JOINER
-    '\u2062', // INVISIBLE TIMES
-    '\u2063', // INVISIBLE SEPARATOR
-    '\u2064', // INVISIBLE PLUS
-    '\uFEFF'  // ZERO WIDTH NO-BREAK SPACE (BOM)
-].map(s => JSON.parse('"' + s.replace(/\\u/g, '\\u') + '"'));
+  '\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'
+];
+const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
+const MAGIC = 0xA55A, VERSION = 1;
+const te = new TextEncoder(), td = new TextDecoder();
 
-// Legacy two-symbols for fallback
-const LEGACY_0 = '\u200B';
-const LEGACY_1 = '\u200C';
+function bytesToBits(b){let s='';for(let i=0;i<b.length;i++)s+=b[i].toString(2).padStart(8,'0');return s;}
+function bitsToBytes(s){const o=[];for(let i=0;i+8<=s.length;i+=8)o.push(parseInt(s.slice(i,i+8),2));return new Uint8Array(o);}
+const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let i=0;i<256;i++){let c=i;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[i]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF>>>0;for(let i=0;i<b.length;i++)c=CRC_TABLE[(c^b[i])&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
+function numToBytesBE(n,l){const o=new Uint8Array(l);for(let i=l-1;i>=0;i--){o[i]=n&0xFF;n>>>=8;}return o;}
+function concatBytes(...a){const t=a.reduce((s,x)=>s+x.length,0),o=new Uint8Array(t);let off=0;for(const x of a){o.set(x,off);off+=x.length;}return o;}
+function xorshift32(seed){let x=seed>>>0;return()=>{if(x===0)x=0x9E3779B9;x^=x<<13;x>>>=0;x^=x>>>17;x>>>=0;x^=x<<5;x>>>=0;return x>>>0;};}
+function obfuscateBits(bits,seed){const next=xorshift32(seed);let acc=0,remain=0,out='';for(let i=0;i<bits.length;i++){if(remain===0){acc=next();remain=32;}const p=acc&1;acc>>>=1;remain--;out+=((bits.charCodeAt(i)&1)^p)?'1':'0';}return out;}
+function bitsToAlphabet(bits){let out='';for(let i=0;i<bits.length;i+=3){const ch=bits.slice(i,i+3).padEnd(3,'0');out+=ZW_ALPHABET[parseInt(ch,2)];}return out;}
+function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));let bits='';for(const ch of Array.from(str)){if(map.has(ch))bits+=map.get(ch).toString(2).padStart(3,'0');}return bits;}
+function buildHeader(nonce,msgBytes){const len=msgBytes.length,crc=crc32(msgBytes);return concatBytes(numToBytesBE(MAGIC,2),numToBytesBE(VERSION,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
+function parseHeader(h){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(MAGIC&0xFFFF))return null;const version=h[2],nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc};}
+function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
 
-// Header constants
-const MAGIC = 0xA55A; // 16-bit magic to detect V2 payloads
-const VERSION = 1;     // 1 byte
-
-// Utilities
-const te = new TextEncoder();
-const td = new TextDecoder();
-
-function bytesToBits(bytes) {
-    let bits = '';
-    for (let i = 0; i < bytes.length; i++) {
-        bits += bytes[i].toString(2).padStart(8, '0');
-    }
-    return bits;
+// XOR passphrase obfuscation
+function xorWithKey(bytes, key) {
+  if (!key) return bytes;
+  const kBytes = te.encode(key);
+  const out = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) out[i] = bytes[i] ^ kBytes[i % kBytes.length];
+  return out;
 }
 
-function bitsToBytes(bits) {
-    const out = [];
-    for (let i = 0; i + 8 <= bits.length; i += 8) {
-        out.push(parseInt(bits.slice(i, i + 8), 2));
-    }
-    return new Uint8Array(out);
+function encodeMsg(visible, hidden, passphrase) {
+  let msgBytes = te.encode(hidden);
+  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
+  const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
+  const header = buildHeader(nonce, msgBytes);
+  const headerBits = bytesToBits(header);
+  const msgBits = bytesToBits(msgBytes);
+  const seed = ((nonce << 16) | MAGIC) >>> 0;
+  const obfBits = obfuscateBits(msgBits, seed);
+  const payload = bitsToAlphabet(headerBits + obfBits);
+  return interleavePayload(visible, payload);
 }
 
-// CRC32 (polynomial 0xEDB88320)
-const CRC_TABLE = (() => {
-    const t = new Uint32Array(256);
-    for (let i = 0; i < 256; i++) {
-        let c = i;
-        for (let k = 0; k < 8; k++) {
-            c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-        }
-        t[i] = c >>> 0;
-    }
-    return t;
-})();
-
-function crc32(bytes) {
-    let c = 0xFFFFFFFF >>> 0;
-    for (let i = 0; i < bytes.length; i++) {
-        c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
-    }
-    return (c ^ 0xFFFFFFFF) >>> 0;
+function tryDecodeV2(text, passphrase) {
+  const alphaSet = new Set(ZW_ALPHABET);
+  let extracted = '';
+  for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
+  if (!extracted.length) return null;
+  const bits = alphabetToBits(extracted);
+  if (bits.length < 88) return null;
+  const headerBytes = bitsToBytes(bits.slice(0, 88));
+  const hdr = parseHeader(headerBytes);
+  if (!hdr) return null;
+  const needBits = hdr.len * 8;
+  const payloadBits = bits.slice(88, 88 + needBits);
+  if (payloadBits.length < needBits) return null;
+  const seed = ((hdr.nonce << 16) | MAGIC) >>> 0;
+  const msgBits = obfuscateBits(payloadBits, seed);
+  let msgBytes = bitsToBytes(msgBits);
+  if (msgBytes.length !== hdr.len) return null;
+  if (crc32(msgBytes) !== (hdr.crc >>> 0)) return null;
+  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
+  try { return td.decode(msgBytes); } catch { return null; }
 }
 
-function numToBytesBE(num, byteLen) {
-    const out = new Uint8Array(byteLen);
-    for (let i = byteLen - 1; i >= 0; i--) {
-        out[i] = num & 0xFF;
-        num >>>= 8;
-    }
-    return out;
+function tryDecodeLegacy(text) {
+  const bits = Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');
+  if (bits.length < 8) return null;
+  try {
+    const msg = td.decode(bitsToBytes(bits));
+    if (msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g,'').length === msg.length) return null;
+    return msg.replace(/\x00+$/g,'');
+  } catch { return null; }
 }
 
-function concatBytes(...arrays) {
-    const total = arrays.reduce((s, a) => s + a.length, 0);
-    const out = new Uint8Array(total);
-    let off = 0;
-    for (const a of arrays) { out.set(a, off); off += a.length; }
-    return out;
-}
+// ════════════════════════════════════════
+// ZW DETECTION HELPERS
+// ════════════════════════════════════════
+const ZW_SET = new Set(ZW_ALPHABET);
+function countZW(str) { return Array.from(str).filter(c=>ZW_SET.has(c)).length; }
+function distinctZWTypes(str) { return new Set(Array.from(str).filter(c=>ZW_SET.has(c))).size; }
 
-// Simple xorshift32 PRNG for obfuscation (not encryption)
-function xorshift32(seed) {
-    let x = seed >>> 0;
-    return () => {
-        // Avoid zero lock
-        if (x === 0) x = 0x9E3779B9;
-        x ^= x << 13; x >>>= 0;
-        x ^= x >>> 17; x >>>= 0;
-        x ^= x << 5;  x >>>= 0;
-        return x >>> 0;
-    };
-}
-
-function obfuscateBits(bits, seed) {
-    const next = xorshift32(seed);
-    let acc = 0, remain = 0;
-    let out = '';
-    for (let i = 0; i < bits.length; i++) {
-        if (remain === 0) { acc = next(); remain = 32; }
-        const prnBit = (acc & 1);
-        acc >>>= 1; remain--;
-        out += ((bits.charCodeAt(i) & 1) ^ prnBit) ? '1' : '0';
-    }
-    return out;
-}
-
-// Map 3-bit groups <-> zero-width alphabet
-function bitsToAlphabet(bits) {
-    let out = '';
-    for (let i = 0; i < bits.length; i += 3) {
-        const chunk = bits.slice(i, i + 3).padEnd(3, '0');
-        const idx = parseInt(chunk, 2);
-        out += ZW_ALPHABET[idx];
-    }
-    return out;
-}
-
-function alphabetToBits(str) {
-    const map = new Map(ZW_ALPHABET.map((ch, i) => [ch, i]));
-    let bits = '';
-    for (const ch of Array.from(str)) {
-        if (map.has(ch)) {
-            bits += map.get(ch).toString(2).padStart(3, '0');
-        }
-    }
-    return bits;
-}
-
-// Build header: [MAGIC(2B) | VERSION(1B) | NONCE(2B) | LENGTH(2B) | CRC32(4B)]
-function buildHeader(nonce, msgBytes) {
-    const len = msgBytes.length;
-    const crc = crc32(msgBytes);
-    return concatBytes(
-        numToBytesBE(MAGIC, 2),
-        numToBytesBE(VERSION, 1),
-        numToBytesBE(nonce, 2),
-        numToBytesBE(len, 2),
-        numToBytesBE(crc, 4)
-    );
-}
-
-function parseHeader(headerBytes) {
-    if (headerBytes.length < 11) return null;
-    const dv = headerBytes; // Uint8Array
-    const magic = (dv[0] << 8) | dv[1];
-    if (magic !== (MAGIC & 0xFFFF)) return null;
-    const version = dv[2];
-    const nonce = (dv[3] << 8) | dv[4];
-    const len = (dv[5] << 8) | dv[6];
-    const crc = (dv[7] * 2**24) | (dv[8] << 16) | (dv[9] << 8) | dv[10];
-    return { version, nonce, len, crc };
-}
-
-// Evenly interleave the zero-width payload across visible text
-function interleavePayload(visible, payload) {
-    if (!visible) return payload; // no cover text
-    const chars = Array.from(visible);
-    const payloadChars = Array.from(payload);
-    const n = chars.length;
-    if (payloadChars.length === 0) return visible;
-    const perSlot = Math.ceil(payloadChars.length / Math.max(1, n));
-    let idx = 0;
-    let out = '';
-    for (let i = 0; i < n; i++) {
-        out += chars[i];
-        // insert up to perSlot code points after each char
-        for (let k = 0; k < perSlot && idx < payloadChars.length; k++, idx++) {
-            out += payloadChars[idx];
-        }
-    }
-    // any remaining go to the end
-    while (idx < payloadChars.length) out += payloadChars[idx++];
-    return out;
-}
-
-function setActiveStep(step) {
-    const steps = ['encode', 'share', 'decode'];
-    steps.forEach(name => {
-        const el = document.getElementById(`step-${name}`);
-        if (el) el.classList.toggle('active', name === step);
-    });
-}
-
-function encode() {
-    const visibleText = document.getElementById('visibleText').value || '';
-    const hiddenMessage = document.getElementById('hiddenMessage').value || '';
-
-    const resultEl = document.getElementById('encodedResult');
-    const statusEl = document.getElementById('encodeStatus');
-    const hiddenInput = document.getElementById('hiddenMessage');
-
-    if (!hiddenMessage) {
-        resultEl.textContent = visibleText || 'Please enter a message to hide';
-        if (statusEl) statusEl.textContent = 'Add a secret message before encoding.';
-        if (hiddenInput) hiddenInput.setAttribute('aria-invalid', 'true');
-        showToast('Please enter a message to hide', 'warning');
-        return;
-    }
-
-    if (statusEl) statusEl.textContent = 'Encoding hidden message…';
-    if (hiddenInput) hiddenInput.removeAttribute('aria-invalid');
-
-    // UTF-8 bytes of the message
-    const msgBytes = te.encode(hiddenMessage);
-    // Random 16-bit nonce for obfuscation seed
-    const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
-    const header = buildHeader(nonce, msgBytes);
-
-    const headerBits = bytesToBits(header);
-    const msgBits = bytesToBits(msgBytes);
-
-    // Obfuscate only payload (not header) to keep header parseable
-    const seed = (nonce << 16) | MAGIC; // derive 32-bit seed
-    const obfMsgBits = obfuscateBits(msgBits, seed >>> 0);
-
-    const fullBits = headerBits + obfMsgBits;
-    const payload = bitsToAlphabet(fullBits);
-    const stego = interleavePayload(visibleText, payload);
-    resultEl.textContent = stego;
-    if (statusEl) statusEl.textContent = 'Done. Your hidden message is now embedded in the visible text.';
-    setActiveStep('share');
-    showToast('Message encoded. You can now copy and share it.');
-}
-
-function tryDecodeV2(encodedText) {
-    // Extract only our 8-symbol alphabet
-    const alphaSet = new Set(ZW_ALPHABET);
-    let extracted = '';
-    for (const ch of Array.from(encodedText)) {
-        if (alphaSet.has(ch)) extracted += ch;
-    }
-    if (extracted.length === 0) return null;
-
-    const bits = alphabetToBits(extracted);
-    // Need at least header (11 bytes = 88 bits)
-    if (bits.length < 88) return null;
-    const headerBytes = bitsToBytes(bits.slice(0, 88));
-    const hdr = parseHeader(headerBytes);
-    if (!hdr) return null;
-
-    const needBits = hdr.len * 8;
-    const payloadBits = bits.slice(88, 88 + needBits);
-    if (payloadBits.length < needBits) return null; // incomplete
-
-    // De-obfuscate
-    const seed = (hdr.nonce << 16) | MAGIC;
-    const msgBits = obfuscateBits(payloadBits, seed >>> 0);
-    const msgBytes = bitsToBytes(msgBits);
-    if (msgBytes.length !== hdr.len) return null;
-
-    const calcCrc = crc32(msgBytes);
-    if (calcCrc !== (hdr.crc >>> 0)) return null;
-
-    try {
-        return td.decode(msgBytes);
-    } catch {
-        return null;
-    }
-}
-
-function tryDecodeLegacy(encodedText) {
-    const ZERO = LEGACY_0;
-    const ONE = LEGACY_1;
-    const bits = Array.from(encodedText)
-        .filter(ch => ch === ZERO || ch === ONE)
-        .map(ch => ch === ZERO ? '0' : '1')
-        .join('');
-    if (bits.length < 8) return null;
-    const bytes = bitsToBytes(bits);
-    try {
-        const msg = td.decode(bytes);
-        // Heuristic: filter out non-printable control-only results
-        if (msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g, '').length === msg.length) return null;
-        return msg.replace(/\x00+$/g, '');
-    } catch {
-        return null;
-    }
-}
-
-function decode() {
-    const encodedText = document.getElementById('encodedText').value || '';
-    const resultEl = document.getElementById('decodedResult');
-    const statusEl = document.getElementById('decodeStatus');
-
-    if (statusEl) statusEl.textContent = 'Decoding…';
-    setActiveStep('decode');
-
-    // Try V2 first
-    let decoded = tryDecodeV2(encodedText);
-    if (decoded == null) {
-        // Fallback to legacy
-        decoded = tryDecodeLegacy(encodedText);
-    }
-
-    const finalText = decoded || 'No hidden message found';
-    resultEl.textContent = finalText;
-
-    if (statusEl) {
-        statusEl.textContent = decoded
-            ? 'Hidden message recovered successfully.'
-            : 'No hidden message found in this text.';
-    }
-
-    if (decoded) {
-        showToast('Hidden message decoded.', 'success');
+// ════════════════════════════════════════
+// LIVE PREVIEW
+// ════════════════════════════════════════
+function renderPreview(str) {
+  let html = '';
+  for (const ch of Array.from(str)) {
+    if (ZW_SET.has(ch)) {
+      html += `<span class="zw-mark" title="U+${ch.charCodeAt(0).toString(16).toUpperCase().padStart(4,'0')}"></span>`;
     } else {
-        showToast('No hidden message found in this text.', 'warning');
+      html += ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
+  }
+  return html;
 }
 
-function copyToClipboard(elementId) {
-    const text = document.getElementById(elementId).textContent;
-    navigator.clipboard.writeText(text)
-        .then(() => showToast('Copied to clipboard!'))
-        .catch(err => showToast('Failed to copy: ' + err, 'error'));
+function updateEncodePreview() {
+  const val = document.getElementById('visibleText').value;
+  const sec = document.getElementById('encodePreviewSection');
+  if (!val) { sec.style.display = 'none'; return; }
+  const zw = countZW(val);
+  if (zw > 0) {
+    sec.style.display = 'block';
+    document.getElementById('encodePreview').innerHTML = renderPreview(val);
+    document.getElementById('encodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
+  } else {
+    sec.style.display = 'none';
+  }
 }
 
-function pasteFromClipboard(targetId) {
-    const target = document.getElementById(targetId);
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-        showToast('Clipboard paste is not supported in this browser.', 'warning');
-        return;
+function showEncodeResultPreview(result) {
+  const sec = document.getElementById('encodePreviewSection');
+  const zw = countZW(result);
+  sec.style.display = 'block';
+  document.getElementById('encodePreview').innerHTML = renderPreview(result);
+  document.getElementById('encodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
+}
+
+function updateDecodePreview() {
+  const val = document.getElementById('encodedText').value;
+  const sec = document.getElementById('decodePreviewSection');
+  if (!val) { sec.style.display = 'none'; return; }
+  const zw = countZW(val);
+  if (zw > 0) {
+    sec.style.display = 'block';
+    document.getElementById('decodePreview').innerHTML = renderPreview(val);
+    document.getElementById('decodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
+  } else {
+    sec.style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════
+// ENCODE UI
+// ════════════════════════════════════════
+function updateCounter() {
+  const val = document.getElementById('hiddenMessage').value;
+  const el = document.getElementById('msgCounter');
+  const n = val.length;
+  el.textContent = `${n} char${n!==1?'s':''}`;
+  el.className = 'char-counter' + (n > 200 ? ' danger' : n > 100 ? ' warn' : '');
+}
+
+function handleEncode() {
+  const visible = document.getElementById('visibleText').value || '';
+  const hidden = document.getElementById('hiddenMessage').value || '';
+  const usePass = document.getElementById('passphraseToggle').checked;
+  const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
+
+  const statusEl = document.getElementById('encodeStatus');
+  const resultEl = document.getElementById('encodedResult');
+  const metaEl = document.getElementById('encodedMeta');
+
+  if (!hidden) {
+    setStatus('encodeStatus', 'err', '✗ Enter a hidden message first');
+    showToast('Enter a hidden message', 'warn');
+    return;
+  }
+
+  const result = encodeMsg(visible, hidden, pass);
+  resultEl.textContent = result;
+  resultEl.classList.remove('empty');
+  resultEl.classList.add('has-content');
+
+  const zwCount = countZW(result);
+  metaEl.textContent = `${Array.from(result).length} chars · ${zwCount} hidden`;
+  setStatus('encodeStatus', 'ok', `✓ Encoded — ${zwCount} zero-width characters embedded`);
+  showEncodeResultPreview(result);
+  document.getElementById('encodePreviewSection').style.display = 'block';
+
+  // Show share button if Web Share API available
+  if (navigator.share) document.getElementById('shareBtn').style.display = 'inline-flex';
+
+  showToast('Encoded successfully');
+}
+
+function clearEncode() {
+  document.getElementById('visibleText').value = '';
+  document.getElementById('hiddenMessage').value = '';
+  document.getElementById('encodedResult').textContent = 'Encoded message will appear here.';
+  document.getElementById('encodedResult').className = 'result-box empty';
+  document.getElementById('encodedMeta').textContent = '';
+  document.getElementById('encodePreviewSection').style.display = 'none';
+  document.getElementById('encodeStatus').textContent = '';
+  document.getElementById('encodeStatus').className = 'status-line';
+  document.getElementById('msgCounter').textContent = '0 chars';
+  document.getElementById('rtResult').innerHTML = '';
+}
+
+// ════════════════════════════════════════
+// DECODE UI
+// ════════════════════════════════════════
+function handleDecode() {
+  const text = document.getElementById('encodedText').value || '';
+  const usePass = document.getElementById('decodePassToggle').checked;
+  const pass = usePass ? (document.getElementById('decodePassInput').value || '') : '';
+
+  const resultEl = document.getElementById('decodedResult');
+  const metaEl = document.getElementById('decodedMeta');
+
+  let decoded = tryDecodeV2(text, pass || null);
+  const usedLegacy = !decoded;
+  if (!decoded) decoded = tryDecodeLegacy(text);
+
+  if (decoded) {
+    resultEl.textContent = decoded;
+    resultEl.classList.remove('empty');
+    resultEl.classList.add('has-content');
+    metaEl.textContent = usedLegacy ? 'legacy format' : 'v2 format';
+    setStatus('decodeStatus', 'ok', `✓ Message recovered${usedLegacy ? ' (legacy decoder)' : ''}`);
+    showToast('Hidden message decoded!');
+  } else {
+    resultEl.textContent = 'No hidden message found.';
+    resultEl.className = 'result-box empty';
+    metaEl.textContent = '';
+    setStatus('decodeStatus', 'err', '✗ No hidden message found in this text');
+    showToast('No hidden message found', 'warn');
+  }
+}
+
+function clearDecode() {
+  document.getElementById('encodedText').value = '';
+  document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
+  document.getElementById('decodedResult').className = 'result-box empty';
+  document.getElementById('decodedMeta').textContent = '';
+  document.getElementById('decodePreviewSection').style.display = 'none';
+  document.getElementById('decodeStatus').textContent = '';
+  document.getElementById('decodeStatus').className = 'status-line';
+}
+
+// ════════════════════════════════════════
+// DETECT UI
+// ════════════════════════════════════════
+function runDetect() {
+  const text = document.getElementById('detectText').value || '';
+  const box = document.getElementById('detectResultBox');
+  if (!text) { box.style.display = 'none'; return; }
+
+  box.style.display = 'block';
+  const total = Array.from(text).length;
+  const zw = countZW(text);
+  const types = distinctZWTypes(text);
+
+  // Check signatures
+  const alphaSet = new Set(ZW_ALPHABET);
+  let extracted = '';
+  for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
+  const bits = alphabetToBits(extracted);
+  let isV2 = false;
+  if (bits.length >= 88) {
+    const hdr = parseHeader(bitsToBytes(bits.slice(0, 88)));
+    isV2 = hdr !== null;
+  }
+  const legacyBits = Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).length;
+  const isLegacy = !isV2 && legacyBits >= 8;
+
+  set('det-total', total);
+  set('det-zw', zw, zw > 0 ? 'badge-found' : 'badge-none');
+  set('det-types', types, types > 0 ? 'badge-found' : 'badge-none');
+  set('det-v2', isV2 ? 'Yes ✓' : 'No', isV2 ? 'badge-ok' : 'badge-none');
+  set('det-legacy', isLegacy ? 'Yes ✓' : 'No', isLegacy ? 'badge-ok' : 'badge-none');
+  const verdict = zw === 0 ? 'Clean — no ZW chars' : isV2 ? 'Likely StegZero V2 payload' : isLegacy ? 'Possible legacy StegZero' : 'ZW chars present (unknown encoding)';
+  set('det-verdict', verdict, zw > 0 ? 'badge-found' : 'badge-none');
+
+  setStatus('detectStatus', zw > 0 ? 'err' : 'ok', zw > 0 ? `⚠ ${zw} zero-width character${zw!==1?'s':''} detected` : '✓ No hidden characters found');
+}
+
+function set(id, val, cls) {
+  const el = document.getElementById(id);
+  el.textContent = val;
+  el.className = cls || '';
+}
+
+function clearDetect() {
+  document.getElementById('detectText').value = '';
+  document.getElementById('detectResultBox').style.display = 'none';
+  setStatus('detectStatus', '', '');
+}
+
+function stripZwAndCopy() {
+  const text = document.getElementById('detectText').value || '';
+  const cleaned = Array.from(text).filter(c => !ZW_SET.has(c)).join('');
+  navigator.clipboard.writeText(cleaned)
+    .then(() => showToast('Stripped text copied to clipboard!'))
+    .catch(() => showToast('Copy failed', 'error'));
+}
+
+// ════════════════════════════════════════
+// ROUND-TRIP TEST
+// ════════════════════════════════════════
+function runRoundTrip() {
+  const visible = document.getElementById('visibleText').value || '';
+  const hidden = document.getElementById('hiddenMessage').value || '';
+  const usePass = document.getElementById('passphraseToggle').checked;
+  const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
+  const rtEl = document.getElementById('rtResult');
+
+  if (!hidden) { rtEl.innerHTML = '<span class="rt-fail">Enter a message first</span>'; return; }
+
+  const encoded = encodeMsg(visible, hidden, pass);
+  const decoded = tryDecodeV2(encoded, pass || null);
+  if (decoded === hidden) {
+    rtEl.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Round-trip passed — encode → decode → match ✓</span>';
+  } else {
+    rtEl.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Round-trip failed — decoded does not match original</span>';
+  }
+}
+
+// ════════════════════════════════════════
+// PIPE TO DECODER
+// ════════════════════════════════════════
+function pipeToDecoder() {
+  const result = document.getElementById('encodedResult').textContent;
+  if (!result || result === 'Encoded message will appear here.') {
+    showToast('Encode something first', 'warn'); return;
+  }
+  document.getElementById('encodedText').value = result;
+  switchTab('decode');
+  updateDecodePreview();
+  document.getElementById('encodedText').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showToast('Piped to decoder — click Decode to test');
+}
+
+// ════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════
+function copyResult(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('Copied!'))
+    .catch(() => showToast('Copy failed', 'error'));
+}
+
+function pasteClipboard(id) {
+  if (!navigator.clipboard?.readText) { showToast('Paste not supported in this browser', 'warn'); return; }
+  navigator.clipboard.readText().then(t => {
+    document.getElementById(id).value = t;
+    updateDecodePreview();
+    showToast('Pasted from clipboard');
+  }).catch(() => showToast('Paste failed', 'error'));
+}
+
+function exportTxt(id, filename) {
+  const text = document.getElementById(id).textContent;
+  if (!text || text.includes('will appear here')) { showToast('Nothing to export', 'warn'); return; }
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  showToast('Exported!');
+}
+
+async function shareResult() {
+  const text = document.getElementById('encodedResult').textContent;
+  if (!text || text.includes('will appear')) return;
+  try {
+    await navigator.share({ text });
+    showToast('Shared!');
+  } catch {}
+}
+
+function togglePassphrase() {
+  const on = document.getElementById('passphraseToggle').checked;
+  document.getElementById('passphraseField').classList.toggle('visible', on);
+}
+
+function toggleDecodePass() {
+  const on = document.getElementById('decodePassToggle').checked;
+  document.getElementById('decodePassField').classList.toggle('visible', on);
+}
+
+function setStatus(id, cls, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'status-line' + (cls ? ' ' + cls : '');
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast-${type}`;
+  t.style.display = 'block';
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+// ════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════
+function switchTab(name) {
+  ['encode','decode','detect'].forEach(n => {
+    document.getElementById(`tab-${n}`).classList.toggle('active', n === name);
+    document.getElementById(`panel-${n}`).classList.toggle('active', n === name);
+  });
+}
+
+// ════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('menuBtn');
+  const nav = document.getElementById('navLinks');
+  const overlay = document.getElementById('overlay');
+  const icon = document.getElementById('menuIcon');
+
+  function toggleNav() {
+    const open = nav.classList.toggle('open');
+    overlay.classList.toggle('active', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    icon.className = open ? 'fas fa-times' : 'fas fa-bars';
+  }
+
+  btn.addEventListener('click', toggleNav);
+  overlay.addEventListener('click', toggleNav);
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    if (nav.classList.contains('open')) toggleNav();
+  }));
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 700 && nav.classList.contains('open')) toggleNav();
+  });
+
+  // Keyboard shortcut: Ctrl+Enter to encode/decode
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const active = document.querySelector('.panel.active');
+      if (active.id === 'panel-encode') handleEncode();
+      else if (active.id === 'panel-decode') handleDecode();
+      e.preventDefault();
     }
-    navigator.clipboard.readText()
-        .then(text => {
-            target.value = text;
-            target.focus();
-            showToast('Pasted from clipboard. You can now decode it.');
-        })
-        .catch(err => showToast('Failed to paste: ' + err, 'error'));
-}
-
-function clearEncodeForm() {
-    const visibleText = document.getElementById('visibleText');
-    const hiddenMessage = document.getElementById('hiddenMessage');
-    const resultEl = document.getElementById('encodedResult');
-    const statusEl = document.getElementById('encodeStatus');
-
-    if (visibleText) visibleText.value = '';
-    if (hiddenMessage) {
-        hiddenMessage.value = '';
-        hiddenMessage.removeAttribute('aria-invalid');
-    }
-    if (resultEl) resultEl.textContent = 'Encoded message will appear here.';
-    if (statusEl) statusEl.textContent = '';
-}
-
-function clearDecodeForm() {
-    const encodedText = document.getElementById('encodedText');
-    const resultEl = document.getElementById('decodedResult');
-    const statusEl = document.getElementById('decodeStatus');
-
-    if (encodedText) encodedText.value = '';
-    if (resultEl) resultEl.textContent = 'Decoded message will appear here.';
-    if (statusEl) statusEl.textContent = '';
-}
-
-function handleEncodeClick() {
-    const button = document.getElementById('encodeButton');
-    if (!button) {
-        encode();
-        return;
-    }
-    button.disabled = true;
-    encode();
-    setTimeout(() => { button.disabled = false; }, 300);
-}
-
-function handleDecodeClick() {
-    const button = document.getElementById('decodeButton');
-    if (!button) {
-        decode();
-        return;
-    }
-    button.disabled = true;
-    decode();
-    setTimeout(() => { button.disabled = false; }, 300);
-}
-
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast toast-${type}`;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
-}
-
-// Enhanced UI functionality
-function initializeEnhancements() {
-    addFormValidation();
-    addKeyboardShortcuts();
-    setActiveStep('encode');
-}
-
-function addFormValidation() {
-    const inputs = document.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() { this.parentElement.classList.add('focused'); });
-        input.addEventListener('blur', function() { this.parentElement.classList.remove('focused'); });
-    });
-}
-
-function addKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            const hash = window.location.hash;
-            if (hash === '#decode') decode(); else encode();
-            e.preventDefault();
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initializeEnhancements();
-
-    const menuButton = document.querySelector('.menu-button');
-    const navLinks = document.querySelector('.nav-links');
-    const overlay = document.querySelector('.overlay');
-
-    function toggleMenu() {
-        const isOpening = !navLinks.classList.contains('active');
-        navLinks.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.classList.toggle('no-scroll', isOpening);
-        menuButton.setAttribute('aria-expanded', String(isOpening));
-        const icon = menuButton.querySelector('i');
-        if (navLinks.classList.contains('active')) { icon.classList.remove('fa-bars'); icon.classList.add('fa-times'); }
-        else { icon.classList.remove('fa-times'); icon.classList.add('fa-bars'); }
-    }
-
-    menuButton.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => { if (navLinks.classList.contains('active')) toggleMenu(); });
-    });
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-            menuButton.setAttribute('aria-expanded', 'false');
-            const icon = menuButton.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-    });
+  });
 });
-        </script>
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-            "@type": "Question",
-            "name": "What is zero-width steganography?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Zero-width steganography hides messages using invisible Unicode characters such as zero width space (ZWSP), zero width non-joiner (ZWNJ) and zero width joiner (ZWJ)."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Is zero-width steganography secure?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No. It’s an obfuscation technique and not a replacement for encryption. Avoid using it for sensitive data."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Which characters does StegZero use?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "StegZero uses a diversified set of zero-width and invisible Unicode characters to encode bits across the visible text for better robustness."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How do I encode or decode hidden text?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Use the Encode and Decode sections on the page: enter cover text and a secret message to generate invisible text, or paste text to reveal hidden content."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Do you provide a steganography decoder?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. StegZero includes a steganography decoder for zero-width Unicode. Paste any text that might contain invisible characters and press Decode to reveal hidden messages."
-            }
-        }
-    ]
-}
 </script>
-<script data-goatcounter="https://stegzero.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
-
 </body>
 </html>
