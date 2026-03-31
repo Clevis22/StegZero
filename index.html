@@ -3,8 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StegZero — Zero-Width Unicode Steganography | Encode & Decode Invisible Text</title>
-  <meta name="description" content="Free online zero-width Unicode steganography tool. Hide and reveal invisible text using ZWSP/ZWNJ/ZWJ characters. 100% client-side.">
+
+  <!-- ═══ SEO: Primary tags ═══ -->
+  <title>Zero-Width Steganography Tool — Hide & Reveal Invisible Text | StegZero</title>
+  <meta name="description" content="Free online zero-width steganography tool. Encode secret messages inside any text using invisible Unicode characters (ZWSP, ZWNJ, ZWJ). Decode and detect hidden text instantly. 100% client-side — nothing sent to any server.">
+  <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
+  <link rel="canonical" href="https://stegzero.com/">
+
+  <!-- ═══ SEO: Open Graph / social sharing ═══ -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://stegzero.com/">
+  <meta property="og:title" content="Zero-Width Steganography Tool — Hide & Reveal Invisible Text | StegZero">
+  <meta property="og:description" content="Encode secret messages inside any text using invisible Unicode characters. Decode and detect hidden text instantly. Free, open-source, 100% client-side.">
+  <meta property="og:image" content="https://stegzero.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zero-Width Steganography Tool | StegZero">
+  <meta name="twitter:description" content="Hide secret messages in plain sight using zero-width Unicode steganography. Free, open-source, client-side only.">
+
+  <!-- ═══ SEO: JSON-LD structured data ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "StegZero",
+    "url": "https://stegzero.com/",
+    "description": "A free online zero-width steganography tool that lets you hide and reveal invisible text messages using Unicode zero-width characters such as ZWSP (U+200B), ZWNJ (U+200C), and ZWJ (U+200D). Runs entirely in the browser — no data is sent to any server.",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Encode hidden messages using zero-width Unicode characters",
+      "Decode and extract invisible text from any string",
+      "Detect zero-width steganography in pasted text",
+      "Optional XOR passphrase obfuscation layer",
+      "Round-trip verification testing",
+      "100% client-side — no server communication"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Clevis22",
+      "url": "https://github.com/Clevis22"
+    }
+  }
+  </script>
+
+  <!-- ═══ SEO: FAQ structured data (targets featured snippets) ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is zero-width steganography?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Zero-width steganography is a technique for hiding secret messages inside ordinary text using invisible Unicode characters — specifically zero-width spaces (U+200B), zero-width non-joiners (U+200C), zero-width joiners (U+200D), and similar characters. The resulting text looks identical to the original but carries a hidden payload that can only be extracted with a decoder tool."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which Unicode characters are used in zero-width steganography?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "StegZero uses eight invisible Unicode characters: ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), and the Zero-Width No-Break Space / BOM (U+FEFF). Each character encodes 3 bits, allowing efficient binary encoding of any UTF-8 message."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is zero-width steganography secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Zero-width steganography is an obfuscation technique, not encryption. Anyone who knows to look — by pasting the text into a decoder tool — will find the hidden message. It hides the existence of a message but does not protect its contents. For genuinely sensitive data, encrypt with GPG or AES first, then optionally use steganography to hide the ciphertext."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does zero-width steganography work on Twitter, WhatsApp, or Facebook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on the platform. Twitter/X and Facebook actively strip zero-width characters, so hidden messages will be lost. WhatsApp may strip some characters. Email clients, most messaging apps, and plain text files generally preserve zero-width characters. Always use the round-trip test before relying on a specific platform."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -41,7 +129,6 @@
       overflow-x: hidden;
     }
 
-    /* Subtle grid background */
     body::before {
       content: '';
       position: fixed;
@@ -184,7 +271,7 @@
     .pill i { color: var(--accent); font-size: 0.7rem; }
     .pill:hover { border-color: var(--border-bright); color: var(--text); }
 
-    /* ── SECURITY WARNING (prominent) ── */
+    /* ── SECURITY WARNING ── */
     .security-banner {
       position: relative;
       z-index: 1;
@@ -265,18 +352,46 @@
     }
     .panel.active { display: block; }
 
-    /* ── FLOW ARROW between panels ── */
-    .flow-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.6rem 0;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      font-family: var(--mono);
-      gap: 0.5rem;
-      opacity: 0.5;
+    /* ── DECODE EMPTY STATE ── */
+    .decode-empty-state {
+      border: 1px dashed var(--border-bright);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      background: rgba(99,179,237,0.03);
     }
+    .decode-empty-state p {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .decode-empty-state p strong {
+      color: var(--text);
+    }
+    .decode-empty-state .example-btns {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .example-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      background: var(--bg3);
+      border: 1px solid var(--border-bright);
+      color: var(--accent);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .example-btn:hover { background: rgba(99,179,237,0.12); }
 
     /* ── ENCODE / DECODE PIPE BUTTON ── */
     .pipe-btn {
@@ -315,6 +430,36 @@
       line-height: 1.5;
       font-family: var(--mono);
     }
+    /* Cover text examples row */
+    .cover-text-examples {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .cover-text-examples span {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+    .cover-example-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--bg3);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .cover-example-chip:hover { border-color: var(--border-bright); background: rgba(99,179,237,0.08); }
+
     textarea, input[type="text"] {
       width: 100%;
       background: var(--bg);
@@ -447,7 +592,7 @@
       color: var(--text-muted);
     }
 
-    /* ── LIVE PREVIEW (zero-width highlighting) ── */
+    /* ── LIVE PREVIEW ── */
     .preview-section { margin-top: 1.75rem; }
     .preview-section h3 {
       font-family: var(--mono);
@@ -473,7 +618,6 @@
       min-height: 60px;
       color: var(--text);
     }
-    /* Zero-width char highlight */
     .zw-mark {
       display: inline-block;
       background: rgba(99,179,237,0.22);
@@ -802,25 +946,26 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><i class="fas fa-lock-open"></i> Unicode Steganography</div>
+  <div class="hero-badge"><i class="fas fa-lock-open"></i> Zero-Width Unicode Steganography</div>
+  <!-- H1 is keyword-rich for SEO while remaining natural -->
   <h1>Hide Messages<br>In Plain Sight</h1>
-  <p>Embed invisible text inside any string using zero-width Unicode characters. No server. No tracking. No traces.</p>
-  <p class="hero-note">// runs 100% in your browser</p>
+  <p>The free zero-width steganography tool. Embed invisible secret text inside any string using Unicode zero-width characters — instantly, with no server, no tracking, and no traces.</p>
+  <p class="hero-note">// runs 100% in your browser — nothing leaves your device</p>
   <div class="hero-pills">
     <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
-    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible chars</span>
-    <span class="pill"><i class="fas fa-bolt"></i> Instant</span>
+    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible Unicode chars</span>
+    <span class="pill"><i class="fas fa-bolt"></i> Instant encode &amp; decode</span>
     <span class="pill"><i class="fas fa-file-export"></i> Export support</span>
     <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
   </div>
 </div>
 
-<!-- SECURITY WARNING (prominent, near tool) -->
+<!-- SECURITY WARNING -->
 <div class="security-banner">
   <div class="security-banner-inner">
     <i class="fas fa-exclamation-triangle"></i>
     <div>
-      <strong>Not a replacement for encryption.</strong> Zero-width steganography is an obfuscation technique. Anyone who knows to look will find it. For sensitive data, use a proper encryption tool (e.g. GPG, Signal). This tool is for education and fun only.
+      <strong>Not a replacement for encryption.</strong> Zero-width steganography is an obfuscation technique — it hides the <em>existence</em> of a message, not its contents. Anyone who pastes your text into a decoder will see it. For sensitive data, encrypt with GPG or AES first. This tool is for education, watermarking, and fun.
     </div>
   </div>
 </div>
@@ -844,16 +989,33 @@
   <!-- ENCODE PANEL -->
   <div class="panel active" id="panel-encode">
 
+    <!-- Cover text field — improved label and example chips -->
     <div class="field">
-      <label>Cover Text <span style="color:var(--text-muted);font-size:0.68rem">(optional — visible to everyone)</span></label>
-      <textarea id="visibleText" rows="3" placeholder="Enter the visible text that will carry your secret…" oninput="updateEncodePreview()"></textarea>
+      <label>Cover Text <span style="color:var(--text-muted);font-size:0.68rem">(the visible text that carries your hidden message)</span></label>
+      <textarea id="visibleText" rows="3" placeholder="Paste a tweet, email, blog post, or any text. Your secret will be invisibly woven into it…" oninput="updateEncodePreview()"></textarea>
+      <div class="cover-text-examples">
+        <span>Try an example:</span>
+        <button class="cover-example-chip" onclick="setCoverText('tweet')" title="Use a sample tweet as cover text">
+          <i class="fab fa-twitter"></i> tweet
+        </button>
+        <button class="cover-example-chip" onclick="setCoverText('email')" title="Use a sample email sentence">
+          <i class="fas fa-envelope"></i> email
+        </button>
+        <button class="cover-example-chip" onclick="setCoverText('bio')" title="Use a sample bio blurb">
+          <i class="fas fa-user"></i> bio
+        </button>
+        <button class="cover-example-chip" onclick="setCoverText('blank')" title="Encode with no cover text (detectable)">
+          <i class="fas fa-times"></i> none (detectable)
+        </button>
+      </div>
+      <div class="field-hint">The cover text is visible to everyone. Your secret is hidden inside it as invisible zero-width Unicode characters. Without cover text, the hidden characters are trivially detectable.</div>
     </div>
 
     <div class="field">
       <label>Hidden Message <span class="required">*</span></label>
       <input type="text" id="hiddenMessage" placeholder="Your secret message…" oninput="updateCounter()">
       <div class="char-counter" id="msgCounter">0 chars</div>
-      <div class="field-hint">Keep it short — longer messages create more zero-width characters</div>
+      <div class="field-hint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
     </div>
 
     <!-- Passphrase toggle -->
@@ -926,10 +1088,29 @@
   <!-- DECODE PANEL -->
   <div class="panel" id="panel-decode">
 
+    <!-- ── NEW: Empty state / onboarding ── -->
+    <div class="decode-empty-state" id="decodeEmptyState">
+      <p>
+        <strong>Paste any text to reveal hidden messages inside it.</strong><br>
+        Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples to see how it works:
+      </p>
+      <div class="example-btns">
+        <button class="example-btn" onclick="loadDecodeExample('tweet')">
+          <i class="fab fa-twitter"></i> Hidden tweet
+        </button>
+        <button class="example-btn" onclick="loadDecodeExample('email')">
+          <i class="fas fa-envelope"></i> Hidden email
+        </button>
+        <button class="example-btn" onclick="loadDecodeExample('watermark')">
+          <i class="fas fa-fingerprint"></i> Watermarked text
+        </button>
+      </div>
+    </div>
+
     <div class="field">
       <label>Text to Decode</label>
-      <textarea id="encodedText" rows="4" placeholder="Paste text containing a hidden message…" oninput="updateDecodePreview()"></textarea>
-      <div class="field-hint">Paste any text — zero-width characters are invisible but this tool will find them</div>
+      <textarea id="encodedText" rows="4" placeholder="Paste text here — zero-width steganography characters are invisible but this tool will find and decode them…" oninput="onDecodeInput()"></textarea>
+      <div class="field-hint">The text will look completely normal even if it contains a hidden message</div>
     </div>
 
     <!-- Passphrase for decode -->
@@ -993,7 +1174,7 @@
   <div class="panel" id="panel-detect">
     <div class="field">
       <label>Text to Inspect</label>
-      <textarea id="detectText" rows="4" placeholder="Paste any text to check for hidden zero-width characters…" oninput="runDetect()"></textarea>
+      <textarea id="detectText" rows="4" placeholder="Paste any text to check for hidden zero-width steganography characters…" oninput="runDetect()"></textarea>
     </div>
 
     <div id="detectResultBox" class="detect-result" style="display:none">
@@ -1028,7 +1209,7 @@
         <i class="fas fa-eraser"></i> Clear
       </button>
       <button class="btn btn-ghost" onclick="stripZwAndCopy()">
-        <i class="fas fa-broom"></i> Strip ZW chars & Copy
+        <i class="fas fa-broom"></i> Strip ZW chars &amp; Copy
       </button>
     </div>
     <div class="status-line" id="detectStatus"></div>
@@ -1036,81 +1217,107 @@
 
   <hr class="divider" id="how-it-works">
 
-  <!-- HOW IT WORKS -->
-  <div class="section-heading"><i class="fas fa-info-circle"></i> How It Works</div>
+  <!-- HOW IT WORKS — keyword-enriched headings and copy -->
+  <h2 class="section-heading"><i class="fas fa-info-circle"></i> How Zero-Width Steganography Works</h2>
   <div class="info-grid">
     <div class="info-card">
-      <h3><i class="fas fa-question-circle"></i> What is Steganography?</h3>
+      <h3><i class="fas fa-question-circle"></i> What is zero-width steganography?</h3>
       <ul>
-        <li>Hiding a message inside another non-secret message or medium</li>
-        <li>Unlike encryption, the goal is to hide the <em>existence</em> of the message</li>
-        <li>This tool uses invisible Unicode characters as the hiding medium</li>
-        <li>The technique is called zero-width steganography</li>
+        <li>A technique for hiding secret messages inside ordinary visible text</li>
+        <li>Uses invisible Unicode characters — zero-width spaces, joiners, and separators</li>
+        <li>Unlike encryption, it hides the <em>existence</em> of a message, not just its contents</li>
+        <li>The cover text looks and reads completely normally to any human reader</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-cogs"></i> The Encoding Process</h3>
+      <h3><i class="fas fa-cogs"></i> The encoding process</h3>
       <ul>
         <li>Your message is converted to UTF-8 bytes</li>
         <li>A header with magic marker, nonce, length + CRC32 is prepended</li>
-        <li>Bits are mapped to 8 zero-width/invisible Unicode characters (3 bits each)</li>
+        <li>Bits are mapped to 8 zero-width Unicode characters (3 bits each)</li>
         <li>Hidden characters are evenly interleaved across the cover text</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-exclamation-triangle"></i> Limitations</h3>
+      <h3><i class="fas fa-exclamation-triangle"></i> Platform compatibility</h3>
       <ul>
-        <li>Twitter/X and Facebook strip zero-width characters</li>
-        <li>WhatsApp may strip some — test before relying on it</li>
-        <li>Not secure — anyone who runs the decode will see your message</li>
-        <li>Not suitable for sensitive or confidential information</li>
+        <li>Twitter/X and Facebook strip zero-width characters — messages will be lost</li>
+        <li>WhatsApp may strip some characters — always test first</li>
+        <li>Email, Telegram, Discord, and plain text files generally preserve them</li>
+        <li>Use the Round-Trip test to verify any platform before relying on it</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-lightbulb"></i> Good Use Cases</h3>
+      <h3><i class="fas fa-lightbulb"></i> Good use cases</h3>
       <ul>
-        <li>Hiding watermarks in shared text to track leaks</li>
-        <li>Easter eggs in documents or web pages</li>
-        <li>Puzzles and ARGs</li>
-        <li>Learning about Unicode and text encoding</li>
+        <li>Hiding watermarks in shared documents to track leaks</li>
+        <li>Easter eggs in web pages, GitHub READMEs, or blog posts</li>
+        <li>Puzzles and alternate reality games (ARGs)</li>
+        <li>Learning about Unicode, text encoding, and digital steganography</li>
       </ul>
     </div>
   </div>
 
   <hr class="divider" id="faq">
 
-  <!-- FAQ -->
-  <div class="section-heading"><i class="fas fa-question-circle"></i> FAQ</div>
+  <!-- FAQ — heading and content keyword-enriched for SEO -->
+  <h2 class="section-heading"><i class="fas fa-question-circle"></i> Zero-Width Steganography — Frequently Asked Questions</h2>
   <div class="info-grid">
     <div class="info-card">
-      <h3><i class="fas fa-shield-alt"></i> Is this secure?</h3>
+      <h3><i class="fas fa-shield-alt"></i> Is zero-width steganography secure?</h3>
       <ul>
-        <li>No. It's obfuscation, not encryption. Anyone who pastes your text into this tool will see the message.</li>
-        <li>For real security, layer it with GPG/AES encryption first, then hide the ciphertext.</li>
+        <li>No — it's obfuscation, not encryption. Pasting into any decoder reveals the message.</li>
+        <li>For real security: encrypt with GPG or AES first, then hide the ciphertext here.</li>
+        <li>The optional passphrase adds XOR obfuscation but is not cryptographically strong.</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-code"></i> Which characters are used?</h3>
+      <h3><i class="fas fa-code"></i> Which Unicode characters are used?</h3>
       <ul>
-        <li>ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D)</li>
-        <li>Word Joiner (U+2060), Invisible Times (U+2062)</li>
-        <li>Invisible Separator (U+2063), Invisible Plus (U+2064)</li>
-        <li>Zero-Width No-Break Space / BOM (U+FEFF)</li>
+        <li>ZWSP (U+200B) — Zero-Width Space</li>
+        <li>ZWNJ (U+200C) — Zero-Width Non-Joiner</li>
+        <li>ZWJ (U+200D) — Zero-Width Joiner</li>
+        <li>Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), BOM/ZWNBS (U+FEFF)</li>
       </ul>
     </div>
     <div class="info-card">
       <h3><i class="fas fa-server"></i> Is my data sent anywhere?</h3>
       <ul>
         <li>No. Everything runs in your browser via JavaScript.</li>
-        <li>No text is ever sent to a server.</li>
-        <li>The source code is open on GitHub.</li>
+        <li>No text is ever sent to a server — not even anonymised telemetry.</li>
+        <li>The full source code is open on GitHub for independent verification.</li>
       </ul>
     </div>
     <div class="info-card">
       <h3><i class="fas fa-file-import"></i> Can I use it without cover text?</h3>
       <ul>
         <li>Yes — cover text is optional. The hidden characters will be output on their own.</li>
-        <li>But this makes detection trivial — always use a natural-looking cover text.</li>
+        <li>Without cover text, detection is trivial — a blank string of invisible characters is immediately suspicious.</li>
+        <li>Always use natural-looking cover text to maximise plausible deniability.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SEO: Additional keyword-rich prose section for long-tail queries -->
+  <hr class="divider">
+  <h2 class="section-heading"><i class="fas fa-book"></i> About Zero-Width Character Steganography</h2>
+  <div style="max-width:720px">
+    <div class="info-card" style="margin-bottom:1rem">
+      <h3><i class="fas fa-history"></i> Background &amp; history</h3>
+      <ul>
+        <li>Zero-width characters were introduced in Unicode to control text rendering across languages — not for hiding data</li>
+        <li>Security researchers documented their steganographic potential in the early 2000s</li>
+        <li>Today, zero-width steganography is used for digital watermarking, leak detection, and CTF challenges</li>
+        <li>Several major platforms now actively scan and strip zero-width characters from user content</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><i class="fas fa-tools"></i> How StegZero differs from basic tools</h3>
+      <ul>
+        <li>Uses an 8-symbol alphabet (3 bits per character) instead of the common 2-symbol binary approach — more efficient encoding</li>
+        <li>Includes a structured header with magic bytes, nonce, length, and CRC32 for reliable decoding</li>
+        <li>XOR-based passphrase obfuscation adds a layer of deniability on top of the steganography</li>
+        <li>Live visual preview highlights every hidden character so you can see exactly what's embedded</li>
       </ul>
     </div>
   </div>
@@ -1131,20 +1338,20 @@
       <h4>Resources</h4>
       <ul class="footer-links">
         <li><a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener"><i class="fas fa-book"></i> Documentation</a></li>
-        <li><a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i> Learn Steganography</a></li>
+        <li><a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i> Learn about steganography</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h4>Community</h4>
       <ul class="footer-links">
         <li><a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
-        <li><a href="https://twitter.com/intent/tweet?text=Hide%20messages%20in%20plain%20sight%20with%20stegzero.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Share on X</a></li>
+        <li><a href="https://twitter.com/intent/tweet?text=Hide%20messages%20in%20plain%20sight%20with%20zero-width%20steganography%20at%20stegzero.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Share on X</a></li>
         <li><a href="mailto:contact@stegzero.com"><i class="fas fa-envelope"></i> contact@stegzero.com</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 StegZero. Some rights reserved.</p>
+    <p>© 2025 StegZero — free online zero-width steganography tool. Open source.</p>
     <p style="font-size:0.7rem;opacity:0.5">Built with zero-width love ​​​​</p>
   </div>
 </footer>
@@ -1153,7 +1360,7 @@
 
 <script>
 // ════════════════════════════════════════
-// CORE STEGANOGRAPHY ENGINE (unchanged from original)
+// CORE STEGANOGRAPHY ENGINE
 // ════════════════════════════════════════
 const ZW_ALPHABET = [
   '\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'
@@ -1176,7 +1383,6 @@ function buildHeader(nonce,msgBytes){const len=msgBytes.length,crc=crc32(msgByte
 function parseHeader(h){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(MAGIC&0xFFFF))return null;const version=h[2],nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc};}
 function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
 
-// XOR passphrase obfuscation
 function xorWithKey(bytes, key) {
   if (!key) return bytes;
   const kBytes = te.encode(key);
@@ -1228,6 +1434,31 @@ function tryDecodeLegacy(text) {
     if (msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g,'').length === msg.length) return null;
     return msg.replace(/\x00+$/g,'');
   } catch { return null; }
+}
+
+// ════════════════════════════════════════
+// EXAMPLE CONTENT — for empty states
+// ════════════════════════════════════════
+
+// Pre-encoded example strings (encoded at build time — these are real zero-width encoded strings)
+// We generate them at runtime on first use to ensure they always match the current engine
+const EXAMPLES = {
+  decode: {
+    tweet: { cover: "Just shipped a new feature. Loving how this project is coming together 🚀", hidden: "stegzero was here" },
+    email: { cover: "Thanks for getting back to me — I'll circle back once I've had a chance to review.", hidden: "watermark:v1:doc42" },
+    watermark: { cover: "This document is confidential and intended solely for the named recipient.", hidden: "leak-check:user:7841" }
+  },
+  cover: {
+    tweet: "Just shipped a new feature. Loving how this project is coming together 🚀",
+    email: "Thanks for getting back to me — I'll circle back once I've had a chance to review.",
+    bio: "Developer, tinkerer, and occasional overthinker. Building things at the intersection of security and UX.",
+    blank: ""
+  }
+};
+
+function getEncodedExample(key) {
+  const ex = EXAMPLES.decode[key];
+  return encodeMsg(ex.cover, ex.hidden, null);
 }
 
 // ════════════════════════════════════════
@@ -1289,6 +1520,45 @@ function updateDecodePreview() {
 }
 
 // ════════════════════════════════════════
+// COVER TEXT EXAMPLES (encode panel)
+// ════════════════════════════════════════
+function setCoverText(key) {
+  document.getElementById('visibleText').value = EXAMPLES.cover[key];
+  updateEncodePreview();
+}
+
+// ════════════════════════════════════════
+// DECODE EMPTY STATE
+// ════════════════════════════════════════
+function loadDecodeExample(key) {
+  const encoded = getEncodedExample(key);
+  document.getElementById('encodedText').value = encoded;
+  // Hide the empty state, show preview
+  document.getElementById('decodeEmptyState').style.display = 'none';
+  updateDecodePreview();
+  // Auto-decode to show the magic immediately
+  handleDecode();
+  showToast(`Example loaded — hidden message revealed below`);
+}
+
+function onDecodeInput() {
+  const val = document.getElementById('encodedText').value;
+  // Hide the empty state once the user starts typing/pasting
+  if (val.length > 0) {
+    document.getElementById('decodeEmptyState').style.display = 'none';
+  } else {
+    document.getElementById('decodeEmptyState').style.display = 'block';
+    // Reset result
+    document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
+    document.getElementById('decodedResult').className = 'result-box empty';
+    document.getElementById('decodedMeta').textContent = '';
+    document.getElementById('decodeStatus').textContent = '';
+    document.getElementById('decodeStatus').className = 'status-line';
+  }
+  updateDecodePreview();
+}
+
+// ════════════════════════════════════════
 // ENCODE UI
 // ════════════════════════════════════════
 function updateCounter() {
@@ -1326,9 +1596,7 @@ function handleEncode() {
   showEncodeResultPreview(result);
   document.getElementById('encodePreviewSection').style.display = 'block';
 
-  // Show share button if Web Share API available
   if (navigator.share) document.getElementById('shareBtn').style.display = 'inline-flex';
-
   showToast('Encoded successfully');
 }
 
@@ -1384,6 +1652,7 @@ function clearDecode() {
   document.getElementById('decodePreviewSection').style.display = 'none';
   document.getElementById('decodeStatus').textContent = '';
   document.getElementById('decodeStatus').className = 'status-line';
+  document.getElementById('decodeEmptyState').style.display = 'block';
 }
 
 // ════════════════════════════════════════
@@ -1399,7 +1668,6 @@ function runDetect() {
   const zw = countZW(text);
   const types = distinctZWTypes(text);
 
-  // Check signatures
   const alphaSet = new Set(ZW_ALPHABET);
   let extracted = '';
   for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
@@ -1473,6 +1741,7 @@ function pipeToDecoder() {
     showToast('Encode something first', 'warn'); return;
   }
   document.getElementById('encodedText').value = result;
+  document.getElementById('decodeEmptyState').style.display = 'none';
   switchTab('decode');
   updateDecodePreview();
   document.getElementById('encodedText').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1493,6 +1762,7 @@ function pasteClipboard(id) {
   if (!navigator.clipboard?.readText) { showToast('Paste not supported in this browser', 'warn'); return; }
   navigator.clipboard.readText().then(t => {
     document.getElementById(id).value = t;
+    document.getElementById('decodeEmptyState').style.display = 'none';
     updateDecodePreview();
     showToast('Pasted from clipboard');
   }).catch(() => showToast('Paste failed', 'error'));
@@ -1579,7 +1849,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth > 700 && nav.classList.contains('open')) toggleNav();
   });
 
-  // Keyboard shortcut: Ctrl+Enter to encode/decode
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       const active = document.querySelector('.panel.active');
