@@ -3,14 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ═══ SEO: Primary tags ═══ -->
   <title>Zero-Width Steganography Tool — Hide & Reveal Invisible Text | StegZero</title>
   <meta name="description" content="Free online zero-width steganography tool. Encode secret messages inside any text using invisible Unicode characters (ZWSP, ZWNJ, ZWJ). Decode and detect hidden text instantly. 100% client-side — nothing sent to any server.">
   <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
   <link rel="canonical" href="https://stegzero.com/">
-
-  <!-- ═══ SEO: Open Graph / social sharing ═══ -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stegzero.com/">
   <meta property="og:title" content="Zero-Width Steganography Tool — Hide & Reveal Invisible Text | StegZero">
@@ -19,80 +15,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Zero-Width Steganography Tool | StegZero">
   <meta name="twitter:description" content="Hide secret messages in plain sight using zero-width Unicode steganography. Free, open-source, client-side only.">
-
-  <!-- ═══ SEO: JSON-LD structured data ═══ -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "StegZero",
-    "url": "https://stegzero.com/",
-    "description": "A free online zero-width steganography tool that lets you hide and reveal invisible text messages using Unicode zero-width characters such as ZWSP (U+200B), ZWNJ (U+200C), and ZWJ (U+200D). Runs entirely in the browser — no data is sent to any server.",
-    "applicationCategory": "SecurityApplication",
-    "operatingSystem": "Any",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "Encode hidden messages using zero-width Unicode characters",
-      "Decode and extract invisible text from any string",
-      "Detect zero-width steganography in pasted text",
-      "Optional XOR passphrase obfuscation layer",
-      "Round-trip verification testing",
-      "100% client-side — no server communication"
-    ],
-    "author": {
-      "@type": "Person",
-      "name": "Clevis22",
-      "url": "https://github.com/Clevis22"
-    }
-  }
-  </script>
-
-  <!-- ═══ SEO: FAQ structured data (targets featured snippets) ═══ -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is zero-width steganography?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Zero-width steganography is a technique for hiding secret messages inside ordinary text using invisible Unicode characters — specifically zero-width spaces (U+200B), zero-width non-joiners (U+200C), zero-width joiners (U+200D), and similar characters. The resulting text looks identical to the original but carries a hidden payload that can only be extracted with a decoder tool."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Which Unicode characters are used in zero-width steganography?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "StegZero uses eight invisible Unicode characters: ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), and the Zero-Width No-Break Space / BOM (U+FEFF). Each character encodes 3 bits, allowing efficient binary encoding of any UTF-8 message."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is zero-width steganography secure?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Zero-width steganography is an obfuscation technique, not encryption. Anyone who knows to look — by pasting the text into a decoder tool — will find the hidden message. It hides the existence of a message but does not protect its contents. For genuinely sensitive data, encrypt with GPG or AES first, then optionally use steganography to hide the ciphertext."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does zero-width steganography work on Twitter, WhatsApp, or Facebook?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "It depends on the platform. Twitter/X and Facebook actively strip zero-width characters, so hidden messages will be lost. WhatsApp may strip some characters. Email clients, most messaging apps, and plain text files generally preserve zero-width characters. Always use the round-trip test before relying on a specific platform."
-        }
-      }
-    ]
-  }
-  </script>
-
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"StegZero","url":"https://stegzero.com/","description":"A free online zero-width steganography tool.","applicationCategory":"SecurityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -118,802 +47,181 @@
       --transition: all 0.18s ease;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: rgba(8,12,20,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    nav { position: sticky; top: 0; z-index: 200; background: rgba(8,12,20,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; height: 58px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; }
     .nav-logo span { color: var(--text-muted); }
     .nav-links { display: flex; gap: 1.75rem; align-items: center; }
-    .nav-link {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-decoration: none;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: var(--transition);
-    }
+    .nav-link { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition); }
     .nav-link:hover { color: var(--accent); }
-    .menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 1.3rem;
-      cursor: pointer;
-    }
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 150;
-      backdrop-filter: blur(4px);
-    }
+    .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; backdrop-filter: blur(4px); }
     .overlay.active { display: block; }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 5rem 1.5rem 3rem;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--border-bright);
-      padding: 0.3rem 0.9rem;
-      border-radius: 999px;
-      margin-bottom: 1.5rem;
-      background: rgba(99,179,237,0.06);
-    }
-    .hero h1 {
-      font-size: clamp(2.6rem, 6vw, 4.2rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      margin-bottom: 1.25rem;
-      background: linear-gradient(135deg, #e2ecf8 30%, #63b3ed 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      max-width: 520px;
-      margin: 0 auto 0.75rem;
-    }
-    .hero-note {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      opacity: 0.7;
-    }
-    .hero-pills {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      background: var(--bg2);
-      transition: var(--transition);
-    }
+    .hero { position: relative; z-index: 1; text-align: center; padding: 5rem 1.5rem 3rem; max-width: 780px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--border-bright); padding: 0.3rem 0.9rem; border-radius: 999px; margin-bottom: 1.5rem; background: rgba(99,179,237,0.06); }
+    .hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.25rem; background: linear-gradient(135deg, #e2ecf8 30%, #63b3ed 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 520px; margin: 0 auto 0.75rem; }
+    .hero-note { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); opacity: 0.7; }
+    .hero-pills { display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+    .pill { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); border: 1px solid var(--border); padding: 0.35rem 0.85rem; border-radius: 999px; background: var(--bg2); transition: var(--transition); }
     .pill i { color: var(--accent); font-size: 0.7rem; }
     .pill:hover { border-color: var(--border-bright); color: var(--text); }
-
-    /* ── SECURITY WARNING ── */
-    .security-banner {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-      margin: 0 auto 2.5rem;
-      padding: 0 1.5rem;
-    }
-    .security-banner-inner {
-      background: rgba(237,137,54,0.08);
-      border: 1px solid rgba(237,137,54,0.3);
-      border-left: 3px solid var(--warn);
-      border-radius: var(--radius);
-      padding: 0.9rem 1.25rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      color: rgba(237,137,54,0.9);
-      line-height: 1.5;
-    }
+    .security-banner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto 2.5rem; padding: 0 1.5rem; }
+    .security-banner-inner { background: rgba(237,137,54,0.08); border: 1px solid rgba(237,137,54,0.3); border-left: 3px solid var(--warn); border-radius: var(--radius); padding: 0.9rem 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem; font-family: var(--mono); font-size: 0.8rem; color: rgba(237,137,54,0.9); line-height: 1.5; }
     .security-banner-inner i { margin-top: 0.1rem; flex-shrink: 0; }
-
-    /* ── MAIN LAYOUT ── */
-    main {
-      position: relative;
-      z-index: 1;
-      flex: 1;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 1.5rem 4rem;
-      width: 100%;
-    }
-
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 0;
-      background: var(--bg2);
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 0.85rem 1rem;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      border-right: 1px solid var(--border);
-    }
+    main { position: relative; z-index: 1; flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 1.5rem 4rem; width: 100%; }
+    .tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 0; background: var(--bg2); }
+    .tab-btn { flex: 1; padding: 0.85rem 1rem; background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem; border-right: 1px solid var(--border); }
     .tab-btn:last-child { border-right: none; }
-    .tab-btn.active {
-      background: rgba(99,179,237,0.1);
-      color: var(--accent);
-    }
+    .tab-btn.active { background: rgba(99,179,237,0.1); color: var(--accent); }
     .tab-btn:hover:not(.active) { background: var(--bg3); color: var(--text); }
-
-    /* ── PANEL ── */
-    .panel {
-      display: none;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 var(--radius) var(--radius);
-      padding: 2rem;
-    }
+    .panel { display: none; background: var(--bg2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 2rem; }
     .panel.active { display: block; }
-
-    /* ── DECODE EMPTY STATE ── */
-    .decode-empty-state {
-      border: 1px dashed var(--border-bright);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      background: rgba(99,179,237,0.03);
-    }
-    .decode-empty-state p {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      line-height: 1.6;
-    }
-    .decode-empty-state p strong {
-      color: var(--text);
-    }
-    .decode-empty-state .example-btns {
-      display: flex;
-      justify-content: center;
-      gap: 0.65rem;
-      flex-wrap: wrap;
-    }
-    .example-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      background: var(--bg3);
-      border: 1px solid var(--border-bright);
-      color: var(--accent);
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
+    .decode-empty-state { border: 1px dashed var(--border-bright); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; background: rgba(99,179,237,0.03); }
+    .decode-empty-state p { font-family: var(--mono); font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.6; }
+    .decode-empty-state p strong { color: var(--text); }
+    .decode-empty-state .example-btns { display: flex; justify-content: center; gap: 0.65rem; flex-wrap: wrap; }
+    .example-btn { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.76rem; background: var(--bg3); border: 1px solid var(--border-bright); color: var(--accent); padding: 0.45rem 0.9rem; border-radius: 999px; cursor: pointer; transition: var(--transition); }
     .example-btn:hover { background: rgba(99,179,237,0.12); }
-
-    /* ── ENCODE / DECODE PIPE BUTTON ── */
-    .pipe-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      background: rgba(99,179,237,0.06);
-      border: 1px solid var(--border-bright);
-      color: var(--accent);
-      padding: 0.45rem 1rem;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-left: auto;
-    }
+    .pipe-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.78rem; background: rgba(99,179,237,0.06); border: 1px solid var(--border-bright); color: var(--accent); padding: 0.45rem 1rem; border-radius: 999px; cursor: pointer; transition: var(--transition); margin-left: auto; }
     .pipe-btn:hover { background: rgba(99,179,237,0.14); }
-
-    /* ── FORM ELEMENTS ── */
     .field { margin-bottom: 1.5rem; }
-    .field label {
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.55rem;
-    }
+    .field label { display: block; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.55rem; }
     .field label .required { color: var(--danger); margin-left: 3px; }
-    .field-hint {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 0.45rem;
-      line-height: 1.5;
-      font-family: var(--mono);
-    }
-    /* Cover text examples row */
-    .cover-text-examples {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .cover-text-examples span {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      opacity: 0.8;
-    }
-    .cover-example-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--accent);
-      border: 1px solid var(--border);
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      background: var(--bg3);
-      cursor: pointer;
-      transition: var(--transition);
-    }
+    .field-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.45rem; line-height: 1.5; font-family: var(--mono); }
+    .cover-text-examples { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .cover-text-examples span { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); opacity: 0.8; }
+    .cover-example-chip { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--mono); font-size: 0.7rem; color: var(--accent); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--bg3); cursor: pointer; transition: var(--transition); }
     .cover-example-chip:hover { border-color: var(--border-bright); background: rgba(99,179,237,0.08); }
-
-    textarea, input[type="text"] {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 1rem;
-      padding: 0.9rem 1rem;
-      border-radius: var(--radius);
-      resize: vertical;
-      transition: var(--transition);
-      line-height: 1.6;
-    }
+    textarea, input[type="text"] { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); resize: vertical; transition: var(--transition); line-height: 1.6; }
     textarea { min-height: 110px; }
     input[type="text"] { height: 3.1rem; }
-    textarea:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-    .char-counter {
-      text-align: right;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
+    textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .char-counter { text-align: right; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
     .char-counter.warn { color: var(--warn); }
     .char-counter.danger { color: var(--danger); }
-
-    /* ── PLATFORM WARNING ── */
-    .platform-note {
-      background: rgba(99,179,237,0.05);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.5rem;
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-    .platform-note strong { color: var(--text); }
-    .platform-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      margin: 0.2rem 0.1rem;
-      border: 1px solid;
-    }
-    .chip-ok { color: var(--success); border-color: rgba(72,187,120,0.3); background: rgba(72,187,120,0.06); }
-    .chip-warn { color: var(--warn); border-color: rgba(237,137,54,0.3); background: rgba(237,137,54,0.06); }
-    .chip-bad { color: var(--danger); border-color: rgba(252,129,129,0.3); background: rgba(252,129,129,0.06); }
-
-    /* ── BUTTONS ── */
-    .btn-row {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: 0.25rem;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.7rem 1.4rem;
-      border-radius: var(--radius);
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      letter-spacing: 0.05em;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: var(--accent2);
-      color: #fff;
-    }
+    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.05em; border: none; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .btn-primary { background: var(--accent2); color: #fff; }
     .btn-primary:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,179,237,0.25); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-    .btn-ghost {
-      background: var(--bg3);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
+    .btn-ghost { background: var(--bg3); color: var(--text-muted); border: 1px solid var(--border); }
     .btn-ghost:hover { border-color: var(--border-bright); color: var(--text); }
-    .btn-success {
-      background: rgba(72,187,120,0.12);
-      color: var(--success);
-      border: 1px solid rgba(72,187,120,0.3);
-    }
+    .btn-success { background: rgba(72,187,120,0.12); color: var(--success); border: 1px solid rgba(72,187,120,0.3); }
     .btn-success:hover { background: rgba(72,187,120,0.2); }
-
-    /* ── RESULT BOX ── */
-    .result-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem;
-      font-family: var(--mono);
-      font-size: 0.88rem;
-      word-break: break-all;
-      min-height: 80px;
-      line-height: 1.7;
-      color: var(--text);
-      position: relative;
-      transition: border-color 0.2s;
-    }
+    .result-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--mono); font-size: 0.88rem; word-break: break-all; min-height: 80px; line-height: 1.7; color: var(--text); position: relative; transition: border-color 0.2s; }
     .result-box.has-content { border-color: var(--border-bright); }
     .result-box.empty { color: var(--text-muted); font-style: italic; }
-    .result-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.55rem;
-    }
-    .result-label span {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .result-label .result-meta {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    /* ── LIVE PREVIEW ── */
+    .result-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.55rem; }
+    .result-label span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+    .result-label .result-meta { font-size: 0.7rem; color: var(--text-muted); }
     .preview-section { margin-top: 1.75rem; }
-    .preview-section h3 {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .preview-section h3 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
     .preview-section h3 i { color: var(--accent); }
-    .preview-display {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem;
-      font-family: var(--mono);
-      font-size: 0.88rem;
-      line-height: 1.8;
-      word-break: break-word;
-      min-height: 60px;
-      color: var(--text);
-    }
-    .zw-mark {
-      display: inline-block;
-      background: rgba(99,179,237,0.22);
-      border: 1px solid rgba(99,179,237,0.5);
-      border-radius: 3px;
-      width: 7px;
-      height: 14px;
-      vertical-align: middle;
-      margin: 0 0.5px;
-      position: relative;
-      cursor: default;
-    }
-    .preview-legend {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 0.65rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .preview-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-    .zw-sample {
-      display: inline-block;
-      background: rgba(99,179,237,0.22);
-      border: 1px solid rgba(99,179,237,0.5);
-      border-radius: 3px;
-      width: 10px;
-      height: 12px;
-    }
-    .zw-count {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.15rem 0.55rem;
-      background: rgba(99,179,237,0.08);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-    }
-
-    /* ── DETECT MODE ── */
-    .detect-result {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin-top: 1rem;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-    }
-    .detect-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-muted);
-    }
+    .preview-display { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--mono); font-size: 0.88rem; line-height: 1.8; word-break: break-word; min-height: 60px; color: var(--text); }
+    .zw-mark { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 7px; height: 14px; vertical-align: middle; margin: 0 0.5px; position: relative; cursor: default; }
+    .preview-legend { display: flex; align-items: center; gap: 1rem; margin-top: 0.65rem; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); flex-wrap: wrap; }
+    .preview-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+    .zw-sample { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 10px; height: 12px; }
+    .zw-count { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.55rem; background: rgba(99,179,237,0.08); border: 1px solid var(--border); border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; color: var(--accent); }
+    .detect-result { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.82rem; }
+    .detect-row { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); color: var(--text-muted); }
     .detect-row:last-child { border-bottom: none; }
     .detect-row strong { color: var(--text); }
     .badge-ok { color: var(--success); }
     .badge-none { color: var(--text-muted); }
     .badge-found { color: var(--warn); }
-
-    /* ── ROUND-TRIP TEST ── */
-    .rt-result {
-      margin-top: 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .rt-result { margin-top: 0.75rem; font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
     .rt-pass { color: var(--success); }
     .rt-fail { color: var(--danger); }
-
-    /* ── INFO / FAQ ── */
-    .section-heading {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
+    .section-heading { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; }
     .section-heading i { color: var(--accent); font-size: 1rem; }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
-    }
-    .info-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: var(--transition);
-    }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+    .info-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: var(--transition); }
     .info-card:hover { border-color: var(--border-bright); }
-    .info-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--accent);
-      font-family: var(--mono);
-    }
+    .info-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); font-family: var(--mono); }
     .info-card ul { list-style: none; }
-    .info-card li {
-      padding: 0.35rem 0;
-      padding-left: 1rem;
-      position: relative;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      line-height: 1.6;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
+    .info-card li { padding: 0.35rem 0; padding-left: 1rem; position: relative; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .info-card li:last-child { border-bottom: none; }
     .info-card li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
-
-    /* ── PASSPHRASE ── */
-    .passphrase-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-    .toggle-switch {
-      position: relative;
-      width: 38px;
-      height: 20px;
-      flex-shrink: 0;
-    }
+    .passphrase-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+    .toggle-switch { position: relative; width: 38px; height: 20px; flex-shrink: 0; }
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-track {
-      position: absolute;
-      inset: 0;
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .toggle-track::after {
-      content: '';
-      position: absolute;
-      left: 2px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 14px;
-      background: var(--text-muted);
-      border-radius: 50%;
-      transition: 0.2s;
-    }
+    .toggle-track { position: absolute; inset: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; transition: 0.2s; }
+    .toggle-track::after { content: ''; position: absolute; left: 2px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: var(--text-muted); border-radius: 50%; transition: 0.2s; }
     input:checked + .toggle-track { background: rgba(99,179,237,0.2); border-color: var(--accent); }
     input:checked + .toggle-track::after { left: 20px; background: var(--accent); }
     .toggle-label { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); }
     .passphrase-field { display: none; margin-top: 0.75rem; }
     .passphrase-field.visible { display: block; }
-
-    /* ── EXPORT ROW ── */
-    .export-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    /* ── TOAST ── */
-    #toast {
-      position: fixed;
-      bottom: 1.75rem;
-      right: 1.75rem;
-      padding: 0.75rem 1.25rem;
-      border-radius: var(--radius);
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      display: none;
-      z-index: 9999;
-      animation: slideUp 0.25s ease;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-      max-width: 320px;
-    }
+    .export-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    #toast { position: fixed; bottom: 1.75rem; right: 1.75rem; padding: 0.75rem 1.25rem; border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; display: none; z-index: 9999; animation: slideUp 0.25s ease; box-shadow: 0 8px 30px rgba(0,0,0,0.35); max-width: 320px; }
     .toast-success { background: var(--success); color: #fff; }
     .toast-warn { background: var(--warn); color: #fff; }
     .toast-error { background: var(--danger); color: #fff; }
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* ── STATUS LINE ── */
-    .status-line {
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      margin-top: 0.6rem;
-      min-height: 1.1em;
-      color: var(--text-muted);
-    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .status-line { font-family: var(--mono); font-size: 0.76rem; margin-top: 0.6rem; min-height: 1.1em; color: var(--text-muted); }
     .status-line.ok { color: var(--success); }
     .status-line.err { color: var(--danger); }
-
-    /* ── DIVIDER ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 2.5rem 0;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
-      max-width: 1080px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-    .footer-section h4 {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.85rem;
-    }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; max-width: 1080px; margin: 0 auto; width: 100%; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    .footer-section h4 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.85rem; }
     .footer-links { list-style: none; }
     .footer-links li { margin-bottom: 0.6rem; }
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: var(--transition);
-    }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; transition: var(--transition); }
     .footer-links a:hover { color: var(--accent); }
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-    .footer-bottom p {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .footer-bottom p { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); }
 
-    /* ── RESPONSIVE ── */
+    /* ── WATERMARK TAB ── */
+    .wm-sub-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; background: var(--bg3); }
+    .wm-sub-btn { flex: 1; padding: 0.65rem 1rem; background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.45rem; border-right: 1px solid var(--border); }
+    .wm-sub-btn:last-child { border-right: none; }
+    .wm-sub-btn.active { background: rgba(99,179,237,0.1); color: var(--accent); }
+    .wm-sub-btn:hover:not(.active) { color: var(--text); }
+    .wm-pane { display: none; }
+    .wm-pane.active { display: block; }
+    .file-drop-zone { border: 1px dashed var(--border-bright); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; background: rgba(99,179,237,0.02); cursor: pointer; transition: var(--transition); position: relative; }
+    .file-drop-zone:hover, .file-drop-zone.dragover { border-color: var(--accent); background: rgba(99,179,237,0.06); }
+    .file-drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .file-drop-zone .drop-icon { font-size: 1.5rem; color: var(--accent); opacity: 0.6; margin-bottom: 0.75rem; }
+    .file-drop-zone p { font-family: var(--mono); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+    .file-drop-zone p strong { color: var(--text); }
+    .file-drop-zone .file-types { margin-top: 0.4rem; font-size: 0.72rem; opacity: 0.6; }
+    .file-loaded { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--bg); border: 1px solid var(--border-bright); border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; }
+    .file-loaded .file-icon { color: var(--accent); font-size: 1rem; flex-shrink: 0; }
+    .file-loaded .file-name { color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-loaded .file-size { color: var(--text-muted); font-size: 0.72rem; flex-shrink: 0; }
+    .file-loaded .file-clear { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; padding: 0.1rem 0.3rem; transition: var(--transition); flex-shrink: 0; }
+    .file-loaded .file-clear:hover { color: var(--danger); }
+    .wm-id-row { display: flex; gap: 0.75rem; align-items: flex-end; }
+    .wm-id-row .field { flex: 1; margin-bottom: 0; }
+    .wm-id-row .btn { flex-shrink: 0; height: 3.1rem; }
+    .verify-result-card { border-radius: var(--radius); padding: 1.25rem; margin-top: 1.25rem; font-family: var(--mono); font-size: 0.85rem; }
+    .verify-found { background: rgba(72,187,120,0.07); border: 1px solid rgba(72,187,120,0.3); }
+    .verify-not-found { background: rgba(252,129,129,0.06); border: 1px solid rgba(252,129,129,0.2); }
+    .verify-result-card .vr-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .verify-result-card .vr-mark { font-size: 1rem; margin-bottom: 0.35rem; }
+    .verify-result-card .vr-value { color: var(--text); font-size: 0.9rem; word-break: break-all; }
+    .vr-found-color { color: var(--success); }
+    .vr-miss-color { color: var(--danger); }
+    .wm-info-strip { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .wm-chip { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); border: 1px solid var(--border); padding: 0.25rem 0.7rem; border-radius: 999px; background: var(--bg3); }
+    .wm-chip i { color: var(--accent); font-size: 0.65rem; }
+
     @media (max-width: 700px) {
-      .nav-links {
-        position: fixed;
-        top: 0; right: -260px;
-        height: 100vh;
-        width: 260px;
-        background: var(--bg2);
-        flex-direction: column;
-        padding: 5rem 1.75rem 2rem;
-        gap: 1.5rem;
-        transition: right 0.3s ease;
-        z-index: 300;
-        border-left: 1px solid var(--border);
-      }
+      .nav-links { position: fixed; top: 0; right: -260px; height: 100vh; width: 260px; background: var(--bg2); flex-direction: column; padding: 5rem 1.75rem 2rem; gap: 1.5rem; transition: right 0.3s ease; z-index: 300; border-left: 1px solid var(--border); }
       .nav-links.open { right: 0; }
       .menu-btn { display: block; z-index: 400; }
       .btn-row { flex-direction: column; }
       .btn { width: 100%; justify-content: center; }
       .export-row { flex-direction: column; }
       .export-row .btn { width: 100%; justify-content: center; }
+      .wm-id-row { flex-direction: column; }
+      .wm-id-row .btn { width: 100%; }
     }
     @media (max-width: 480px) {
       .hero { padding: 3.5rem 1rem 2rem; }
@@ -923,7 +231,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="#">
@@ -944,9 +251,7 @@
 </nav>
 <div class="overlay" id="overlay"></div>
 
-<!-- HERO -->
 <div class="hero">
-  <!-- H1 is keyword-rich for SEO while remaining natural -->
   <h1>Hide Messages<br>In Plain Sight</h1>
   <p>The free zero-width steganography tool. Embed invisible secret text inside any string using Unicode zero-width characters — instantly, with no server, no tracking, and no traces.</p>
   <p class="hero-note">// runs 100% in your browser</p>
@@ -954,12 +259,11 @@
     <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
     <span class="pill"><i class="fas fa-eye-slash"></i> Invisible Unicode chars</span>
     <span class="pill"><i class="fas fa-bolt"></i> Instant encode &amp; decode</span>
-    <span class="pill"><i class="fas fa-file-export"></i> Export support</span>
+    <span class="pill"><i class="fas fa-fingerprint"></i> File watermarking</span>
     <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
   </div>
 </div>
 
-<!-- SECURITY WARNING -->
 <div class="security-banner">
   <div class="security-banner-inner">
     <i class="fas fa-exclamation-triangle"></i>
@@ -969,10 +273,8 @@
   </div>
 </div>
 
-<!-- TOOL -->
 <main id="tool">
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('encode')" id="tab-encode">
       <i class="fas fa-lock"></i> Encode
@@ -983,41 +285,31 @@
     <button class="tab-btn" onclick="switchTab('detect')" id="tab-detect">
       <i class="fas fa-search"></i> Detect
     </button>
+    <button class="tab-btn" onclick="switchTab('watermark')" id="tab-watermark">
+      <i class="fas fa-fingerprint"></i> Watermark
+    </button>
   </div>
 
   <!-- ENCODE PANEL -->
   <div class="panel active" id="panel-encode">
-
-    <!-- Cover text field — improved label and example chips -->
     <div class="field">
       <label>Cover Text <span style="color:var(--text-muted);font-size:0.68rem">(the visible text that carries your hidden message)</span></label>
       <textarea id="visibleText" rows="3" placeholder="Paste a tweet, email, blog post, or any text. Your secret will be invisibly woven into it…" oninput="updateEncodePreview()"></textarea>
       <div class="cover-text-examples">
         <span>Try an example:</span>
-        <button class="cover-example-chip" onclick="setCoverText('tweet')" title="Use a sample tweet as cover text">
-          <i class="fab fa-twitter"></i> tweet
-        </button>
-        <button class="cover-example-chip" onclick="setCoverText('email')" title="Use a sample email sentence">
-          <i class="fas fa-envelope"></i> email
-        </button>
-        <button class="cover-example-chip" onclick="setCoverText('bio')" title="Use a sample bio blurb">
-          <i class="fas fa-user"></i> bio
-        </button>
-        <button class="cover-example-chip" onclick="setCoverText('blank')" title="Encode with no cover text (detectable)">
-          <i class="fas fa-times"></i> none (detectable)
-        </button>
+        <button class="cover-example-chip" onclick="setCoverText('tweet')"><i class="fab fa-twitter"></i> tweet</button>
+        <button class="cover-example-chip" onclick="setCoverText('email')"><i class="fas fa-envelope"></i> email</button>
+        <button class="cover-example-chip" onclick="setCoverText('bio')"><i class="fas fa-user"></i> bio</button>
+        <button class="cover-example-chip" onclick="setCoverText('blank')"><i class="fas fa-times"></i> none (detectable)</button>
       </div>
-      <div class="field-hint">The cover text is visible to everyone. Your secret is hidden inside it as invisible zero-width Unicode characters. Without cover text, the hidden characters are trivially detectable.</div>
+      <div class="field-hint">The cover text is visible to everyone. Your secret is hidden inside it as invisible zero-width Unicode characters.</div>
     </div>
-
     <div class="field">
       <label>Hidden Message <span class="required">*</span></label>
       <input type="text" id="hiddenMessage" placeholder="Your secret message…" oninput="updateCounter()">
       <div class="char-counter" id="msgCounter">0 chars</div>
       <div class="field-hint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
     </div>
-
-    <!-- Passphrase toggle -->
     <div class="field">
       <div class="passphrase-row">
         <label class="toggle-switch">
@@ -1031,54 +323,31 @@
         <div class="field-hint">The receiver must enter the same passphrase to decode</div>
       </div>
     </div>
-
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleEncode()" id="encodeBtn">
-        <i class="fas fa-shield-alt"></i> Encode
-      </button>
-      <button class="btn btn-ghost" onclick="clearEncode()">
-        <i class="fas fa-eraser"></i> Clear
-      </button>
-      <button class="btn btn-ghost" onclick="runRoundTrip()" id="rtBtn" title="Test round-trip: encode then immediately decode to verify">
-        <i class="fas fa-sync-alt"></i> Test Round-Trip
-      </button>
+      <button class="btn btn-primary" onclick="handleEncode()"><i class="fas fa-shield-alt"></i> Encode</button>
+      <button class="btn btn-ghost" onclick="clearEncode()"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="btn btn-ghost" onclick="runRoundTrip()" title="Test round-trip: encode then immediately decode to verify"><i class="fas fa-sync-alt"></i> Test Round-Trip</button>
     </div>
     <div class="status-line" id="encodeStatus"></div>
     <div class="rt-result" id="rtResult"></div>
-
-    <!-- Result -->
     <div style="margin-top:1.5rem">
       <div class="result-label">
         <span>Result</span>
         <span class="result-meta" id="encodedMeta"></span>
       </div>
       <div class="result-box empty" id="encodedResult">Encoded message will appear here.</div>
-
       <div class="export-row">
-        <button class="btn btn-success" onclick="copyResult('encodedResult')">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-        <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none">
-          <i class="fas fa-share-alt"></i> Share
-        </button>
-        <button class="btn btn-ghost" onclick="exportTxt('encodedResult','stegzero_encoded.txt')">
-          <i class="fas fa-file-download"></i> Export .txt
-        </button>
-        <button class="pipe-btn" onclick="pipeToDecoder()" title="Send this result directly to the Decode panel">
-          <i class="fas fa-arrow-right"></i> Send to Decoder →
-        </button>
+        <button class="btn btn-success" onclick="copyResult('encodedResult')"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none"><i class="fas fa-share-alt"></i> Share</button>
+        <button class="btn btn-ghost" onclick="exportTxt('encodedResult','stegzero_encoded.txt')"><i class="fas fa-file-download"></i> Export .txt</button>
+        <button class="pipe-btn" onclick="pipeToDecoder()" title="Send this result directly to the Decode panel"><i class="fas fa-arrow-right"></i> Send to Decoder →</button>
       </div>
     </div>
-
-    <!-- Live Preview -->
     <div class="preview-section" id="encodePreviewSection" style="display:none">
       <h3><i class="fas fa-eye"></i> Live Preview — Zero-Width Characters Highlighted</h3>
       <div class="preview-display" id="encodePreview"></div>
       <div class="preview-legend">
-        <div class="preview-legend-item">
-          <span class="zw-sample"></span>
-          <span>= one zero-width character</span>
-        </div>
+        <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
         <span class="zw-count" id="encodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
       </div>
     </div>
@@ -1086,33 +355,19 @@
 
   <!-- DECODE PANEL -->
   <div class="panel" id="panel-decode">
-
-    <!-- ── NEW: Empty state / onboarding ── -->
     <div class="decode-empty-state" id="decodeEmptyState">
-      <p>
-        <strong>Paste any text to reveal hidden messages inside it.</strong><br>
-        Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples to see how it works:
-      </p>
+      <p><strong>Paste any text to reveal hidden messages inside it.</strong><br>Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples:</p>
       <div class="example-btns">
-        <button class="example-btn" onclick="loadDecodeExample('tweet')">
-          <i class="fab fa-twitter"></i> Hidden tweet
-        </button>
-        <button class="example-btn" onclick="loadDecodeExample('email')">
-          <i class="fas fa-envelope"></i> Hidden email
-        </button>
-        <button class="example-btn" onclick="loadDecodeExample('watermark')">
-          <i class="fas fa-fingerprint"></i> Watermarked text
-        </button>
+        <button class="example-btn" onclick="loadDecodeExample('tweet')"><i class="fab fa-twitter"></i> Hidden tweet</button>
+        <button class="example-btn" onclick="loadDecodeExample('email')"><i class="fas fa-envelope"></i> Hidden email</button>
+        <button class="example-btn" onclick="loadDecodeExample('watermark')"><i class="fas fa-fingerprint"></i> Watermarked text</button>
       </div>
     </div>
-
     <div class="field">
       <label>Text to Decode</label>
       <textarea id="encodedText" rows="4" placeholder="Paste text here — zero-width steganography characters are invisible but this tool will find and decode them…" oninput="onDecodeInput()"></textarea>
       <div class="field-hint">The text will look completely normal even if it contains a hidden message</div>
     </div>
-
-    <!-- Passphrase for decode -->
     <div class="field">
       <div class="passphrase-row">
         <label class="toggle-switch">
@@ -1125,20 +380,12 @@
         <input type="text" id="decodePassInput" placeholder="Enter passphrase…" style="margin-top:0.5rem">
       </div>
     </div>
-
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleDecode()" id="decodeBtn">
-        <i class="fas fa-eye"></i> Decode
-      </button>
-      <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')">
-        <i class="fas fa-paste"></i> Paste
-      </button>
-      <button class="btn btn-ghost" onclick="clearDecode()">
-        <i class="fas fa-eraser"></i> Clear
-      </button>
+      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Decode</button>
+      <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')"><i class="fas fa-paste"></i> Paste</button>
+      <button class="btn btn-ghost" onclick="clearDecode()"><i class="fas fa-eraser"></i> Clear</button>
     </div>
     <div class="status-line" id="decodeStatus"></div>
-
     <div style="margin-top:1.5rem">
       <div class="result-label">
         <span>Hidden Message</span>
@@ -1146,24 +393,15 @@
       </div>
       <div class="result-box empty" id="decodedResult">Decoded message will appear here.</div>
       <div class="export-row">
-        <button class="btn btn-success" onclick="copyResult('decodedResult')">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-        <button class="btn btn-ghost" onclick="exportTxt('decodedResult','stegzero_decoded.txt')">
-          <i class="fas fa-file-download"></i> Export .txt
-        </button>
+        <button class="btn btn-success" onclick="copyResult('decodedResult')"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-ghost" onclick="exportTxt('decodedResult','stegzero_decoded.txt')"><i class="fas fa-file-download"></i> Export .txt</button>
       </div>
     </div>
-
-    <!-- Live Preview -->
     <div class="preview-section" id="decodePreviewSection" style="display:none">
       <h3><i class="fas fa-eye"></i> Zero-Width Characters Found in Input</h3>
       <div class="preview-display" id="decodePreview"></div>
       <div class="preview-legend">
-        <div class="preview-legend-item">
-          <span class="zw-sample"></span>
-          <span>= one zero-width character</span>
-        </div>
+        <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
         <span class="zw-count" id="decodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
       </div>
     </div>
@@ -1175,48 +413,100 @@
       <label>Text to Inspect</label>
       <textarea id="detectText" rows="4" placeholder="Paste any text to check for hidden zero-width steganography characters…" oninput="runDetect()"></textarea>
     </div>
-
     <div id="detectResultBox" class="detect-result" style="display:none">
-      <div class="detect-row">
-        <span>Total characters</span>
-        <strong id="det-total">—</strong>
-      </div>
-      <div class="detect-row">
-        <span>Zero-width characters found</span>
-        <strong id="det-zw">—</strong>
-      </div>
-      <div class="detect-row">
-        <span>Distinct ZW types</span>
-        <strong id="det-types">—</strong>
-      </div>
-      <div class="detect-row">
-        <span>StegZero V2 signature</span>
-        <strong id="det-v2">—</strong>
-      </div>
-      <div class="detect-row">
-        <span>Legacy signature</span>
-        <strong id="det-legacy">—</strong>
-      </div>
-      <div class="detect-row">
-        <span>Verdict</span>
-        <strong id="det-verdict">—</strong>
-      </div>
+      <div class="detect-row"><span>Total characters</span><strong id="det-total">—</strong></div>
+      <div class="detect-row"><span>Zero-width characters found</span><strong id="det-zw">—</strong></div>
+      <div class="detect-row"><span>Distinct ZW types</span><strong id="det-types">—</strong></div>
+      <div class="detect-row"><span>StegZero V2 signature</span><strong id="det-v2">—</strong></div>
+      <div class="detect-row"><span>Legacy signature</span><strong id="det-legacy">—</strong></div>
+      <div class="detect-row"><span>Verdict</span><strong id="det-verdict">—</strong></div>
     </div>
-
     <div class="btn-row" style="margin-top:1rem">
-      <button class="btn btn-ghost" onclick="clearDetect()">
-        <i class="fas fa-eraser"></i> Clear
-      </button>
-      <button class="btn btn-ghost" onclick="stripZwAndCopy()">
-        <i class="fas fa-broom"></i> Strip ZW chars &amp; Copy
-      </button>
+      <button class="btn btn-ghost" onclick="clearDetect()"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="btn btn-ghost" onclick="stripZwAndCopy()"><i class="fas fa-broom"></i> Strip ZW chars &amp; Copy</button>
     </div>
     <div class="status-line" id="detectStatus"></div>
   </div>
 
+  <!-- WATERMARK PANEL -->
+  <div class="panel" id="panel-watermark">
+
+    <div class="wm-info-strip">
+      <span class="wm-chip"><i class="fas fa-file-alt"></i> .txt &amp; .md</span>
+      <span class="wm-chip"><i class="fas fa-code"></i> .html &amp; .xml</span>
+      <span class="wm-chip"><i class="fas fa-table"></i> .csv</span>
+      <span class="wm-chip"><i class="fas fa-brackets-curly" style="font-family:var(--mono);">{}</i> .json</span>
+      <span class="wm-chip"><i class="fas fa-lock"></i> 100% client-side</span>
+    </div>
+
+    <!-- Sub-tabs: Embed / Verify -->
+    <div class="wm-sub-tabs">
+      <button class="wm-sub-btn active" onclick="switchWmPane('embed')" id="wm-tab-embed">
+        <i class="fas fa-stamp"></i> Embed Watermark
+      </button>
+      <button class="wm-sub-btn" onclick="switchWmPane('verify')" id="wm-tab-verify">
+        <i class="fas fa-search-plus"></i> Verify / Extract
+      </button>
+    </div>
+
+    <!-- EMBED PANE -->
+    <div class="wm-pane active" id="wm-pane-embed">
+      <div class="field">
+        <label>File to Watermark</label>
+        <div class="file-drop-zone" id="embedDropZone">
+          <input type="file" id="embedFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleEmbedFile(this)">
+          <div class="drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <p><strong>Drop a text file here</strong> or click to browse</p>
+          <p class="file-types">.txt · .md · .html · .xml · .csv · .json</p>
+        </div>
+        <div id="embedFileLoaded" style="display:none"></div>
+      </div>
+
+      <div class="field">
+        <label>Watermark ID <span class="required">*</span></label>
+        <div class="wm-id-row">
+          <div class="field">
+            <input type="text" id="wmIdInput" placeholder="e.g. recipient:alice · leak-check:v1 · doc:42">
+          </div>
+          <button class="btn btn-ghost" onclick="generateWmId()"><i class="fas fa-dice"></i> Generate</button>
+        </div>
+        <div class="field-hint">This ID will be invisibly embedded throughout the file. Keep it unique per recipient or distribution copy.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="handleEmbed()"><i class="fas fa-stamp"></i> Embed &amp; Download</button>
+        <button class="btn btn-ghost" onclick="clearEmbed()"><i class="fas fa-eraser"></i> Clear</button>
+      </div>
+      <div class="status-line" id="embedStatus"></div>
+    </div>
+
+    <!-- VERIFY PANE -->
+    <div class="wm-pane" id="wm-pane-verify">
+      <div class="field">
+        <label>File to Verify</label>
+        <div class="file-drop-zone" id="verifyDropZone">
+          <input type="file" id="verifyFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleVerifyFile(this)">
+          <div class="drop-icon"><i class="fas fa-search-plus"></i></div>
+          <p><strong>Drop the file to inspect</strong> or click to browse</p>
+          <p class="file-types">.txt · .md · .html · .xml · .csv · .json</p>
+        </div>
+        <div id="verifyFileLoaded" style="display:none"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="handleVerify()"><i class="fas fa-search-plus"></i> Extract Watermark</button>
+        <button class="btn btn-ghost" onclick="clearVerify()"><i class="fas fa-eraser"></i> Clear</button>
+      </div>
+      <div class="status-line" id="verifyStatus"></div>
+
+      <div id="verifyResultCard" style="display:none"></div>
+    </div>
+
+  </div>
+  <!-- END WATERMARK PANEL -->
+
   <hr class="divider" id="how-it-works">
 
-  <!-- HOW IT WORKS — keyword-enriched headings and copy -->
   <h2 class="section-heading"><i class="fas fa-info-circle"></i> How Zero-Width Steganography Works</h2>
   <div class="info-grid">
     <div class="info-card">
@@ -1259,7 +549,6 @@
 
   <hr class="divider" id="faq">
 
-  <!-- FAQ — heading and content keyword-enriched for SEO -->
   <h2 class="section-heading"><i class="fas fa-question-circle"></i> Zero-Width Steganography — Frequently Asked Questions</h2>
   <div class="info-grid">
     <div class="info-card">
@@ -1288,42 +577,18 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-file-import"></i> Can I use it without cover text?</h3>
+      <h3><i class="fas fa-fingerprint"></i> How does file watermarking work?</h3>
       <ul>
-        <li>Yes — cover text is optional. The hidden characters will be output on their own.</li>
-        <li>Without cover text, detection is trivial — a blank string of invisible characters is immediately suspicious.</li>
-        <li>Always use natural-looking cover text to maximise plausible deniability.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- SEO: Additional keyword-rich prose section for long-tail queries -->
-  <hr class="divider">
-  <h2 class="section-heading"><i class="fas fa-book"></i> About Zero-Width Character Steganography</h2>
-  <div style="max-width:720px">
-    <div class="info-card" style="margin-bottom:1rem">
-      <h3><i class="fas fa-history"></i> Background &amp; history</h3>
-      <ul>
-        <li>Zero-width characters were introduced in Unicode to control text rendering across languages — not for hiding data</li>
-        <li>Security researchers documented their steganographic potential in the early 2000s</li>
-        <li>Today, zero-width steganography is used for digital watermarking, leak detection, and CTF challenges</li>
-        <li>Several major platforms now actively scan and strip zero-width characters from user content</li>
-      </ul>
-    </div>
-    <div class="info-card">
-      <h3><i class="fas fa-tools"></i> How StegZero differs from basic tools</h3>
-      <ul>
-        <li>Uses an 8-symbol alphabet (3 bits per character) instead of the common 2-symbol binary approach — more efficient encoding</li>
-        <li>Includes a structured header with magic bytes, nonce, length, and CRC32 for reliable decoding</li>
-        <li>XOR-based passphrase obfuscation adds a layer of deniability on top of the steganography</li>
-        <li>Live visual preview highlights every hidden character so you can see exactly what's embedded</li>
+        <li>The watermark ID is encoded as zero-width characters using the same V2 engine</li>
+        <li>Characters are distributed across safe text positions — avoiding JSON values, CSV numbers, etc.</li>
+        <li>The original file content is completely unchanged — only invisible characters are added</li>
+        <li>Upload a suspected leaked copy to the Verify pane to instantly extract the watermark ID</li>
       </ul>
     </div>
   </div>
 
 </main>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-section">
@@ -1359,11 +624,9 @@
 
 <script>
 // ════════════════════════════════════════
-// CORE STEGANOGRAPHY ENGINE
+// CORE STEGANOGRAPHY ENGINE (unchanged)
 // ════════════════════════════════════════
-const ZW_ALPHABET = [
-  '\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'
-];
+const ZW_ALPHABET = ['\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'];
 const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
 const MAGIC = 0xA55A, VERSION = 1;
 const te = new TextEncoder(), td = new TextDecoder();
@@ -1381,66 +644,313 @@ function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));
 function buildHeader(nonce,msgBytes){const len=msgBytes.length,crc=crc32(msgBytes);return concatBytes(numToBytesBE(MAGIC,2),numToBytesBE(VERSION,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
 function parseHeader(h){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(MAGIC&0xFFFF))return null;const version=h[2],nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc};}
 function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
+function xorWithKey(bytes,key){if(!key)return bytes;const kBytes=te.encode(key);const out=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)out[i]=bytes[i]^kBytes[i%kBytes.length];return out;}
+function encodeMsg(visible,hidden,passphrase){let msgBytes=te.encode(hidden);if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
+function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);try{return td.decode(msgBytes);}catch{return null;}}
+function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8)return null;try{const msg=td.decode(bitsToBytes(bits));if(msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g,'').length===msg.length)return null;return msg.replace(/\x00+$/g,'');}catch{return null;}}
 
-function xorWithKey(bytes, key) {
-  if (!key) return bytes;
-  const kBytes = te.encode(key);
-  const out = new Uint8Array(bytes.length);
-  for (let i = 0; i < bytes.length; i++) out[i] = bytes[i] ^ kBytes[i % kBytes.length];
-  return out;
+// ════════════════════════════════════════
+// WATERMARK ENGINE
+// ════════════════════════════════════════
+
+// Safe injection positions vary by file type.
+// Strategy: for all text types, inject after runs of visible text characters.
+// For JSON we inject only after string value closings and structural chars.
+// For CSV we inject only after text-cell content (not bare numbers).
+
+function getFileType(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  if (['json'].includes(ext)) return 'json';
+  if (['csv'].includes(ext)) return 'csv';
+  if (['html','htm','xml'].includes(ext)) return 'html';
+  return 'text'; // txt, md, everything else
 }
 
-function encodeMsg(visible, hidden, passphrase) {
-  let msgBytes = te.encode(hidden);
-  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
-  const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
-  const header = buildHeader(nonce, msgBytes);
-  const headerBits = bytesToBits(header);
-  const msgBits = bytesToBits(msgBytes);
-  const seed = ((nonce << 16) | MAGIC) >>> 0;
-  const obfBits = obfuscateBits(msgBits, seed);
-  const payload = bitsToAlphabet(headerBits + obfBits);
-  return interleavePayload(visible, payload);
+function wmEncode(content, wmId, fileType) {
+  // Build the payload ZW string (no cover text — we'll inject manually)
+  const payload = encodeMsg('', wmId, null);
+  const payloadChars = Array.from(payload);
+  if (!payloadChars.length) return content;
+
+  const chars = Array.from(content);
+  const n = chars.length;
+
+  // Find safe injection indices based on file type
+  const safePositions = [];
+
+  if (fileType === 'json') {
+    // Inject after closing " of string values, or after { [ ] } , structural chars
+    // Simple heuristic: after any char that isn't part of a number or key
+    let inString = false, escape = false;
+    for (let i = 0; i < chars.length; i++) {
+      const c = chars[i];
+      if (escape) { escape = false; continue; }
+      if (c === '\\') { escape = true; continue; }
+      if (c === '"') { inString = !inString; if (!inString) safePositions.push(i + 1); continue; }
+      if (!inString && (c === ',' || c === '{' || c === '[' || c === '}' || c === ']' || c === '\n')) {
+        safePositions.push(i + 1);
+      }
+    }
+  } else if (fileType === 'csv') {
+    // Inject after commas and newlines, but only when adjacent cell looks like text (not a bare number)
+    for (let i = 0; i < chars.length; i++) {
+      const c = chars[i];
+      if (c === '\n' || c === ',') {
+        // peek ahead — skip if next non-space chars form a number
+        let j = i + 1;
+        while (j < chars.length && chars[j] === ' ') j++;
+        const peek = chars.slice(j, j + 12).join('');
+        if (!/^-?[\d.]+[,\n\r"]/.test(peek)) {
+          safePositions.push(i + 1);
+        }
+      }
+    }
+  } else if (fileType === 'html') {
+    // Inject only inside text nodes — after visible chars that aren't inside a tag
+    let inTag = false;
+    for (let i = 0; i < chars.length; i++) {
+      if (chars[i] === '<') { inTag = true; continue; }
+      if (chars[i] === '>') { inTag = false; continue; }
+      if (!inTag && /\S/.test(chars[i])) safePositions.push(i + 1);
+    }
+  } else {
+    // Plain text / markdown: inject after any non-whitespace character
+    for (let i = 0; i < chars.length; i++) {
+      if (/\S/.test(chars[i])) safePositions.push(i + 1);
+    }
+  }
+
+  if (!safePositions.length) {
+    // Fallback: append at end
+    return content + payload;
+  }
+
+  // Distribute payload chars evenly across safe positions
+  const step = Math.max(1, Math.floor(safePositions.length / payloadChars.length));
+  const insertAt = new Map();
+  for (let i = 0; i < payloadChars.length; i++) {
+    const pos = safePositions[Math.min(i * step, safePositions.length - 1)];
+    if (!insertAt.has(pos)) insertAt.set(pos, '');
+    insertAt.get(pos); // already set below
+    insertAt.set(pos, (insertAt.get(pos) || '') + payloadChars[i]);
+  }
+
+  // Build result
+  let result = '';
+  for (let i = 0; i < chars.length; i++) {
+    result += chars[i];
+    if (insertAt.has(i + 1)) result += insertAt.get(i + 1);
+  }
+  return result;
 }
 
-function tryDecodeV2(text, passphrase) {
-  const alphaSet = new Set(ZW_ALPHABET);
-  let extracted = '';
-  for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
-  if (!extracted.length) return null;
-  const bits = alphabetToBits(extracted);
-  if (bits.length < 88) return null;
-  const headerBytes = bitsToBytes(bits.slice(0, 88));
-  const hdr = parseHeader(headerBytes);
-  if (!hdr) return null;
-  const needBits = hdr.len * 8;
-  const payloadBits = bits.slice(88, 88 + needBits);
-  if (payloadBits.length < needBits) return null;
-  const seed = ((hdr.nonce << 16) | MAGIC) >>> 0;
-  const msgBits = obfuscateBits(payloadBits, seed);
-  let msgBytes = bitsToBytes(msgBits);
-  if (msgBytes.length !== hdr.len) return null;
-  if (crc32(msgBytes) !== (hdr.crc >>> 0)) return null;
-  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
-  try { return td.decode(msgBytes); } catch { return null; }
+function wmDecode(content) {
+  return tryDecodeV2(content, null);
 }
 
-function tryDecodeLegacy(text) {
-  const bits = Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');
-  if (bits.length < 8) return null;
+// ════════════════════════════════════════
+// WATERMARK UI STATE
+// ════════════════════════════════════════
+let embedFileData = null; // { name, content, type }
+let verifyFileData = null;
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = () => reject(new Error('File read failed'));
+    r.readAsText(file, 'utf-8');
+  });
+}
+
+function formatBytes(n) {
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+  return (n / 1048576).toFixed(2) + ' MB';
+}
+
+function renderFileLoaded(containerId, file) {
+  const ext = file.name.split('.').pop().toUpperCase();
+  const iconMap = { JSON:'fa-brackets-curly', CSV:'fa-table', HTML:'fa-code', HTM:'fa-code', XML:'fa-code', MD:'fa-markdown', TXT:'fa-file-alt' };
+  const icon = iconMap[ext] || 'fa-file-alt';
+  document.getElementById(containerId).innerHTML = `
+    <div class="file-loaded">
+      <i class="fas ${icon} file-icon"></i>
+      <span class="file-name">${escHtml(file.name)}</span>
+      <span class="file-size">${formatBytes(file.size)}</span>
+      <button class="file-clear" onclick="clearFileSlot('${containerId}')" title="Remove file">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>`;
+  document.getElementById(containerId).style.display = 'block';
+  // Hide the drop zone
+  const dzId = containerId.replace('FileLoaded', 'DropZone');
+  const dz = document.getElementById(dzId);
+  if (dz) dz.style.display = 'none';
+}
+
+function clearFileSlot(containerId) {
+  const dzId = containerId.replace('FileLoaded', 'DropZone');
+  document.getElementById(containerId).style.display = 'none';
+  const dz = document.getElementById(dzId);
+  if (dz) dz.style.display = 'block';
+  if (containerId === 'embedFileLoaded') { embedFileData = null; setStatus('embedStatus','',''); }
+  if (containerId === 'verifyFileLoaded') {
+    verifyFileData = null;
+    setStatus('verifyStatus','','');
+    document.getElementById('verifyResultCard').style.display = 'none';
+  }
+}
+
+async function handleEmbedFile(input) {
+  const file = input.files[0];
+  if (!file) return;
   try {
-    const msg = td.decode(bitsToBytes(bits));
-    if (msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g,'').length === msg.length) return null;
-    return msg.replace(/\x00+$/g,'');
-  } catch { return null; }
+    const content = await readFileAsText(file);
+    embedFileData = { name: file.name, content, type: getFileType(file.name), size: file.size };
+    renderFileLoaded('embedFileLoaded', file);
+    setStatus('embedStatus', 'ok', `✓ Loaded — ${Array.from(content).length.toLocaleString()} characters`);
+  } catch (e) {
+    showToast('Failed to read file', 'error');
+  }
+}
+
+async function handleVerifyFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  try {
+    const content = await readFileAsText(file);
+    verifyFileData = { name: file.name, content, type: getFileType(file.name), size: file.size };
+    renderFileLoaded('verifyFileLoaded', file);
+    setStatus('verifyStatus', 'ok', `✓ Loaded — ${Array.from(content).length.toLocaleString()} characters`);
+    document.getElementById('verifyResultCard').style.display = 'none';
+  } catch (e) {
+    showToast('Failed to read file', 'error');
+  }
+}
+
+function generateWmId() {
+  const prefixes = ['leak','doc','copy','dist','recv','ref','build','export'];
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const id = Math.random().toString(36).slice(2, 10);
+  const ts = Date.now().toString(36);
+  document.getElementById('wmIdInput').value = `${prefix}:${id}-${ts}`;
+}
+
+function handleEmbed() {
+  if (!embedFileData) { showToast('Load a file first', 'warn'); return; }
+  const wmId = document.getElementById('wmIdInput').value.trim();
+  if (!wmId) { setStatus('embedStatus', 'err', '✗ Enter a watermark ID first'); showToast('Enter a watermark ID', 'warn'); return; }
+
+  try {
+    const watermarked = wmEncode(embedFileData.content, wmId, embedFileData.type);
+    const zwAdded = countZW(watermarked) - countZW(embedFileData.content);
+
+    // Download the watermarked file
+    const blob = new Blob([watermarked], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    const dotIdx = embedFileData.name.lastIndexOf('.');
+    const base = dotIdx > -1 ? embedFileData.name.slice(0, dotIdx) : embedFileData.name;
+    const ext = dotIdx > -1 ? embedFileData.name.slice(dotIdx) : '';
+    a.href = URL.createObjectURL(blob);
+    a.download = `${base}.watermarked${ext}`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+
+    setStatus('embedStatus', 'ok', `✓ Watermarked — ${zwAdded} hidden characters embedded · downloading…`);
+    showToast('Watermarked file downloaded!');
+  } catch (e) {
+    setStatus('embedStatus', 'err', '✗ Embedding failed — ' + e.message);
+    showToast('Embedding failed', 'error');
+  }
+}
+
+function handleVerify() {
+  if (!verifyFileData) { showToast('Load a file first', 'warn'); return; }
+
+  const card = document.getElementById('verifyResultCard');
+  const wmId = wmDecode(verifyFileData.content);
+
+  if (wmId) {
+    card.className = 'verify-result-card verify-found';
+    card.innerHTML = `
+      <div class="vr-label">Watermark Status</div>
+      <div class="vr-mark vr-found-color"><i class="fas fa-check-circle"></i> Watermark found</div>
+      <div class="vr-label" style="margin-top:0.85rem">Embedded ID</div>
+      <div class="vr-value">${escHtml(wmId)}</div>`;
+    card.style.display = 'block';
+    setStatus('verifyStatus', 'ok', `✓ Watermark recovered from "${verifyFileData.name}"`);
+    showToast('Watermark found!');
+  } else {
+    card.className = 'verify-result-card verify-not-found';
+    card.innerHTML = `
+      <div class="vr-label">Watermark Status</div>
+      <div class="vr-mark vr-miss-color"><i class="fas fa-times-circle"></i> No watermark found</div>
+      <div class="vr-value" style="color:var(--text-muted);margin-top:0.5rem;font-size:0.8rem">This file contains no StegZero watermark, or it was stripped during transfer.</div>`;
+    card.style.display = 'block';
+    setStatus('verifyStatus', 'err', '✗ No watermark detected');
+    showToast('No watermark found', 'warn');
+  }
+}
+
+function clearEmbed() {
+  clearFileSlot('embedFileLoaded');
+  document.getElementById('wmIdInput').value = '';
+  setStatus('embedStatus', '', '');
+}
+
+function clearVerify() {
+  clearFileSlot('verifyFileLoaded');
+  document.getElementById('verifyResultCard').style.display = 'none';
+  setStatus('verifyStatus', '', '');
+}
+
+function switchWmPane(name) {
+  ['embed','verify'].forEach(n => {
+    document.getElementById(`wm-tab-${n}`).classList.toggle('active', n === name);
+    document.getElementById(`wm-pane-${n}`).classList.toggle('active', n === name);
+  });
+}
+
+// Drag and drop support for both zones
+['embedDropZone','verifyDropZone'].forEach(id => {
+  document.addEventListener('DOMContentLoaded', () => {
+    const zone = document.getElementById(id);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      if (id === 'embedDropZone') {
+        const input = document.getElementById('embedFileInput');
+        // Manually trigger with the dropped file
+        readFileAsText(file).then(content => {
+          embedFileData = { name: file.name, content, type: getFileType(file.name), size: file.size };
+          renderFileLoaded('embedFileLoaded', file);
+          setStatus('embedStatus', 'ok', `✓ Loaded — ${Array.from(content).length.toLocaleString()} characters`);
+        }).catch(() => showToast('Failed to read file', 'error'));
+      } else {
+        readFileAsText(file).then(content => {
+          verifyFileData = { name: file.name, content, type: getFileType(file.name), size: file.size };
+          renderFileLoaded('verifyFileLoaded', file);
+          setStatus('verifyStatus', 'ok', `✓ Loaded — ${Array.from(content).length.toLocaleString()} characters`);
+          document.getElementById('verifyResultCard').style.display = 'none';
+        }).catch(() => showToast('Failed to read file', 'error'));
+      }
+    });
+  });
+});
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ════════════════════════════════════════
-// EXAMPLE CONTENT — for empty states
+// EXAMPLES
 // ════════════════════════════════════════
-
-// Pre-encoded example strings (encoded at build time — these are real zero-width encoded strings)
-// We generate them at runtime on first use to ensure they always match the current engine
 const EXAMPLES = {
   decode: {
     tweet: { cover: "Just shipped a new feature. Loving how this project is coming together 🚀", hidden: "stegzero was here" },
@@ -1454,408 +964,96 @@ const EXAMPLES = {
     blank: ""
   }
 };
-
-function getEncodedExample(key) {
-  const ex = EXAMPLES.decode[key];
-  return encodeMsg(ex.cover, ex.hidden, null);
-}
+function getEncodedExample(key){const ex=EXAMPLES.decode[key];return encodeMsg(ex.cover,ex.hidden,null);}
 
 // ════════════════════════════════════════
-// ZW DETECTION HELPERS
+// ZW HELPERS
 // ════════════════════════════════════════
 const ZW_SET = new Set(ZW_ALPHABET);
-function countZW(str) { return Array.from(str).filter(c=>ZW_SET.has(c)).length; }
-function distinctZWTypes(str) { return new Set(Array.from(str).filter(c=>ZW_SET.has(c))).size; }
+function countZW(str){return Array.from(str).filter(c=>ZW_SET.has(c)).length;}
+function distinctZWTypes(str){return new Set(Array.from(str).filter(c=>ZW_SET.has(c))).size;}
 
 // ════════════════════════════════════════
 // LIVE PREVIEW
 // ════════════════════════════════════════
-function renderPreview(str) {
-  let html = '';
-  for (const ch of Array.from(str)) {
-    if (ZW_SET.has(ch)) {
-      html += `<span class="zw-mark" title="U+${ch.charCodeAt(0).toString(16).toUpperCase().padStart(4,'0')}"></span>`;
-    } else {
-      html += ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-  }
-  return html;
-}
-
-function updateEncodePreview() {
-  const val = document.getElementById('visibleText').value;
-  const sec = document.getElementById('encodePreviewSection');
-  if (!val) { sec.style.display = 'none'; return; }
-  const zw = countZW(val);
-  if (zw > 0) {
-    sec.style.display = 'block';
-    document.getElementById('encodePreview').innerHTML = renderPreview(val);
-    document.getElementById('encodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
-  } else {
-    sec.style.display = 'none';
-  }
-}
-
-function showEncodeResultPreview(result) {
-  const sec = document.getElementById('encodePreviewSection');
-  const zw = countZW(result);
-  sec.style.display = 'block';
-  document.getElementById('encodePreview').innerHTML = renderPreview(result);
-  document.getElementById('encodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
-}
-
-function updateDecodePreview() {
-  const val = document.getElementById('encodedText').value;
-  const sec = document.getElementById('decodePreviewSection');
-  if (!val) { sec.style.display = 'none'; return; }
-  const zw = countZW(val);
-  if (zw > 0) {
-    sec.style.display = 'block';
-    document.getElementById('decodePreview').innerHTML = renderPreview(val);
-    document.getElementById('decodeZwCount').innerHTML = `<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;
-  } else {
-    sec.style.display = 'none';
-  }
-}
+function renderPreview(str){let html='';for(const ch of Array.from(str)){if(ZW_SET.has(ch)){html+=`<span class="zw-mark" title="U+${ch.charCodeAt(0).toString(16).toUpperCase().padStart(4,'0')}"></span>`;}else{html+=ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}}return html;}
+function updateEncodePreview(){const val=document.getElementById('visibleText').value;const sec=document.getElementById('encodePreviewSection');if(!val){sec.style.display='none';return;}const zw=countZW(val);if(zw>0){sec.style.display='block';document.getElementById('encodePreview').innerHTML=renderPreview(val);document.getElementById('encodeZwCount').innerHTML=`<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;}else{sec.style.display='none';}}
+function showEncodeResultPreview(result){const sec=document.getElementById('encodePreviewSection');const zw=countZW(result);sec.style.display='block';document.getElementById('encodePreview').innerHTML=renderPreview(result);document.getElementById('encodeZwCount').innerHTML=`<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;}
+function updateDecodePreview(){const val=document.getElementById('encodedText').value;const sec=document.getElementById('decodePreviewSection');if(!val){sec.style.display='none';return;}const zw=countZW(val);if(zw>0){sec.style.display='block';document.getElementById('decodePreview').innerHTML=renderPreview(val);document.getElementById('decodeZwCount').innerHTML=`<i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}`;}else{sec.style.display='none';}}
 
 // ════════════════════════════════════════
-// COVER TEXT EXAMPLES (encode panel)
+// COVER TEXT EXAMPLES
 // ════════════════════════════════════════
-function setCoverText(key) {
-  document.getElementById('visibleText').value = EXAMPLES.cover[key];
-  updateEncodePreview();
-}
+function setCoverText(key){document.getElementById('visibleText').value=EXAMPLES.cover[key];updateEncodePreview();}
 
 // ════════════════════════════════════════
 // DECODE EMPTY STATE
 // ════════════════════════════════════════
-function loadDecodeExample(key) {
-  const encoded = getEncodedExample(key);
-  document.getElementById('encodedText').value = encoded;
-  // Hide the empty state, show preview
-  document.getElementById('decodeEmptyState').style.display = 'none';
-  updateDecodePreview();
-  // Auto-decode to show the magic immediately
-  handleDecode();
-  showToast(`Example loaded — hidden message revealed below`);
-}
-
-function onDecodeInput() {
-  const val = document.getElementById('encodedText').value;
-  // Hide the empty state once the user starts typing/pasting
-  if (val.length > 0) {
-    document.getElementById('decodeEmptyState').style.display = 'none';
-  } else {
-    document.getElementById('decodeEmptyState').style.display = 'block';
-    // Reset result
-    document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
-    document.getElementById('decodedResult').className = 'result-box empty';
-    document.getElementById('decodedMeta').textContent = '';
-    document.getElementById('decodeStatus').textContent = '';
-    document.getElementById('decodeStatus').className = 'status-line';
-  }
-  updateDecodePreview();
-}
+function loadDecodeExample(key){const encoded=getEncodedExample(key);document.getElementById('encodedText').value=encoded;document.getElementById('decodeEmptyState').style.display='none';updateDecodePreview();handleDecode();showToast('Example loaded — hidden message revealed below');}
+function onDecodeInput(){const val=document.getElementById('encodedText').value;if(val.length>0){document.getElementById('decodeEmptyState').style.display='none';}else{document.getElementById('decodeEmptyState').style.display='block';document.getElementById('decodedResult').textContent='Decoded message will appear here.';document.getElementById('decodedResult').className='result-box empty';document.getElementById('decodedMeta').textContent='';document.getElementById('decodeStatus').textContent='';document.getElementById('decodeStatus').className='status-line';}updateDecodePreview();}
 
 // ════════════════════════════════════════
 // ENCODE UI
 // ════════════════════════════════════════
-function updateCounter() {
-  const val = document.getElementById('hiddenMessage').value;
-  const el = document.getElementById('msgCounter');
-  const n = val.length;
-  el.textContent = `${n} char${n!==1?'s':''}`;
-  el.className = 'char-counter' + (n > 200 ? ' danger' : n > 100 ? ' warn' : '');
-}
-
-function handleEncode() {
-  const visible = document.getElementById('visibleText').value || '';
-  const hidden = document.getElementById('hiddenMessage').value || '';
-  const usePass = document.getElementById('passphraseToggle').checked;
-  const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
-
-  const statusEl = document.getElementById('encodeStatus');
-  const resultEl = document.getElementById('encodedResult');
-  const metaEl = document.getElementById('encodedMeta');
-
-  if (!hidden) {
-    setStatus('encodeStatus', 'err', '✗ Enter a hidden message first');
-    showToast('Enter a hidden message', 'warn');
-    return;
-  }
-
-  const result = encodeMsg(visible, hidden, pass);
-  resultEl.textContent = result;
-  resultEl.classList.remove('empty');
-  resultEl.classList.add('has-content');
-
-  const zwCount = countZW(result);
-  metaEl.textContent = `${Array.from(result).length} chars · ${zwCount} hidden`;
-  setStatus('encodeStatus', 'ok', `✓ Encoded — ${zwCount} zero-width characters embedded`);
-  showEncodeResultPreview(result);
-  document.getElementById('encodePreviewSection').style.display = 'block';
-
-  if (navigator.share) document.getElementById('shareBtn').style.display = 'inline-flex';
-  showToast('Encoded successfully');
-}
-
-function clearEncode() {
-  document.getElementById('visibleText').value = '';
-  document.getElementById('hiddenMessage').value = '';
-  document.getElementById('encodedResult').textContent = 'Encoded message will appear here.';
-  document.getElementById('encodedResult').className = 'result-box empty';
-  document.getElementById('encodedMeta').textContent = '';
-  document.getElementById('encodePreviewSection').style.display = 'none';
-  document.getElementById('encodeStatus').textContent = '';
-  document.getElementById('encodeStatus').className = 'status-line';
-  document.getElementById('msgCounter').textContent = '0 chars';
-  document.getElementById('rtResult').innerHTML = '';
-}
+function updateCounter(){const val=document.getElementById('hiddenMessage').value;const el=document.getElementById('msgCounter');const n=val.length;el.textContent=`${n} char${n!==1?'s':''}`;el.className='char-counter'+(n>200?' danger':n>100?' warn':'');}
+function handleEncode(){const visible=document.getElementById('visibleText').value||'';const hidden=document.getElementById('hiddenMessage').value||'';const usePass=document.getElementById('passphraseToggle').checked;const pass=usePass?(document.getElementById('passphraseInput').value||''):'';const resultEl=document.getElementById('encodedResult');const metaEl=document.getElementById('encodedMeta');if(!hidden){setStatus('encodeStatus','err','✗ Enter a hidden message first');showToast('Enter a hidden message','warn');return;}const result=encodeMsg(visible,hidden,pass);resultEl.textContent=result;resultEl.classList.remove('empty');resultEl.classList.add('has-content');const zwCount=countZW(result);metaEl.textContent=`${Array.from(result).length} chars · ${zwCount} hidden`;setStatus('encodeStatus','ok',`✓ Encoded — ${zwCount} zero-width characters embedded`);showEncodeResultPreview(result);document.getElementById('encodePreviewSection').style.display='block';if(navigator.share)document.getElementById('shareBtn').style.display='inline-flex';showToast('Encoded successfully');}
+function clearEncode(){document.getElementById('visibleText').value='';document.getElementById('hiddenMessage').value='';document.getElementById('encodedResult').textContent='Encoded message will appear here.';document.getElementById('encodedResult').className='result-box empty';document.getElementById('encodedMeta').textContent='';document.getElementById('encodePreviewSection').style.display='none';document.getElementById('encodeStatus').textContent='';document.getElementById('encodeStatus').className='status-line';document.getElementById('msgCounter').textContent='0 chars';document.getElementById('rtResult').innerHTML='';}
 
 // ════════════════════════════════════════
 // DECODE UI
 // ════════════════════════════════════════
-function handleDecode() {
-  const text = document.getElementById('encodedText').value || '';
-  const usePass = document.getElementById('decodePassToggle').checked;
-  const pass = usePass ? (document.getElementById('decodePassInput').value || '') : '';
-
-  const resultEl = document.getElementById('decodedResult');
-  const metaEl = document.getElementById('decodedMeta');
-
-  let decoded = tryDecodeV2(text, pass || null);
-  const usedLegacy = !decoded;
-  if (!decoded) decoded = tryDecodeLegacy(text);
-
-  if (decoded) {
-    resultEl.textContent = decoded;
-    resultEl.classList.remove('empty');
-    resultEl.classList.add('has-content');
-    metaEl.textContent = usedLegacy ? 'legacy format' : 'v2 format';
-    setStatus('decodeStatus', 'ok', `✓ Message recovered${usedLegacy ? ' (legacy decoder)' : ''}`);
-    showToast('Hidden message decoded!');
-  } else {
-    resultEl.textContent = 'No hidden message found.';
-    resultEl.className = 'result-box empty';
-    metaEl.textContent = '';
-    setStatus('decodeStatus', 'err', '✗ No hidden message found in this text');
-    showToast('No hidden message found', 'warn');
-  }
-}
-
-function clearDecode() {
-  document.getElementById('encodedText').value = '';
-  document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
-  document.getElementById('decodedResult').className = 'result-box empty';
-  document.getElementById('decodedMeta').textContent = '';
-  document.getElementById('decodePreviewSection').style.display = 'none';
-  document.getElementById('decodeStatus').textContent = '';
-  document.getElementById('decodeStatus').className = 'status-line';
-  document.getElementById('decodeEmptyState').style.display = 'block';
-}
+function handleDecode(){const text=document.getElementById('encodedText').value||'';const usePass=document.getElementById('decodePassToggle').checked;const pass=usePass?(document.getElementById('decodePassInput').value||''):'';const resultEl=document.getElementById('decodedResult');const metaEl=document.getElementById('decodedMeta');let decoded=tryDecodeV2(text,pass||null);const usedLegacy=!decoded;if(!decoded)decoded=tryDecodeLegacy(text);if(decoded){resultEl.textContent=decoded;resultEl.classList.remove('empty');resultEl.classList.add('has-content');metaEl.textContent=usedLegacy?'legacy format':'v2 format';setStatus('decodeStatus','ok',`✓ Message recovered${usedLegacy?' (legacy decoder)':''}`);showToast('Hidden message decoded!');}else{resultEl.textContent='No hidden message found.';resultEl.className='result-box empty';metaEl.textContent='';setStatus('decodeStatus','err','✗ No hidden message found in this text');showToast('No hidden message found','warn');}}
+function clearDecode(){document.getElementById('encodedText').value='';document.getElementById('decodedResult').textContent='Decoded message will appear here.';document.getElementById('decodedResult').className='result-box empty';document.getElementById('decodedMeta').textContent='';document.getElementById('decodePreviewSection').style.display='none';document.getElementById('decodeStatus').textContent='';document.getElementById('decodeStatus').className='status-line';document.getElementById('decodeEmptyState').style.display='block';}
 
 // ════════════════════════════════════════
 // DETECT UI
 // ════════════════════════════════════════
-function runDetect() {
-  const text = document.getElementById('detectText').value || '';
-  const box = document.getElementById('detectResultBox');
-  if (!text) { box.style.display = 'none'; return; }
-
-  box.style.display = 'block';
-  const total = Array.from(text).length;
-  const zw = countZW(text);
-  const types = distinctZWTypes(text);
-
-  const alphaSet = new Set(ZW_ALPHABET);
-  let extracted = '';
-  for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
-  const bits = alphabetToBits(extracted);
-  let isV2 = false;
-  if (bits.length >= 88) {
-    const hdr = parseHeader(bitsToBytes(bits.slice(0, 88)));
-    isV2 = hdr !== null;
-  }
-  const legacyBits = Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).length;
-  const isLegacy = !isV2 && legacyBits >= 8;
-
-  set('det-total', total);
-  set('det-zw', zw, zw > 0 ? 'badge-found' : 'badge-none');
-  set('det-types', types, types > 0 ? 'badge-found' : 'badge-none');
-  set('det-v2', isV2 ? 'Yes ✓' : 'No', isV2 ? 'badge-ok' : 'badge-none');
-  set('det-legacy', isLegacy ? 'Yes ✓' : 'No', isLegacy ? 'badge-ok' : 'badge-none');
-  const verdict = zw === 0 ? 'Clean — no ZW chars' : isV2 ? 'Likely StegZero V2 payload' : isLegacy ? 'Possible legacy StegZero' : 'ZW chars present (unknown encoding)';
-  set('det-verdict', verdict, zw > 0 ? 'badge-found' : 'badge-none');
-
-  setStatus('detectStatus', zw > 0 ? 'err' : 'ok', zw > 0 ? `⚠ ${zw} zero-width character${zw!==1?'s':''} detected` : '✓ No hidden characters found');
-}
-
-function set(id, val, cls) {
-  const el = document.getElementById(id);
-  el.textContent = val;
-  el.className = cls || '';
-}
-
-function clearDetect() {
-  document.getElementById('detectText').value = '';
-  document.getElementById('detectResultBox').style.display = 'none';
-  setStatus('detectStatus', '', '');
-}
-
-function stripZwAndCopy() {
-  const text = document.getElementById('detectText').value || '';
-  const cleaned = Array.from(text).filter(c => !ZW_SET.has(c)).join('');
-  navigator.clipboard.writeText(cleaned)
-    .then(() => showToast('Stripped text copied to clipboard!'))
-    .catch(() => showToast('Copy failed', 'error'));
-}
+function runDetect(){const text=document.getElementById('detectText').value||'';const box=document.getElementById('detectResultBox');if(!text){box.style.display='none';return;}box.style.display='block';const total=Array.from(text).length;const zw=countZW(text);const types=distinctZWTypes(text);const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;const bits=alphabetToBits(extracted);let isV2=false;if(bits.length>=88){const hdr=parseHeader(bitsToBytes(bits.slice(0,88)));isV2=hdr!==null;}const legacyBits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).length;const isLegacy=!isV2&&legacyBits>=8;set('det-total',total);set('det-zw',zw,zw>0?'badge-found':'badge-none');set('det-types',types,types>0?'badge-found':'badge-none');set('det-v2',isV2?'Yes ✓':'No',isV2?'badge-ok':'badge-none');set('det-legacy',isLegacy?'Yes ✓':'No',isLegacy?'badge-ok':'badge-none');const verdict=zw===0?'Clean — no ZW chars':isV2?'Likely StegZero V2 payload':isLegacy?'Possible legacy StegZero':'ZW chars present (unknown encoding)';set('det-verdict',verdict,zw>0?'badge-found':'badge-none');setStatus('detectStatus',zw>0?'err':'ok',zw>0?`⚠ ${zw} zero-width character${zw!==1?'s':''} detected`:'✓ No hidden characters found');}
+function set(id,val,cls){const el=document.getElementById(id);el.textContent=val;el.className=cls||'';}
+function clearDetect(){document.getElementById('detectText').value='';document.getElementById('detectResultBox').style.display='none';setStatus('detectStatus','','');}
+function stripZwAndCopy(){const text=document.getElementById('detectText').value||'';const cleaned=Array.from(text).filter(c=>!ZW_SET.has(c)).join('');navigator.clipboard.writeText(cleaned).then(()=>showToast('Stripped text copied to clipboard!')).catch(()=>showToast('Copy failed','error'));}
 
 // ════════════════════════════════════════
 // ROUND-TRIP TEST
 // ════════════════════════════════════════
-function runRoundTrip() {
-  const visible = document.getElementById('visibleText').value || '';
-  const hidden = document.getElementById('hiddenMessage').value || '';
-  const usePass = document.getElementById('passphraseToggle').checked;
-  const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
-  const rtEl = document.getElementById('rtResult');
-
-  if (!hidden) { rtEl.innerHTML = '<span class="rt-fail">Enter a message first</span>'; return; }
-
-  const encoded = encodeMsg(visible, hidden, pass);
-  const decoded = tryDecodeV2(encoded, pass || null);
-  if (decoded === hidden) {
-    rtEl.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Round-trip passed — encode → decode → match ✓</span>';
-  } else {
-    rtEl.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Round-trip failed — decoded does not match original</span>';
-  }
-}
+function runRoundTrip(){const visible=document.getElementById('visibleText').value||'';const hidden=document.getElementById('hiddenMessage').value||'';const usePass=document.getElementById('passphraseToggle').checked;const pass=usePass?(document.getElementById('passphraseInput').value||''):'';const rtEl=document.getElementById('rtResult');if(!hidden){rtEl.innerHTML='<span class="rt-fail">Enter a message first</span>';return;}const encoded=encodeMsg(visible,hidden,pass);const decoded=tryDecodeV2(encoded,pass||null);if(decoded===hidden){rtEl.innerHTML='<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Round-trip passed — encode → decode → match ✓</span>';}else{rtEl.innerHTML='<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Round-trip failed — decoded does not match original</span>';}}
 
 // ════════════════════════════════════════
 // PIPE TO DECODER
 // ════════════════════════════════════════
-function pipeToDecoder() {
-  const result = document.getElementById('encodedResult').textContent;
-  if (!result || result === 'Encoded message will appear here.') {
-    showToast('Encode something first', 'warn'); return;
-  }
-  document.getElementById('encodedText').value = result;
-  document.getElementById('decodeEmptyState').style.display = 'none';
-  switchTab('decode');
-  updateDecodePreview();
-  document.getElementById('encodedText').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  showToast('Piped to decoder — click Decode to test');
-}
+function pipeToDecoder(){const result=document.getElementById('encodedResult').textContent;if(!result||result==='Encoded message will appear here.'){showToast('Encode something first','warn');return;}document.getElementById('encodedText').value=result;document.getElementById('decodeEmptyState').style.display='none';switchTab('decode');updateDecodePreview();document.getElementById('encodedText').scrollIntoView({behavior:'smooth',block:'center'});showToast('Piped to decoder — click Decode to test');}
 
 // ════════════════════════════════════════
-// UTILITIES
+// SHARED UTILITIES
 // ════════════════════════════════════════
-function copyResult(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text)
-    .then(() => showToast('Copied!'))
-    .catch(() => showToast('Copy failed', 'error'));
-}
-
-function pasteClipboard(id) {
-  if (!navigator.clipboard?.readText) { showToast('Paste not supported in this browser', 'warn'); return; }
-  navigator.clipboard.readText().then(t => {
-    document.getElementById(id).value = t;
-    document.getElementById('decodeEmptyState').style.display = 'none';
-    updateDecodePreview();
-    showToast('Pasted from clipboard');
-  }).catch(() => showToast('Paste failed', 'error'));
-}
-
-function exportTxt(id, filename) {
-  const text = document.getElementById(id).textContent;
-  if (!text || text.includes('will appear here')) { showToast('Nothing to export', 'warn'); return; }
-  const blob = new Blob([text], { type: 'text/plain' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  showToast('Exported!');
-}
-
-async function shareResult() {
-  const text = document.getElementById('encodedResult').textContent;
-  if (!text || text.includes('will appear')) return;
-  try {
-    await navigator.share({ text });
-    showToast('Shared!');
-  } catch {}
-}
-
-function togglePassphrase() {
-  const on = document.getElementById('passphraseToggle').checked;
-  document.getElementById('passphraseField').classList.toggle('visible', on);
-}
-
-function toggleDecodePass() {
-  const on = document.getElementById('decodePassToggle').checked;
-  document.getElementById('decodePassField').classList.toggle('visible', on);
-}
-
-function setStatus(id, cls, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = 'status-line' + (cls ? ' ' + cls : '');
-}
-
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast-${type}`;
-  t.style.display = 'block';
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(() => { t.style.display = 'none'; }, 3000);
-}
+function copyResult(id){const text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Copy failed','error'));}
+function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;document.getElementById('decodeEmptyState').style.display='none';updateDecodePreview();showToast('Pasted from clipboard');}).catch(()=>showToast('Paste failed','error'));}
+function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
+async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}
+function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;document.getElementById('passphraseField').classList.toggle('visible',on);}
+function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);}
+function setStatus(id,cls,msg){const el=document.getElementById(id);el.textContent=msg;el.className='status-line'+(cls?' '+cls:'');}
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast-${type}`;t.style.display='block';clearTimeout(t._timeout);t._timeout=setTimeout(()=>{t.style.display='none';},3000);}
 
 // ════════════════════════════════════════
 // TABS
 // ════════════════════════════════════════
-function switchTab(name) {
-  ['encode','decode','detect'].forEach(n => {
-    document.getElementById(`tab-${n}`).classList.toggle('active', n === name);
-    document.getElementById(`panel-${n}`).classList.toggle('active', n === name);
-  });
-}
+function switchTab(name){['encode','decode','detect','watermark'].forEach(n=>{document.getElementById(`tab-${n}`).classList.toggle('active',n===name);document.getElementById(`panel-${n}`).classList.toggle('active',n===name);});}
 
 // ════════════════════════════════════════
 // NAV
 // ════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('menuBtn');
-  const nav = document.getElementById('navLinks');
-  const overlay = document.getElementById('overlay');
-  const icon = document.getElementById('menuIcon');
-
-  function toggleNav() {
-    const open = nav.classList.toggle('open');
-    overlay.classList.toggle('active', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-    icon.className = open ? 'fas fa-times' : 'fas fa-bars';
-  }
-
-  btn.addEventListener('click', toggleNav);
-  overlay.addEventListener('click', toggleNav);
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    if (nav.classList.contains('open')) toggleNav();
-  }));
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 700 && nav.classList.contains('open')) toggleNav();
-  });
-
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      const active = document.querySelector('.panel.active');
-      if (active.id === 'panel-encode') handleEncode();
-      else if (active.id === 'panel-decode') handleDecode();
-      e.preventDefault();
-    }
-  });
+document.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('menuBtn');
+  const nav=document.getElementById('navLinks');
+  const overlay=document.getElementById('overlay');
+  const icon=document.getElementById('menuIcon');
+  function toggleNav(){const open=nav.classList.toggle('open');overlay.classList.toggle('active',open);document.body.style.overflow=open?'hidden':'';icon.className=open?'fas fa-times':'fas fa-bars';}
+  btn.addEventListener('click',toggleNav);
+  overlay.addEventListener('click',toggleNav);
+  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{if(nav.classList.contains('open'))toggleNav();}));
+  window.addEventListener('resize',()=>{if(window.innerWidth>700&&nav.classList.contains('open'))toggleNav();});
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){const active=document.querySelector('.panel.active');if(active.id==='panel-encode')handleEncode();else if(active.id==='panel-decode')handleDecode();e.preventDefault();}});
 });
 </script>
 </body>
