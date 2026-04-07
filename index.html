@@ -283,8 +283,8 @@
 <div class="overlay" id="overlay"></div>
 
 <div class="hero">
-  <h1>Hide Messages<br>In Plain Sight</h1>
-  <p>The free zero-width steganography tool. Embed invisible secret text inside any string using Unicode zero-width characters — instantly, with no server, no tracking, and no traces.</p>
+  <h1>Zero-Width<br>Decoder &amp; Encoder</h1>
+  <p>The free text steganography tool. Embed invisible secrets or reveal hidden text using zero-width characters — instantly, with no server, no tracking, and no traces.</p>
   <p class="hero-note">// runs 100% in your browser</p>
   <div class="hero-pills">
     <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
@@ -292,7 +292,7 @@
     <span class="pill"><i class="fas fa-bolt"></i> Instant encode &amp; decode</span>
     <span class="pill"><i class="fas fa-fingerprint"></i> File watermarking</span>
     <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
-    <span class="pill" style="color:var(--binary-color);border-color:var(--binary-border)"><i class="fas fa-code-branch" style="color:var(--binary-color)"></i> Binary mode</span>
+    
   </div>
 </div>
 
@@ -411,28 +411,7 @@
   <!-- DECODE PANEL -->
   <div class="panel" id="panel-decode">
 
-    <!-- Mode selector -->
-    <div class="mode-selector" id="decodeModeSelector">
-      <button class="mode-btn active-v2" id="decModeAuto" onclick="setDecodeMode('auto')">
-        <i class="fas fa-magic"></i>
-        Auto-detect
-        <span class="mode-badge badge-8">V2 + Binary</span>
-      </button>
-      <button class="mode-btn" id="decModeV2" onclick="setDecodeMode('v2')">
-        <i class="fas fa-th"></i>
-        V2 only
-        <span class="mode-badge badge-8">8 chars</span>
-      </button>
-      <button class="mode-btn" id="decModeBin" onclick="setDecodeMode('binary')">
-        <i class="fas fa-code-branch"></i>
-        Binary only
-        <span class="mode-badge badge-2">2 chars</span>
-      </button>
-    </div>
-    <div class="mode-info-strip mode-info-v2" id="decModeInfo">
-      <i class="fas fa-info-circle"></i>
-      <span id="decModeInfoText">Auto-detect tries V2 first, then Binary. Switch to a specific mode if you know how the message was encoded.</span>
-    </div>
+    <!-- Mode selector removed -->
 
     <div class="decode-empty-state" id="decodeEmptyState">
       <p><strong>Paste any text to reveal hidden messages inside it.</strong><br>Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples:</p>
@@ -830,7 +809,6 @@ function hasBinarySignature(text) {
 // ENCODE / DECODE MODE STATE
 // ════════════════════════════════════════
 let currentEncodeMode = 'v2';    // 'v2' | 'binary'
-let currentDecodeMode = 'auto';  // 'auto' | 'v2' | 'binary'
 
 function setEncodeMode(mode) {
   currentEncodeMode = mode;
@@ -845,26 +823,6 @@ function setEncodeMode(mode) {
     hint.textContent = 'Keep it short — longer messages create more zero-width characters, increasing detectability';
   }
   updateEncodePreview();
-}
-
-function setDecodeMode(mode) {
-  currentDecodeMode = mode;
-  ['auto','v2','binary'].forEach(m => {
-    const btn = document.getElementById('decMode' + m.charAt(0).toUpperCase() + m.slice(1));
-    if (btn) btn.className = 'mode-btn' + (m === mode ? (m === 'binary' ? ' active-binary' : ' active-v2') : '');
-  });
-  const infoEl = document.getElementById('decModeInfo');
-  const textEl = document.getElementById('decModeInfoText');
-  if (mode === 'binary') {
-    infoEl.className = 'mode-info-strip mode-info-binary';
-    textEl.textContent = 'Binary mode only: extracts bits from ZWSP (U+200B) and ZWNJ (U+200C) characters using the binary header signature.';
-  } else if (mode === 'v2') {
-    infoEl.className = 'mode-info-strip mode-info-v2';
-    textEl.textContent = 'V2 only: uses all 8 zero-width characters mapped to 3-bit symbols with the V2 header.';
-  } else {
-    infoEl.className = 'mode-info-strip mode-info-v2';
-    textEl.textContent = 'Auto-detect tries V2 first, then Binary. Switch to a specific mode if you know how the message was encoded.';
-  }
 }
 
 // ════════════════════════════════════════
@@ -1209,7 +1167,7 @@ function updateDecodePreview() {
   const zw = countZW(val);
   if (zw > 0) {
     // Detect which mode to use for preview rendering
-    const isBin = hasBinarySignature(val) && currentDecodeMode !== 'v2';
+    const isBin = hasBinarySignature(val);
     sec.style.display = 'block';
     document.getElementById('decodePreview').innerHTML = isBin ? renderPreviewBinary(val) : renderPreviewV2(val);
     setPreviewLegend('decodePreviewSection', 'decodePreviewLegend', 'decodeZwCount', val, isBin ? 'binary' : 'v2');
@@ -1228,7 +1186,6 @@ function loadDecodeExample(key) {
   const encoded = getEncodedExample(key);
   document.getElementById('encodedText').value = encoded;
   document.getElementById('decodeEmptyState').style.display = 'none';
-  if (key === 'binary') setDecodeMode('binary');
   updateDecodePreview();
   handleDecode();
   showToast('Example loaded — hidden message revealed below');
@@ -1313,23 +1270,15 @@ function handleDecode() {
   let decoded = null;
   let usedMode = '';
 
-  if (currentDecodeMode === 'binary') {
+  // auto: try V2 first, then binary, then legacy
+  decoded = tryDecodeV2(text, pass || null);
+  if (decoded) { usedMode = 'v2'; }
+  else {
     decoded = tryDecodeBinary(text, pass || null);
-    usedMode = 'binary';
-  } else if (currentDecodeMode === 'v2') {
-    decoded = tryDecodeV2(text, pass || null);
-    usedMode = 'v2';
-  } else {
-    // auto: try V2 first, then binary, then legacy
-    decoded = tryDecodeV2(text, pass || null);
-    if (decoded) { usedMode = 'v2'; }
+    if (decoded) { usedMode = 'binary'; }
     else {
-      decoded = tryDecodeBinary(text, pass || null);
-      if (decoded) { usedMode = 'binary'; }
-      else {
-        decoded = tryDecodeLegacy(text);
-        if (decoded) usedMode = 'legacy';
-      }
+      decoded = tryDecodeLegacy(text);
+      if (decoded) usedMode = 'legacy';
     }
   }
 
@@ -1441,9 +1390,6 @@ function pipeToDecoder() {
   if (!result || result === 'Encoded message will appear here.') { showToast('Encode something first','warn'); return; }
   document.getElementById('encodedText').value = result;
   document.getElementById('decodeEmptyState').style.display = 'none';
-  // Auto-set decode mode to match encode mode
-  if (currentEncodeMode === 'binary') setDecodeMode('binary');
-  else setDecodeMode('auto');
   switchTab('decode');
   updateDecodePreview();
   document.getElementById('encodedText').scrollIntoView({behavior:'smooth',block:'center'});
