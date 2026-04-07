@@ -283,8 +283,8 @@
 <div class="overlay" id="overlay"></div>
 
 <div class="hero">
-  <h1>Zero-Width<br>Decoder &amp; Encoder</h1>
-  <p>The free text steganography tool. Embed invisible secrets or reveal hidden text using zero-width characters — instantly, with no server, no tracking, and no traces.</p>
+  <h1>Hide Messages<br>In Plain Sight</h1>
+  <p>The free zero-width steganography tool. Embed invisible secret text inside any string using Unicode zero-width characters — instantly, with no server, no tracking, and no traces.</p>
   <p class="hero-note">// runs 100% in your browser</p>
   <div class="hero-pills">
     <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
@@ -292,7 +292,7 @@
     <span class="pill"><i class="fas fa-bolt"></i> Instant encode &amp; decode</span>
     <span class="pill"><i class="fas fa-fingerprint"></i> File watermarking</span>
     <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
-    
+    <span class="pill" style="color:var(--binary-color);border-color:var(--binary-border)"><i class="fas fa-code-branch" style="color:var(--binary-color)"></i> Binary mode</span>
   </div>
 </div>
 
@@ -410,8 +410,6 @@
 
   <!-- DECODE PANEL -->
   <div class="panel" id="panel-decode">
-
-    <!-- Mode selector removed -->
 
     <div class="decode-empty-state" id="decodeEmptyState">
       <p><strong>Paste any text to reveal hidden messages inside it.</strong><br>Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples:</p>
