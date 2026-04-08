@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zero-Width Steganography Decoder & Encoder — Reveal Hidden Text | StegZero</title>
+  <title>Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero</title>
   <meta name="description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
   <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
   <link rel="canonical" href="https://stegzero.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stegzero.com/">
-  <meta property="og:title" content="Zero-Width Steganography Decoder & Encoder — Reveal Hidden Text | StegZero">
+  <meta property="og:title" content="Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero">
   <meta property="og:description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
   <meta property="og:image" content="https://stegzero.com/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Zero-Width Steganography Decoder & Encoder | StegZero">
+  <meta name="twitter:title" content="Zero-Width Steganography Decoder & Encoder Online | StegZero">
   <meta name="twitter:description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -601,6 +601,15 @@
         <li>Learning about Unicode, text encoding, and digital steganography</li>
       </ul>
     </div>
+    <div class="info-card">
+  <h3><i class="fas fa-key"></i> Passphrase obfuscation layer</h3>
+  <ul>
+    <li>The optional passphrase applies XOR obfuscation to the message bytes before they are encoded as zero-width characters</li>
+    <li>Without the matching passphrase, decoding produces garbled output — the hidden message is unreadable even to someone who knows steganography is present</li>
+    <li>XOR obfuscation is not cryptographic encryption and should not be treated as such — it adds obscurity, not security</li>
+    <li>For genuinely sensitive content, encrypt with GPG or AES-256 first, then encode the ciphertext here with a passphrase on top</li>
+  </ul>
+</div>
   </div>
 
   <hr class="divider" id="faq">
@@ -645,6 +654,25 @@
         <li>Upload a suspected leaked copy to the Verify pane to instantly extract the watermark ID</li>
       </ul>
     </div>
+    <div class="info-card">
+  <h3><i class="fas fa-image"></i> Can StegZero decode Steghide files?</h3>
+  <ul>
+    <li>No — Steghide is an <em>image and audio</em> steganography tool that hides data inside JPEG/BMP/WAV files. StegZero handles <em>text</em> steganography using invisible Unicode characters.</li>
+    <li>If you have a Steghide-encoded image, you need the <code>steghide</code> command-line tool or a dedicated image steg decoder — not StegZero.</li>
+    <li>If you have text that looks normal but may contain a hidden message, you're in the right place — paste it into the Decode tab above.</li>
+    <li>Other tools StegZero doesn't cover: Snow (whitespace steganography), OpenStego, and MP3Stego.</li>
+  </ul>
+</div>
+<div class="info-card">
+  <h3><i class="fas fa-list-ol"></i> How to decode a hidden text message</h3>
+  <ul>
+    <li><strong>Step 1:</strong> Copy the text you suspect contains a hidden message — it will look completely normal</li>
+    <li><strong>Step 2:</strong> Click the Decode tab above and paste the text into the input field</li>
+    <li><strong>Step 3:</strong> Click Decode — StegZero auto-detects V2, Binary, and legacy formats</li>
+    <li><strong>Step 4:</strong> If the message was encoded with a passphrase, toggle the passphrase option and enter it before decoding</li>
+    <li>Use the Detect tab to check whether any zero-width characters are present before decoding</li>
+  </ul>
+</div>
   </div>
 
 </main>
