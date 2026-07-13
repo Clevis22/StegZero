@@ -22,9 +22,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"StegZero","url":"https://stegzero.com/","description":"A free online zero-width steganography tool.","applicationCategory":"SecurityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
@@ -41,12 +38,12 @@
       --success: #48bb78;
       --warn: #ed8936;
       --danger: #fc8181;
-      --binary-color: #b794f4;
-      --binary-border: rgba(183,148,244,0.35);
-      --binary-glow: rgba(183,148,244,0.18);
-      --binary-bg: rgba(183,148,244,0.08);
-      --mono: 'Space Mono', monospace;
-      --sans: 'Syne', sans-serif;
+      --binary-color: #8a5d22;
+      --binary-border: rgba(138,93,34,0.28);
+      --binary-glow: rgba(138,93,34,0.14);
+      --binary-bg: rgba(138,93,34,0.07);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --radius: 10px;
       --transition: all 0.18s ease;
     }
@@ -93,10 +90,10 @@
     .mode-btn:hover:not(.active-v2):not(.active-binary) { background: rgba(255,255,255,0.03); color: var(--text); }
     .mode-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--mono); font-size: 0.7rem; padding: 0.15rem 0.55rem; border-radius: 999px; border: 1px solid; }
     .badge-8 { color: var(--accent); border-color: rgba(99,179,237,0.3); background: rgba(99,179,237,0.06); }
-    .badge-2 { color: var(--binary-color); border-color: rgba(183,148,244,0.3); background: rgba(183,148,244,0.06); }
+    .badge-2 { color: var(--binary-color); border-color: rgba(138,93,34,0.3); background: rgba(138,93,34,0.06); }
     .mode-info-strip { border-radius: var(--radius); padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.78rem; line-height: 1.6; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.65rem; }
     .mode-info-v2 { background: rgba(99,179,237,0.05); border: 1px solid rgba(99,179,237,0.2); color: rgba(99,179,237,0.85); }
-    .mode-info-binary { background: var(--binary-bg); border: 1px solid var(--binary-border); color: rgba(183,148,244,0.9); }
+    .mode-info-binary { background: var(--binary-bg); border: 1px solid var(--binary-border); color: rgba(110,72,26,0.92); }
     .mode-info-strip i { margin-top: 0.1rem; flex-shrink: 0; }
 
     .decode-empty-state { border: 1px dashed var(--border-bright); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; background: rgba(99,179,237,0.03); }
@@ -143,13 +140,13 @@
     .preview-display { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--mono); font-size: 0.88rem; line-height: 1.8; word-break: break-word; min-height: 60px; color: var(--text); }
     .zw-mark { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 7px; height: 14px; vertical-align: middle; margin: 0 0.5px; position: relative; cursor: default; }
     .zw-mark-bin { display: inline-block; border-radius: 3px; width: 7px; height: 14px; vertical-align: middle; margin: 0 0.5px; position: relative; cursor: default; }
-    .zw-mark-bin.bit0 { background: rgba(183,148,244,0.25); border: 1px solid rgba(183,148,244,0.55); }
-    .zw-mark-bin.bit1 { background: rgba(183,148,244,0.5); border: 1px solid rgba(183,148,244,0.8); }
+    .zw-mark-bin.bit0 { background: rgba(138,93,34,0.18); border: 1px solid rgba(138,93,34,0.45); }
+    .zw-mark-bin.bit1 { background: rgba(138,93,34,0.4); border: 1px solid rgba(138,93,34,0.72); }
     .preview-legend { display: flex; align-items: center; gap: 1rem; margin-top: 0.65rem; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); flex-wrap: wrap; }
     .preview-legend-item { display: flex; align-items: center; gap: 0.35rem; }
     .zw-sample { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 10px; height: 12px; }
-    .zw-sample-0 { display: inline-block; background: rgba(183,148,244,0.25); border: 1px solid rgba(183,148,244,0.55); border-radius: 3px; width: 10px; height: 12px; }
-    .zw-sample-1 { display: inline-block; background: rgba(183,148,244,0.5); border: 1px solid rgba(183,148,244,0.8); border-radius: 3px; width: 10px; height: 12px; }
+    .zw-sample-0 { display: inline-block; background: rgba(138,93,34,0.18); border: 1px solid rgba(138,93,34,0.45); border-radius: 3px; width: 10px; height: 12px; }
+    .zw-sample-1 { display: inline-block; background: rgba(138,93,34,0.4); border: 1px solid rgba(138,93,34,0.72); border-radius: 3px; width: 10px; height: 12px; }
     .zw-count { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.55rem; background: rgba(99,179,237,0.08); border: 1px solid var(--border); border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; color: var(--accent); }
     .zw-count-bin { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.55rem; background: var(--binary-bg); border: 1px solid var(--binary-border); border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; color: var(--binary-color); }
     .detect-result { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.82rem; }
@@ -258,6 +255,349 @@
       .hero { padding: 3.5rem 1rem 2rem; }
       .panel { padding: 1.25rem; }
     }
+
+    /* ── CLEAN NEUTRAL VISUAL SYSTEM ── */
+    :root {
+      --bg: #f6f7f4;
+      --bg2: #ffffff;
+      --bg3: #eef1ed;
+      --border: rgba(25, 33, 29, 0.12);
+      --border-bright: rgba(25, 33, 29, 0.24);
+      --text: #19211d;
+      --text-muted: #68716c;
+      --accent: #23684f;
+      --accent2: #23684f;
+      --accent-glow: rgba(35, 104, 79, 0.13);
+      --success: #23684f;
+      --warn: #a35b16;
+      --danger: #b33b32;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --radius: 12px;
+      --transition: all 0.16s ease;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    body::before { display: none; }
+
+    nav {
+      background: rgba(246, 247, 244, 0.9);
+      border-bottom-color: var(--border);
+      backdrop-filter: blur(14px);
+    }
+    .nav-inner { max-width: 1120px; height: 68px; }
+    .nav-logo {
+      font-family: var(--sans);
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .nav-logo i {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.78rem;
+    }
+    .nav-logo span { color: var(--text-muted); font-weight: 500; }
+    .nav-links { gap: 1.5rem; }
+    .nav-link {
+      font-family: var(--sans);
+      font-size: 0.84rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    .hero {
+      max-width: 760px;
+      padding: 6rem 1.5rem 3.25rem;
+    }
+    .hero h1 {
+      max-width: 720px;
+      margin: 0 auto 1.35rem;
+      background: none;
+      color: var(--text);
+      -webkit-text-fill-color: currentColor;
+      font-size: clamp(3rem, 7vw, 5.25rem);
+      font-weight: 680;
+      letter-spacing: -0.06em;
+      line-height: 0.98;
+    }
+    .hero p {
+      max-width: 610px;
+      margin-bottom: 0.8rem;
+      color: var(--text-muted);
+      font-size: 1.08rem;
+      line-height: 1.65;
+    }
+    .hero p strong { color: var(--text); font-weight: 650; }
+    .hero-note {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 650;
+      color: var(--accent);
+      opacity: 1;
+    }
+    .hero-pills { margin-top: 1.8rem; gap: 0.55rem; }
+    .pill {
+      border: 0;
+      background: var(--bg3);
+      color: #56605a;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.42rem 0.75rem;
+    }
+    .pill i { color: var(--accent); }
+    .pill:hover { color: var(--text); }
+
+    .security-banner { max-width: 960px; margin-bottom: 1.25rem; }
+    .security-banner-inner {
+      border: 1px solid #eadfcf;
+      border-left: 1px solid #eadfcf;
+      border-radius: 12px;
+      background: #fffaf2;
+      color: #73532f;
+      font-family: var(--sans);
+      font-size: 0.84rem;
+      line-height: 1.55;
+      padding: 0.9rem 1rem;
+    }
+    .security-banner-inner i { color: #a35b16; margin-top: 0.18rem; }
+
+    main { max-width: 960px; padding-bottom: 5rem; }
+    .tabs {
+      gap: 0.35rem;
+      overflow: visible;
+      border: 0;
+      border-radius: 14px 14px 0 0;
+      background: #e8ece7;
+      padding: 0.4rem;
+    }
+    .tab-btn {
+      min-height: 46px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 650;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .tab-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(25, 33, 29, 0.08);
+    }
+    .tab-btn.active i { color: var(--accent); }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.5); }
+    .panel {
+      border: 1px solid var(--border);
+      border-top: 0;
+      border-radius: 0 0 16px 16px;
+      background: white;
+      padding: clamp(1.4rem, 4vw, 2.5rem);
+      box-shadow: 0 18px 48px rgba(25, 33, 29, 0.06);
+    }
+
+    .mode-selector,
+    .wm-sub-tabs {
+      gap: 0.5rem;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      margin-bottom: 1rem;
+    }
+    .mode-btn,
+    .wm-sub-btn {
+      min-height: 52px;
+      border: 1px solid var(--border) !important;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 620;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .mode-btn.active-v2,
+    .wm-sub-btn.active {
+      border-color: rgba(35,104,79,0.36) !important;
+      background: rgba(35,104,79,0.07);
+      color: var(--accent);
+    }
+    .mode-btn.active-binary {
+      border-color: var(--binary-border) !important;
+      background: var(--binary-bg);
+    }
+    .mode-badge {
+      border: 0;
+      background: rgba(25,33,29,0.06);
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 650;
+    }
+
+    .mode-info-strip {
+      border: 0;
+      border-radius: 9px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      padding: 0.75rem 0.85rem;
+    }
+    .mode-info-v2 { background: #eff6f2; color: #3f6657; }
+    .mode-info-binary { background: #faf5ed; color: #73532f; }
+
+    .field { margin-bottom: 1.35rem; }
+    .field label,
+    .result-label span,
+    .preview-section h3 {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 680;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #47514c;
+    }
+    textarea,
+    input[type="text"] {
+      border-color: #d8ddd9;
+      background: #fbfcfa;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+    textarea { min-height: 118px; }
+    textarea::placeholder,
+    input[type="text"]::placeholder { color: #949c97; }
+    textarea:focus,
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .field-hint,
+    .char-counter,
+    .cover-text-examples span,
+    .toggle-label,
+    .status-line,
+    .rt-result {
+      font-family: var(--sans);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+    }
+    .cover-example-chip,
+    .example-btn,
+    .pipe-btn,
+    .wm-chip {
+      border-color: var(--border);
+      background: white;
+      color: #56605a;
+      font-family: var(--sans);
+      font-weight: 600;
+    }
+    .cover-example-chip:hover,
+    .example-btn:hover,
+    .pipe-btn:hover { border-color: var(--border-bright); background: var(--bg3); color: var(--text); }
+
+    .btn {
+      min-height: 42px;
+      border-radius: 9px;
+      font-family: var(--sans);
+      font-size: 0.84rem;
+      font-weight: 680;
+      letter-spacing: 0;
+      padding: 0.65rem 1.1rem;
+    }
+    .btn-primary { background: var(--text); color: white; }
+    .btn-primary:hover {
+      background: #2b3731;
+      box-shadow: 0 7px 18px rgba(25, 33, 29, 0.14);
+    }
+    .btn-ghost { background: white; color: #56605a; border-color: #d8ddd9; }
+    .btn-ghost:hover { background: var(--bg3); border-color: var(--border-bright); }
+    .btn-success { background: #edf6f1; color: var(--accent); border-color: rgba(35,104,79,0.18); }
+
+    .result-box,
+    .preview-display,
+    .detect-result,
+    .file-loaded {
+      border-color: #d8ddd9;
+      background: #fbfcfa;
+      color: var(--text);
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    .result-box.has-content { border-color: rgba(35,104,79,0.4); }
+    .decode-empty-state,
+    .file-drop-zone {
+      border-color: #cdd5d0;
+      background: #f8faf7;
+      border-radius: 12px;
+    }
+    .decode-empty-state p,
+    .file-drop-zone p { font-family: var(--sans); }
+    .file-drop-zone:hover,
+    .file-drop-zone.dragover { background: #f0f6f2; }
+
+    input:checked + .toggle-track { background: var(--accent); border-color: var(--accent); }
+    input:checked + .toggle-track::after { background: white; }
+    .toggle-track::after { background: #89928d; }
+
+    .info-grid { gap: 0.85rem; }
+    .section-heading { color: var(--text); }
+    .info-card {
+      border-color: var(--border);
+      background: white;
+      padding: 1.35rem;
+      box-shadow: none;
+    }
+    .info-card:hover { border-color: var(--border-bright); }
+    .info-card h3 {
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 0.92rem;
+    }
+    .info-card h3 i,
+    .section-heading i { color: var(--accent); }
+    .info-card li { border-bottom-color: var(--border); color: var(--text-muted); }
+
+    footer { border-top-color: var(--border); padding-top: 3rem; }
+    .footer-section h4,
+    .footer-bottom p { font-family: var(--sans); letter-spacing: 0; text-transform: none; }
+    #toast { font-family: var(--sans); box-shadow: 0 10px 30px rgba(25,33,29,0.18); }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        right: 0;
+        transform: none;
+        background: white;
+        box-shadow: -16px 0 40px rgba(25,33,29,0.08);
+      }
+      .nav-links.open { display: flex; right: 0; transform: none; }
+      .hero { padding: 4.5rem 1rem 2.5rem; }
+      .hero h1 { font-size: clamp(2.8rem, 14vw, 4.25rem); }
+      .hero-pills { gap: 0.4rem; }
+      .mode-selector { flex-direction: column; }
+      .tabs { gap: 0.2rem; }
+      .tab-btn { padding-inline: 0.4rem; font-size: 0.75rem; }
+    }
   </style>
 </head>
 <body>
@@ -283,14 +623,12 @@
 <div class="overlay" id="overlay"></div>
 
 <div class="hero">
-<h1>Zero-Width Text<br>Encoder & Decoder</h1>
-<p><strong>StegZero</strong> is a free <strong>steganography tool</strong> to hide and reveal secret messages. Embed or extract invisible strings using Unicode zero-width characters (ZWSP) — instantly, with zero server tracking.</p><p class="hero-note">// runs 100% in your browser</p>
+<h1>Hide messages.<br>In plain sight.</h1>
+<p><strong>StegZero</strong> hides and reveals messages inside ordinary text using invisible Unicode characters. Everything happens locally on your device.</p><p class="hero-note">Private by design. Nothing is uploaded.</p>
   <div class="hero-pills">
-    <span class="pill"><i class="fas fa-shield-alt"></i> Local only</span>
-    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible Unicode chars</span>
-    <span class="pill"><i class="fas fa-bolt"></i> Instant encode &amp; decode</span>
-    <span class="pill"><i class="fas fa-fingerprint"></i> File watermarking</span>
-    <span class="pill"><i class="fas fa-key"></i> Optional passphrase</span>
+    <span class="pill"><i class="fas fa-shield-alt"></i> Runs locally</span>
+    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible Unicode</span>
+    <span class="pill"><i class="fas fa-fingerprint"></i> Text &amp; file watermarking</span>
   </div>
 </div>
 
@@ -298,7 +636,7 @@
   <div class="security-banner-inner">
     <i class="fas fa-exclamation-triangle"></i>
     <div>
-      <strong>Not a replacement for encryption.</strong> Zero-width steganography is an obfuscation technique — it hides the <em>existence</em> of a message, not its contents. Anyone who pastes your text into a decoder will see it. For sensitive data, encrypt with GPG or AES first. This tool is for education, watermarking, and fun.
+      <strong>A quick security note:</strong> Steganography hides that a message exists; it does not encrypt the contents. Use proper encryption for sensitive information.
     </div>
   </div>
 </div>
