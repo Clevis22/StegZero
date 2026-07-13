@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero</title>
-  <meta name="description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
+  <meta name="description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
   <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
   <link rel="canonical" href="https://stegzero.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stegzero.com/">
   <meta property="og:title" content="Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero">
-  <meta property="og:description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
+  <meta property="og:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
   <meta property="og:image" content="https://stegzero.com/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Zero-Width Steganography Decoder & Encoder Online | StegZero">
-  <meta name="twitter:description" content="Instantly decode zero-width steganography — reveal invisible Unicode characters hidden in any text. Free encoder, decoder, and detector. 100% in your browser, nothing sent to any server.">
+  <meta name="twitter:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -582,6 +582,122 @@
     .footer-bottom p { font-family: var(--sans); letter-spacing: 0; text-transform: none; }
     #toast { font-family: var(--sans); box-shadow: 0 10px 30px rgba(25,33,29,0.18); }
 
+    .advanced-options,
+    .inspection-details,
+    .technical-preview {
+      margin: 0 0 1.35rem;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: #fbfcfa;
+    }
+    .advanced-options > summary,
+    .inspection-details > summary,
+    .technical-preview > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 48px;
+      padding: 0.75rem 0.95rem;
+      color: #4f5a54;
+      font-size: 0.82rem;
+      font-weight: 680;
+      cursor: pointer;
+      list-style: none;
+    }
+    .advanced-options > summary::-webkit-details-marker,
+    .inspection-details > summary::-webkit-details-marker,
+    .technical-preview > summary::-webkit-details-marker { display: none; }
+    .advanced-options > summary::after,
+    .inspection-details > summary::after,
+    .technical-preview > summary::after {
+      content: '⌄';
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: transform 0.16s ease;
+    }
+    .advanced-options[open] > summary::after,
+    .inspection-details[open] > summary::after,
+    .technical-preview[open] > summary::after { transform: rotate(180deg); }
+    .advanced-options > summary > span:first-child,
+    .inspection-details > summary > span:first-child { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .summary-meta {
+      margin-left: auto;
+      color: var(--accent);
+      font-size: 0.73rem;
+      font-weight: 650;
+    }
+    .advanced-content {
+      padding: 0 0.95rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .advanced-label {
+      margin: 1rem 0 0.55rem;
+      color: #47514c;
+      font-size: 0.76rem;
+      font-weight: 680;
+    }
+    .advanced-content .mode-selector { margin-bottom: 0.65rem; }
+    .advanced-content .mode-info-strip { margin-bottom: 1rem; }
+    .advanced-test-btn { margin-top: 1rem; }
+
+    .inline-security-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      margin: 0.75rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      line-height: 1.5;
+    }
+    .inline-security-note i { color: #a35b16; margin-top: 0.15rem; }
+
+    .result-card {
+      margin-top: 1.5rem;
+      padding: 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfcfa;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .result-card.is-ready,
+    .result-card.is-found {
+      border-color: rgba(35,104,79,0.26);
+      background: #f2f8f4;
+    }
+    .result-card.needs-attention {
+      border-color: #eadfcf;
+      background: #fffaf2;
+    }
+    .result-card-heading { margin-bottom: 0.7rem; }
+    .result-card-heading > span:first-child { color: var(--text); font-size: 0.86rem; }
+    .result-card.is-ready .result-card-heading > span:first-child,
+    .result-card.is-found .result-card-heading > span:first-child { color: var(--accent); }
+    .result-card .result-box { background: white; }
+    .btn:disabled,
+    .pipe-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .technical-preview { margin-top: 0.9rem; }
+    .technical-preview > summary { justify-content: flex-start; }
+    .technical-preview > summary::after { margin-left: auto; }
+    .technical-preview .preview-display,
+    .technical-preview .preview-legend { margin-inline: 0.95rem; }
+    .technical-preview .preview-display { margin-top: 0.15rem; }
+    .technical-preview .preview-legend { margin-bottom: 0.95rem; }
+
+    .inspection-details { margin-top: 0.9rem; }
+    .inspection-details .detect-result {
+      margin: 0 0.95rem 0.8rem;
+      border-radius: 9px;
+    }
+    .inspection-details > .btn { margin: 0 0.95rem 0.95rem; }
+    .status-line.warn { color: var(--warn); }
+
     @media (max-width: 700px) {
       .nav-links {
         display: none;
@@ -597,6 +713,8 @@
       .mode-selector { flex-direction: column; }
       .tabs { gap: 0.2rem; }
       .tab-btn { padding-inline: 0.4rem; font-size: 0.75rem; }
+      .summary-meta { display: none; }
+      .result-card { padding: 0.9rem; }
     }
   </style>
 </head>
@@ -632,15 +750,6 @@
   </div>
 </div>
 
-<div class="security-banner">
-  <div class="security-banner-inner">
-    <i class="fas fa-exclamation-triangle"></i>
-    <div>
-      <strong>A quick security note:</strong> Steganography hides that a message exists; it does not encrypt the contents. Use proper encryption for sensitive information.
-    </div>
-  </div>
-</div>
-
 <main id="tool">
 
   <div class="tabs">
@@ -648,10 +757,7 @@
       <i class="fas fa-lock"></i> Encode
     </button>
     <button class="tab-btn" onclick="switchTab('decode')" id="tab-decode">
-      <i class="fas fa-unlock"></i> Decode
-    </button>
-    <button class="tab-btn" onclick="switchTab('detect')" id="tab-detect">
-      <i class="fas fa-search"></i> Detect
+      <i class="fas fa-eye"></i> Reveal
     </button>
     <button class="tab-btn" onclick="switchTab('watermark')" id="tab-watermark">
       <i class="fas fa-fingerprint"></i> Watermark
@@ -661,31 +767,9 @@
   <!-- ENCODE PANEL -->
   <div class="panel active" id="panel-encode">
 
-    <!-- Mode selector -->
-    <div class="mode-selector" id="encodeModeSelector">
-      <button class="mode-btn active-v2" id="encModeV2" onclick="setEncodeMode('v2')">
-        <i class="fas fa-th"></i>
-        V2 — 8-char alphabet
-        <span class="mode-badge badge-8">8 chars</span>
-      </button>
-      <button class="mode-btn" id="encModeBin" onclick="setEncodeMode('binary')">
-        <i class="fas fa-code-branch"></i>
-        Binary — 2-char only
-        <span class="mode-badge badge-2">2 chars</span>
-      </button>
-    </div>
-    <div class="mode-info-strip mode-info-v2" id="encModeInfoV2">
-      <i class="fas fa-info-circle"></i>
-      <span>V2 mode uses 8 zero-width Unicode characters (3 bits per symbol), producing the shortest payload. Best for most platforms.</span>
-    </div>
-    <div class="mode-info-strip mode-info-binary" id="encModeInfoBin" style="display:none">
-      <i class="fas fa-code-branch"></i>
-      <span>Binary mode uses only ZWSP (U+200B = 0) and ZWNJ (U+200C = 1) — the two most universally preserved zero-width characters. Payload is 4× longer but survives platforms that strip rarer Unicode. Use when V2 messages are lost in transit.</span>
-    </div>
-
     <div class="field">
-      <label>Cover Text <span style="color:var(--text-muted);font-size:0.68rem">(the visible text that carries your hidden message)</span></label>
-      <textarea id="visibleText" rows="3" placeholder="Paste a tweet, email, blog post, or any text. Your secret will be invisibly woven into it…" oninput="updateEncodePreview()"></textarea>
+      <label>Visible text</label>
+      <textarea id="visibleText" rows="3" placeholder="Paste or write the ordinary text people will see…" oninput="updateEncodePreview()"></textarea>
       <div class="cover-text-examples">
         <span>Try an example:</span>
         <button class="cover-example-chip" onclick="setCoverText('tweet')"><i class="fab fa-twitter"></i> tweet</button>
@@ -693,73 +777,102 @@
         <button class="cover-example-chip" onclick="setCoverText('bio')"><i class="fas fa-user"></i> bio</button>
         <button class="cover-example-chip" onclick="setCoverText('blank')"><i class="fas fa-times"></i> none (detectable)</button>
       </div>
-      <div class="field-hint">The cover text is visible to everyone. Your secret is hidden inside it as invisible zero-width Unicode characters.</div>
+      <div class="field-hint">This stays readable and unchanged. The hidden message is woven into it invisibly.</div>
     </div>
     <div class="field">
-      <label>Hidden Message <span class="required">*</span></label>
-      <input type="text" id="hiddenMessage" placeholder="Your secret message…" oninput="updateCounter()">
+      <label>Message to hide <span class="required">*</span></label>
+      <input type="text" id="hiddenMessage" placeholder="Type the message you want to hide…" oninput="updateCounter()">
       <div class="char-counter" id="msgCounter">0 chars</div>
       <div class="field-hint" id="encodeLengthHint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
     </div>
-    <div class="field">
-      <div class="passphrase-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="passphraseToggle" onchange="togglePassphrase()">
-          <span class="toggle-track"></span>
-        </label>
-        <span class="toggle-label">Add passphrase layer (XOR obfuscation on top)</span>
+    <details class="advanced-options">
+      <summary>
+        <span><i class="fas fa-sliders-h"></i> Advanced options</span>
+        <span class="summary-meta" id="encodeModeSummary">Standard mode</span>
+      </summary>
+      <div class="advanced-content">
+        <div class="advanced-label">Compatibility</div>
+        <div class="mode-selector" id="encodeModeSelector">
+          <button class="mode-btn active-v2" id="encModeV2" onclick="setEncodeMode('v2')" type="button">
+            <i class="fas fa-bolt"></i>
+            Standard
+            <span class="mode-badge badge-8">Recommended</span>
+          </button>
+          <button class="mode-btn" id="encModeBin" onclick="setEncodeMode('binary')" type="button">
+            <i class="fas fa-signal"></i>
+            Compatibility mode
+            <span class="mode-badge badge-2">Longer</span>
+          </button>
+        </div>
+        <div class="mode-info-strip mode-info-v2" id="encModeInfoV2">
+          <i class="fas fa-info-circle"></i>
+          <span>Best for most uses. Produces a shorter, less noticeable payload.</span>
+        </div>
+        <div class="mode-info-strip mode-info-binary" id="encModeInfoBin" style="display:none">
+          <i class="fas fa-signal"></i>
+          <span>Uses the two most widely preserved invisible characters. Try this if Standard messages are lost on a platform.</span>
+        </div>
+
+        <div class="passphrase-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="passphraseToggle" onchange="togglePassphrase()">
+            <span class="toggle-track"></span>
+          </label>
+          <span class="toggle-label">Require a passphrase to reveal the message</span>
+        </div>
+        <div class="passphrase-field" id="passphraseField">
+          <input type="text" id="passphraseInput" placeholder="Enter a passphrase…" style="margin-top:0.5rem">
+          <div class="field-hint">The receiver will need the exact same passphrase. This adds obscurity, not strong encryption.</div>
+        </div>
+        <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message to verify it works">
+          <i class="fas fa-check-circle"></i> Test this setup
+        </button>
+        <div class="rt-result" id="rtResult"></div>
       </div>
-      <div class="passphrase-field" id="passphraseField">
-        <input type="text" id="passphraseInput" placeholder="Enter passphrase…" style="margin-top:0.5rem">
-        <div class="field-hint">The receiver must enter the same passphrase to decode</div>
-      </div>
-    </div>
+    </details>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleEncode()"><i class="fas fa-shield-alt"></i> Encode</button>
+      <button class="btn btn-primary" onclick="handleEncode()"><i class="fas fa-eye-slash"></i> Hide message</button>
       <button class="btn btn-ghost" onclick="clearEncode()"><i class="fas fa-eraser"></i> Clear</button>
-      <button class="btn btn-ghost" onclick="runRoundTrip()" title="Test round-trip: encode then immediately decode to verify"><i class="fas fa-sync-alt"></i> Test Round-Trip</button>
     </div>
+    <p class="inline-security-note"><i class="fas fa-info-circle"></i> This hides a message; it does not encrypt it. Don’t use it for sensitive information.</p>
     <div class="status-line" id="encodeStatus"></div>
-    <div class="rt-result" id="rtResult"></div>
-    <div style="margin-top:1.5rem">
-      <div class="result-label">
-        <span>Result</span>
+    <section class="result-card" id="encodeResultCard">
+      <div class="result-label result-card-heading">
+        <span id="encodeResultHeading">Your encoded text</span>
         <span class="result-meta" id="encodedMeta"></span>
       </div>
-      <div class="result-box empty" id="encodedResult">Encoded message will appear here.</div>
+      <div class="result-box empty" id="encodedResult" aria-live="polite">Encoded message will appear here.</div>
       <div class="export-row">
-        <button class="btn btn-success" onclick="copyResult('encodedResult')"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-primary" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled><i class="fas fa-copy"></i> Copy encoded text</button>
         <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none"><i class="fas fa-share-alt"></i> Share</button>
-        <button class="btn btn-ghost" onclick="exportTxt('encodedResult','stegzero_encoded.txt')"><i class="fas fa-file-download"></i> Export .txt</button>
-        <button class="pipe-btn" onclick="pipeToDecoder()" title="Send this result directly to the Decode panel"><i class="fas fa-arrow-right"></i> Send to Decoder →</button>
+        <button class="btn btn-ghost" id="encodeExportBtn" onclick="exportTxt('encodedResult','stegzero_encoded.txt')" disabled><i class="fas fa-file-download"></i> Export .txt</button>
+        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Open this result in Reveal" disabled><i class="fas fa-arrow-right"></i> Test in Reveal</button>
       </div>
-    </div>
-    <div class="preview-section" id="encodePreviewSection" style="display:none">
-      <h3><i class="fas fa-eye"></i> Live Preview — Zero-Width Characters Highlighted</h3>
+    </section>
+    <details class="technical-preview preview-section" id="encodePreviewSection" style="display:none">
+      <summary><i class="fas fa-code"></i> View technical preview</summary>
       <div class="preview-display" id="encodePreview"></div>
       <div class="preview-legend" id="encodePreviewLegend">
         <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
         <span class="zw-count" id="encodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
       </div>
-    </div>
+    </details>
   </div>
 
   <!-- DECODE PANEL -->
   <div class="panel" id="panel-decode">
 
     <div class="decode-empty-state" id="decodeEmptyState">
-      <p><strong>Paste any text to reveal hidden messages inside it.</strong><br>Zero-width characters are completely invisible — you can't tell by looking. Try one of these pre-encoded examples:</p>
+      <p><strong>Paste text below and StegZero will inspect it automatically.</strong><br>If it contains a hidden message, it will appear right away.</p>
       <div class="example-btns">
-        <button class="example-btn" onclick="loadDecodeExample('tweet')"><i class="fab fa-twitter"></i> Hidden tweet (V2)</button>
-        <button class="example-btn" onclick="loadDecodeExample('email')"><i class="fas fa-envelope"></i> Hidden email (V2)</button>
-        <button class="example-btn" onclick="loadDecodeExample('binary')"><i class="fas fa-code-branch"></i> Binary mode example</button>
-        <button class="example-btn" onclick="loadDecodeExample('watermark')"><i class="fas fa-fingerprint"></i> Watermarked text</button>
+        <button class="example-btn" onclick="loadDecodeExample('tweet')"><i class="fas fa-comment"></i> Try a hidden message</button>
+        <button class="example-btn" onclick="loadDecodeExample('binary')"><i class="fas fa-signal"></i> Try compatibility mode</button>
       </div>
     </div>
     <div class="field">
-      <label>Text to Decode</label>
-      <textarea id="encodedText" rows="4" placeholder="Paste text here — zero-width steganography characters are invisible but this tool will find and decode them…" oninput="onDecodeInput()"></textarea>
-      <div class="field-hint">The text will look completely normal even if it contains a hidden message</div>
+      <label>Text to inspect</label>
+      <textarea id="encodedText" rows="4" placeholder="Paste text here. We’ll check it automatically…" oninput="onDecodeInput()"></textarea>
+      <div class="field-hint">Hidden characters are invisible, so suspicious text may look completely normal.</div>
     </div>
     <div class="field">
       <div class="passphrase-row">
@@ -767,29 +880,46 @@
           <input type="checkbox" id="decodePassToggle" onchange="toggleDecodePass()">
           <span class="toggle-track"></span>
         </label>
-        <span class="toggle-label">Message was encoded with a passphrase</span>
+        <span class="toggle-label">I have a passphrase for this message</span>
       </div>
       <div class="passphrase-field" id="decodePassField">
-        <input type="text" id="decodePassInput" placeholder="Enter passphrase…" style="margin-top:0.5rem">
+        <input type="text" id="decodePassInput" placeholder="Enter the passphrase…" style="margin-top:0.5rem" oninput="handleDecode(true)">
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Decode</button>
+      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Reveal message</button>
       <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')"><i class="fas fa-paste"></i> Paste</button>
       <button class="btn btn-ghost" onclick="clearDecode()"><i class="fas fa-eraser"></i> Clear</button>
     </div>
     <div class="status-line" id="decodeStatus"></div>
-    <div style="margin-top:1.5rem">
-      <div class="result-label">
-        <span>Hidden Message</span>
+    <section class="result-card reveal-result-card" id="revealResultCard">
+      <div class="result-label result-card-heading">
+        <span id="revealResultHeading">Reveal result</span>
         <span class="result-meta" id="decodedMeta"></span>
       </div>
-      <div class="result-box empty" id="decodedResult">Decoded message will appear here.</div>
+      <div class="result-box empty" id="decodedResult" aria-live="polite">Paste text above to begin.</div>
       <div class="export-row">
-        <button class="btn btn-success" onclick="copyResult('decodedResult')"><i class="fas fa-copy"></i> Copy</button>
-        <button class="btn btn-ghost" onclick="exportTxt('decodedResult','stegzero_decoded.txt')"><i class="fas fa-file-download"></i> Export .txt</button>
+        <button class="btn btn-primary" id="revealCopyBtn" onclick="copyResult('decodedResult')" disabled><i class="fas fa-copy"></i> Copy revealed message</button>
+        <button class="btn btn-ghost" id="revealExportBtn" onclick="exportTxt('decodedResult','stegzero_decoded.txt')" disabled><i class="fas fa-file-download"></i> Export .txt</button>
       </div>
-    </div>
+    </section>
+
+    <details class="inspection-details" id="revealInspection" style="display:none">
+      <summary>
+        <span><i class="fas fa-search"></i> Inspection details</span>
+        <span class="summary-meta" id="inspectionSummary">No hidden characters</span>
+      </summary>
+      <div id="detectResultBox" class="detect-result">
+        <div class="detect-row"><span>Total characters</span><strong id="det-total">—</strong></div>
+        <div class="detect-row"><span>Invisible characters</span><strong id="det-zw">—</strong></div>
+        <div class="detect-row"><span>Distinct invisible types</span><strong id="det-types">—</strong></div>
+        <div class="detect-row"><span>Standard format</span><strong id="det-v2">—</strong></div>
+        <div class="detect-row"><span>Compatibility format</span><strong id="det-binary">—</strong></div>
+        <div class="detect-row"><span>Legacy format</span><strong id="det-legacy">—</strong></div>
+        <div class="detect-row"><span>Verdict</span><strong id="det-verdict">—</strong></div>
+      </div>
+      <button class="btn btn-ghost" onclick="stripZwAndCopy()"><i class="fas fa-broom"></i> Copy without invisible characters</button>
+    </details>
     <div class="preview-section" id="decodePreviewSection" style="display:none">
       <h3><i class="fas fa-eye"></i> Zero-Width Characters Found in Input</h3>
       <div class="preview-display" id="decodePreview"></div>
@@ -798,28 +928,6 @@
         <span class="zw-count" id="decodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
       </div>
     </div>
-  </div>
-
-  <!-- DETECT PANEL -->
-  <div class="panel" id="panel-detect">
-    <div class="field">
-      <label>Text to Inspect</label>
-      <textarea id="detectText" rows="4" placeholder="Paste any text to check for hidden zero-width steganography characters…" oninput="runDetect()"></textarea>
-    </div>
-    <div id="detectResultBox" class="detect-result" style="display:none">
-      <div class="detect-row"><span>Total characters</span><strong id="det-total">—</strong></div>
-      <div class="detect-row"><span>Zero-width characters found</span><strong id="det-zw">—</strong></div>
-      <div class="detect-row"><span>Distinct ZW types</span><strong id="det-types">—</strong></div>
-      <div class="detect-row"><span>StegZero V2 signature</span><strong id="det-v2">—</strong></div>
-      <div class="detect-row"><span>Binary mode signature</span><strong id="det-binary">—</strong></div>
-      <div class="detect-row"><span>Legacy signature</span><strong id="det-legacy">—</strong></div>
-      <div class="detect-row"><span>Verdict</span><strong id="det-verdict">—</strong></div>
-    </div>
-    <div class="btn-row" style="margin-top:1rem">
-      <button class="btn btn-ghost" onclick="clearDetect()"><i class="fas fa-eraser"></i> Clear</button>
-      <button class="btn btn-ghost" onclick="stripZwAndCopy()"><i class="fas fa-broom"></i> Strip ZW chars &amp; Copy</button>
-    </div>
-    <div class="status-line" id="detectStatus"></div>
   </div>
 
   <!-- WATERMARK PANEL -->
@@ -972,7 +1080,7 @@
     <div class="info-card">
       <h3><i class="fas fa-code"></i>How do I decode a steganography message?</h3>
       <ul>
-        <li>Paste the text into the Decode tab above. Use Auto-detect mode and StegZero's decoder will automatically find and extract any hidden zero-width Unicode message — both V2 and Binary formats.</li>
+        <li>Paste the text into the Reveal tab above. StegZero automatically inspects it and extracts hidden messages in Standard, Compatibility, and legacy formats.</li>
       </ul>
     </div>
     <div class="info-card">
@@ -997,7 +1105,7 @@
   <ul>
     <li>No — Steghide is an <em>image and audio</em> steganography tool that hides data inside JPEG/BMP/WAV files. StegZero handles <em>text</em> steganography using invisible Unicode characters.</li>
     <li>If you have a Steghide-encoded image, you need the <code>steghide</code> command-line tool or a dedicated image steg decoder — not StegZero.</li>
-    <li>If you have text that looks normal but may contain a hidden message, you're in the right place — paste it into the Decode tab above.</li>
+    <li>If you have text that looks normal but may contain a hidden message, you're in the right place — paste it into the Reveal tab above.</li>
     <li>Other tools StegZero doesn't cover: Snow (whitespace steganography), OpenStego, and MP3Stego.</li>
   </ul>
 </div>
@@ -1005,10 +1113,10 @@
   <h3><i class="fas fa-list-ol"></i> How to decode a hidden text message</h3>
   <ul>
     <li><strong>Step 1:</strong> Copy the text you suspect contains a hidden message — it will look completely normal</li>
-    <li><strong>Step 2:</strong> Click the Decode tab above and paste the text into the input field</li>
-    <li><strong>Step 3:</strong> Click Decode — StegZero auto-detects V2, Binary, and legacy formats</li>
+    <li><strong>Step 2:</strong> Open the Reveal tab above and paste the text into the input field</li>
+    <li><strong>Step 3:</strong> StegZero automatically inspects the text and reveals Standard, Compatibility, and legacy messages</li>
     <li><strong>Step 4:</strong> If the message was encoded with a passphrase, toggle the passphrase option and enter it before decoding</li>
-    <li>Use the Detect tab to check whether any zero-width characters are present before decoding</li>
+    <li>Open Inspection details to see which invisible characters and message format were found</li>
   </ul>
 </div>
   </div>
@@ -1184,6 +1292,7 @@ function setEncodeMode(mode) {
   } else {
     hint.textContent = 'Keep it short — longer messages create more zero-width characters, increasing detectability';
   }
+  document.getElementById('encodeModeSummary').textContent = mode === 'binary' ? 'Compatibility mode' : 'Standard mode';
   updateEncodePreview();
 }
 
@@ -1548,8 +1657,7 @@ function loadDecodeExample(key) {
   const encoded = getEncodedExample(key);
   document.getElementById('encodedText').value = encoded;
   document.getElementById('decodeEmptyState').style.display = 'none';
-  updateDecodePreview();
-  handleDecode();
+  onDecodeInput();
   showToast('Example loaded — hidden message revealed below');
 }
 
@@ -1559,13 +1667,22 @@ function onDecodeInput() {
     document.getElementById('decodeEmptyState').style.display = 'none';
   } else {
     document.getElementById('decodeEmptyState').style.display = 'block';
-    document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
+    document.getElementById('decodedResult').textContent = 'Paste text above to begin.';
     document.getElementById('decodedResult').className = 'result-box empty';
     document.getElementById('decodedMeta').textContent = '';
+    document.getElementById('revealResultHeading').textContent = 'Reveal result';
+    document.getElementById('revealResultCard').className = 'result-card reveal-result-card';
+    document.getElementById('revealInspection').style.display = 'none';
+    document.getElementById('revealCopyBtn').disabled = true;
+    document.getElementById('revealExportBtn').disabled = true;
     document.getElementById('decodeStatus').textContent = '';
     document.getElementById('decodeStatus').className = 'status-line';
   }
   updateDecodePreview();
+  if (val.length > 0) {
+    const inspection = runDetect();
+    handleDecode(true, inspection);
+  }
 }
 
 // ════════════════════════════════════════
@@ -1597,9 +1714,14 @@ function handleEncode() {
   resultEl.classList.remove('empty');
   resultEl.classList.add('has-content');
   const zwCount = countZW(result);
-  const modeLabel = currentEncodeMode === 'binary' ? 'binary mode' : 'v2 mode';
-  metaEl.textContent = `${Array.from(result).length} chars · ${zwCount} hidden · ${modeLabel}`;
-  setStatus('encodeStatus','ok',`✓ Encoded (${modeLabel}) — ${zwCount} zero-width characters embedded`);
+  const modeLabel = currentEncodeMode === 'binary' ? 'Compatibility mode' : 'Standard mode';
+  metaEl.textContent = `${Array.from(result).length} total · ${zwCount} invisible · ${modeLabel}`;
+  document.getElementById('encodeResultHeading').textContent = 'Your message is ready';
+  document.getElementById('encodeResultCard').classList.add('is-ready');
+  document.getElementById('encodeCopyBtn').disabled = false;
+  document.getElementById('encodeExportBtn').disabled = false;
+  document.getElementById('encodeRevealBtn').disabled = false;
+  setStatus('encodeStatus','ok',`✓ Ready — message hidden using ${modeLabel}`);
   showEncodeResultPreview(result);
   document.getElementById('encodePreviewSection').style.display = 'block';
   if (navigator.share) document.getElementById('shareBtn').style.display = 'inline-flex';
@@ -1612,6 +1734,11 @@ function clearEncode() {
   document.getElementById('encodedResult').textContent = 'Encoded message will appear here.';
   document.getElementById('encodedResult').className = 'result-box empty';
   document.getElementById('encodedMeta').textContent = '';
+  document.getElementById('encodeResultHeading').textContent = 'Your encoded text';
+  document.getElementById('encodeResultCard').className = 'result-card';
+  document.getElementById('encodeCopyBtn').disabled = true;
+  document.getElementById('encodeExportBtn').disabled = true;
+  document.getElementById('encodeRevealBtn').disabled = true;
   document.getElementById('encodePreviewSection').style.display = 'none';
   document.getElementById('encodeStatus').textContent = '';
   document.getElementById('encodeStatus').className = 'status-line';
@@ -1622,12 +1749,20 @@ function clearEncode() {
 // ════════════════════════════════════════
 // DECODE UI — mode-aware
 // ════════════════════════════════════════
-function handleDecode() {
+function handleDecode(silent = false, inspection = null) {
   const text = document.getElementById('encodedText').value || '';
   const usePass = document.getElementById('decodePassToggle').checked;
   const pass = usePass ? (document.getElementById('decodePassInput').value || '') : '';
   const resultEl = document.getElementById('decodedResult');
   const metaEl = document.getElementById('decodedMeta');
+  const cardEl = document.getElementById('revealResultCard');
+  const headingEl = document.getElementById('revealResultHeading');
+
+  if (!text) {
+    onDecodeInput();
+    if (!silent) showToast('Paste some text first', 'warn');
+    return;
+  }
 
   let decoded = null;
   let usedMode = '';
@@ -1646,39 +1781,48 @@ function handleDecode() {
 
   if (decoded) {
     resultEl.textContent = decoded;
-    resultEl.classList.remove('empty');
-    resultEl.classList.add('has-content');
-    metaEl.textContent = usedMode + ' format';
-    setStatus('decodeStatus','ok',`✓ Message recovered (${usedMode} decoder)`);
-    showToast('Hidden message decoded!');
+    resultEl.className = 'result-box has-content';
+    cardEl.className = 'result-card reveal-result-card is-found';
+    headingEl.textContent = 'Hidden message found';
+    metaEl.textContent = usedMode === 'binary' ? 'compatibility format' : usedMode + ' format';
+    document.getElementById('revealCopyBtn').disabled = false;
+    document.getElementById('revealExportBtn').disabled = false;
+    setStatus('decodeStatus','ok','✓ Hidden message revealed');
+    if (!silent) showToast('Hidden message revealed!');
   } else {
-    resultEl.textContent = 'No hidden message found.';
+    inspection = inspection || runDetect();
+    const knownPayload = inspection.isV2 || inspection.isBinary || inspection.isLegacy;
+    resultEl.textContent = inspection.zw === 0
+      ? 'No invisible characters were found in this text.'
+      : knownPayload
+        ? 'Hidden data was found, but it could not be revealed. If the sender used a passphrase, enter it above and try again.'
+        : 'Invisible characters were found, but they do not match a StegZero message.';
     resultEl.className = 'result-box empty';
+    cardEl.className = 'result-card reveal-result-card' + (inspection.zw > 0 ? ' needs-attention' : '');
+    headingEl.textContent = inspection.zw > 0 ? 'Hidden data detected' : 'No hidden message found';
     metaEl.textContent = '';
-    setStatus('decodeStatus','err','✗ No hidden message found in this text');
-    showToast('No hidden message found','warn');
+    document.getElementById('revealCopyBtn').disabled = true;
+    document.getElementById('revealExportBtn').disabled = true;
+    setStatus('decodeStatus', inspection.zw > 0 ? 'warn' : '', inspection.zw > 0 ? 'Invisible characters are present' : 'This text looks clean');
+    if (!silent) showToast(inspection.zw > 0 ? 'Hidden data needs attention' : 'No hidden message found','warn');
   }
 }
 
 function clearDecode() {
   document.getElementById('encodedText').value = '';
-  document.getElementById('decodedResult').textContent = 'Decoded message will appear here.';
-  document.getElementById('decodedResult').className = 'result-box empty';
-  document.getElementById('decodedMeta').textContent = '';
   document.getElementById('decodePreviewSection').style.display = 'none';
-  document.getElementById('decodeStatus').textContent = '';
-  document.getElementById('decodeStatus').className = 'status-line';
-  document.getElementById('decodeEmptyState').style.display = 'block';
+  onDecodeInput();
 }
 
 // ════════════════════════════════════════
 // DETECT UI — extended for binary
 // ════════════════════════════════════════
 function runDetect() {
-  const text = document.getElementById('detectText').value || '';
+  const text = document.getElementById('encodedText').value || '';
   const box = document.getElementById('detectResultBox');
-  if (!text) { box.style.display = 'none'; return; }
-  box.style.display = 'block';
+  const details = document.getElementById('revealInspection');
+  if (!text) { details.style.display = 'none'; return { zw: 0, isV2: false, isBinary: false, isLegacy: false }; }
+  details.style.display = 'block';
   const total = Array.from(text).length;
   const zw = countZW(text);
   const types = distinctZWTypes(text);
@@ -1711,13 +1855,14 @@ function runDetect() {
     : isLegacy ? 'Possible legacy StegZero'
     : 'ZW chars present (unknown encoding)';
   set('det-verdict', verdict, zw > 0 ? 'badge-found' : 'badge-none');
-  setStatus('detectStatus', zw > 0 ? 'err' : 'ok',
-    zw > 0 ? `⚠ ${zw} zero-width character${zw!==1?'s':''} detected` : '✓ No hidden characters found');
+  document.getElementById('inspectionSummary').textContent = zw > 0
+    ? `${zw} invisible character${zw!==1?'s':''}`
+    : 'No invisible characters';
+  return { total, zw, types, isV2, isBinary, isLegacy };
 }
 
 function set(id,val,cls){const el=document.getElementById(id);el.textContent=val;el.className=cls||'';}
-function clearDetect(){document.getElementById('detectText').value='';document.getElementById('detectResultBox').style.display='none';setStatus('detectStatus','','');}
-function stripZwAndCopy(){const text=document.getElementById('detectText').value||'';const cleaned=Array.from(text).filter(c=>!ZW_SET.has(c)).join('');navigator.clipboard.writeText(cleaned).then(()=>showToast('Stripped text copied to clipboard!')).catch(()=>showToast('Copy failed','error'));}
+function stripZwAndCopy(){const text=document.getElementById('encodedText').value||'';const cleaned=Array.from(text).filter(c=>!ZW_SET.has(c)).join('');navigator.clipboard.writeText(cleaned).then(()=>showToast('Clean text copied!')).catch(()=>showToast('Copy failed','error'));}
 
 // ════════════════════════════════════════
 // ROUND-TRIP TEST — mode-aware
@@ -1753,27 +1898,27 @@ function pipeToDecoder() {
   document.getElementById('encodedText').value = result;
   document.getElementById('decodeEmptyState').style.display = 'none';
   switchTab('decode');
-  updateDecodePreview();
+  onDecodeInput();
   document.getElementById('encodedText').scrollIntoView({behavior:'smooth',block:'center'});
-  showToast('Piped to decoder — click Decode to test');
+  showToast('Opened in Reveal — message found');
 }
 
 // ════════════════════════════════════════
 // SHARED UTILITIES
 // ════════════════════════════════════════
 function copyResult(id){const text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Copy failed','error'));}
-function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;document.getElementById('decodeEmptyState').style.display='none';updateDecodePreview();showToast('Pasted from clipboard');}).catch(()=>showToast('Paste failed','error'));}
+function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;onDecodeInput();showToast('Pasted and inspected');}).catch(()=>showToast('Paste failed','error'));}
 function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
 async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}
 function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;document.getElementById('passphraseField').classList.toggle('visible',on);}
-function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);}
+function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);if(!on)document.getElementById('decodePassInput').value='';if(document.getElementById('encodedText').value)handleDecode(true);}
 function setStatus(id,cls,msg){const el=document.getElementById(id);el.textContent=msg;el.className='status-line'+(cls?' '+cls:'');}
 function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast-${type}`;t.style.display='block';clearTimeout(t._timeout);t._timeout=setTimeout(()=>{t.style.display='none';},3000);}
 
 // ════════════════════════════════════════
 // TABS
 // ════════════════════════════════════════
-function switchTab(name){['encode','decode','detect','watermark'].forEach(n=>{document.getElementById(`tab-${n}`).classList.toggle('active',n===name);document.getElementById(`panel-${n}`).classList.toggle('active',n===name);});}
+function switchTab(name){['encode','decode','watermark'].forEach(n=>{document.getElementById(`tab-${n}`).classList.toggle('active',n===name);document.getElementById(`panel-${n}`).classList.toggle('active',n===name);});}
 
 // ════════════════════════════════════════
 // NAV
