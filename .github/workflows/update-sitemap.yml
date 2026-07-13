@@ -1,0 +1,48 @@
+name: Update sitemap for deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - '**/*.mjs'
+      - '**/*.png'
+      - '**/*.svg'
+      - '**/*.ico'
+      - 'site.webmanifest'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sitemap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate sitemap
+        run: node scripts/update-sitemap.mjs
+
+      - name: Commit an updated sitemap
+        run: |
+          if git diff --quiet -- sitemap.xml; then
+            echo "sitemap.xml is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          git commit -m "chore: update sitemap lastmod"
+          git push

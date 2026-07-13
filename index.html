@@ -21,7 +21,36 @@
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"StegZero","url":"https://stegzero.com/","description":"A free online zero-width steganography tool.","applicationCategory":"SecurityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "StegZero",
+        "url": "https://stegzero.com/",
+        "description": "A free browser-based tool to hide and reveal messages inside ordinary text using invisible Unicode characters.",
+        "applicationCategory": "SecurityApplication",
+        "applicationSubCategory": "Text steganography",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "inLanguage": "en",
+        "image": "https://stegzero.com/android-chrome-512x512.png",
+        "screenshot": "https://stegzero.com/preview-image.png",
+        "featureList": [
+          "Zero-width message encoding",
+          "Automatic hidden-message detection and decoding",
+          "Compatibility mode using two zero-width characters",
+          "Client-side text file watermarking",
+          "Optional passphrase obfuscation",
+          "Local browser processing"
+        ],
+        "sameAs": "https://github.com/Clevis22/StegZero/",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
@@ -297,17 +326,7 @@
       letter-spacing: -0.02em;
       color: var(--text);
     }
-    .nav-logo i {
-      display: grid;
-      width: 30px;
-      height: 30px;
-      place-items: center;
-      border-radius: 9px;
-      background: var(--accent);
-      color: white;
-      font-size: 0.78rem;
-    }
-    .nav-logo span { color: var(--text-muted); font-weight: 500; }
+    .nav-logo img { display: block; width: auto; height: 32px; }
     .nav-links { gap: 1.5rem; }
     .nav-link {
       font-family: var(--sans);
@@ -722,9 +741,8 @@
 
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#">
-      <i class="fas fa-ghost"></i>
-      StegZero<span>.com</span>
+    <a class="nav-logo" href="#" aria-label="StegZero home">
+      <img src="logo.svg" alt="StegZero">
     </a>
     <div class="nav-links" id="navLinks">
       <a class="nav-link" href="#tool">Tool</a>

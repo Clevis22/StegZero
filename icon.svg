@@ -1,11 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120" shape-rendering="crispEdges">
-  <path fill="#d8dfe5" d="M 20 0 h 50 v 10 h 10 v 10 h 10 v 100 h -10 v -30 h -10 v 30 h -10 v -30 h -10 v 30 h -10 v -30 h -10 v 30 h -10 v -30 h -10 v 30 h -10 v -100 h 10 v -10 h 10 v -10 Z" />
-
-  <rect x="10" y="20" width="30" height="20" fill="#232528" />
-  <rect x="50" y="20" width="40" height="20" fill="#232528" />
-
-  <rect x="20" y="20" width="10" height="10" fill="#2a699c" />
-  <rect x="60" y="20" width="10" height="10" fill="#2a699c" />
-
-  <rect x="40" y="40" width="20" height="10" fill="#232528" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">StegZero mark</title>
+  <desc id="desc">A split zero containing a small ghost, representing invisible messages.</desc>
+  <defs>
+    <mask id="zero-gap">
+      <rect width="128" height="128" fill="#fff"/>
+      <rect x="60" y="5" width="8" height="118" rx="4" fill="#000"/>
+    </mask>
+  </defs>
+  <g mask="url(#zero-gap)">
+    <rect x="12" y="7" width="104" height="114" rx="52" fill="#23684f"/>
+    <path fill="#f6f7f4" d="M34 94V56c0-17 13-30 30-30s30 13 30 30v38c0 7-4 11-10 11-5 0-8-3-11-7-2-4-6-4-9 0-3 4-6 7-11 7-4 0-7-2-9-5-2 3-5 5-9 5-7 0-11-4-11-11Z"/>
+    <rect x="45" y="53" width="11" height="17" rx="5.5" fill="#19211d"/>
+    <rect x="72" y="53" width="11" height="17" rx="5.5" fill="#19211d"/>
+  </g>
 </svg>

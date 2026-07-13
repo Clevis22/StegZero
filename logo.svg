@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 366 96" role="img" aria-labelledby="title desc">
+  <title id="title">StegZero</title>
+  <desc id="desc">StegZero wordmark with a split-zero ghost symbol.</desc>
+  <defs>
+    <mask id="logo-gap">
+      <rect width="128" height="128" fill="#fff"/>
+      <rect x="60" y="5" width="8" height="118" rx="4" fill="#000"/>
+    </mask>
+  </defs>
+  <g transform="translate(8 8) scale(.625)" mask="url(#logo-gap)">
+    <rect x="12" y="7" width="104" height="114" rx="52" fill="#23684f"/>
+    <path fill="#f6f7f4" d="M34 94V56c0-17 13-30 30-30s30 13 30 30v38c0 7-4 11-10 11-5 0-8-3-11-7-2-4-6-4-9 0-3 4-6 7-11 7-4 0-7-2-9-5-2 3-5 5-9 5-7 0-11-4-11-11Z"/>
+    <rect x="45" y="53" width="11" height="17" rx="5.5" fill="#19211d"/>
+    <rect x="72" y="53" width="11" height="17" rx="5.5" fill="#19211d"/>
+  </g>
+  <text x="103" y="63" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="45" font-weight="750" letter-spacing="-2">
+    <tspan fill="#19211d">Steg</tspan><tspan fill="#23684f">Zero</tspan>
+  </text>
+</svg>
