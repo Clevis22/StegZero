@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero</title>
+  <title>Zero-Width Steganography Decoder &amp; Encoder Online — Reveal Hidden Text | StegZero</title>
   <meta name="description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
   <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
   <link rel="canonical" href="https://stegzero.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stegzero.com/">
-  <meta property="og:title" content="Zero-Width Steganography Decoder & Encoder Online — Reveal Hidden Text | StegZero">
+  <meta property="og:title" content="Zero-Width Steganography Decoder &amp; Encoder Online — Reveal Hidden Text | StegZero">
   <meta property="og:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
-  <meta property="og:image" content="https://stegzero.com/og-image.png">
+  <meta property="og:image" content="https://stegzero.com/preview-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Zero-Width Steganography Decoder & Encoder Online | StegZero">
+  <meta name="twitter:title" content="Zero-Width Steganography Decoder &amp; Encoder Online | StegZero">
   <meta name="twitter:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
+  <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -736,6 +737,7 @@
       .result-card { padding: 0.9rem; }
     }
   </style>
+  <link rel="stylesheet" href="utility.css">
 </head>
 <body>
 
@@ -745,11 +747,9 @@
       <img src="logo.svg" alt="StegZero">
     </a>
     <div class="nav-links" id="navLinks">
-      <a class="nav-link" href="#tool">Tool</a>
-      <a class="nav-link" href="#how-it-works">How It Works</a>
-      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-link nav-link-secondary" href="#how-it-works">How it works</a>
+      <a class="nav-link nav-link-secondary" href="#faq">FAQ</a>
       <a class="nav-link" href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
-      <a class="nav-link" href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
     </div>
     <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
       <i class="fas fa-bars" id="menuIcon"></i>
@@ -759,34 +759,30 @@
 <div class="overlay" id="overlay"></div>
 
 <div class="hero">
-<h1>Hide messages.<br>In plain sight.</h1>
-<p><strong>StegZero</strong> hides and reveals messages inside ordinary text using invisible Unicode characters. Everything happens locally on your device.</p><p class="hero-note">Private by design. Nothing is uploaded.</p>
-  <div class="hero-pills">
-    <span class="pill"><i class="fas fa-shield-alt"></i> Runs locally</span>
-    <span class="pill"><i class="fas fa-eye-slash"></i> Invisible Unicode</span>
-    <span class="pill"><i class="fas fa-fingerprint"></i> Text &amp; file watermarking</span>
-  </div>
+  <h1>Zero-width text encoder &amp; decoder</h1>
+  <p>Hide a message in ordinary text, or inspect text for invisible Unicode characters.</p>
+  <p class="hero-note"><span aria-hidden="true">●</span> Runs locally in your browser. Nothing is uploaded.</p>
 </div>
 
 <main id="tool">
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('encode')" id="tab-encode">
+  <div class="tabs" role="tablist" aria-label="StegZero tools">
+    <button class="tab-btn active" type="button" role="tab" aria-selected="true" aria-controls="panel-encode" onclick="switchTab('encode')" id="tab-encode">
       <i class="fas fa-lock"></i> Encode
     </button>
-    <button class="tab-btn" onclick="switchTab('decode')" id="tab-decode">
+    <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-decode" tabindex="-1" onclick="switchTab('decode')" id="tab-decode">
       <i class="fas fa-eye"></i> Reveal
     </button>
-    <button class="tab-btn" onclick="switchTab('watermark')" id="tab-watermark">
+    <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-watermark" tabindex="-1" onclick="switchTab('watermark')" id="tab-watermark">
       <i class="fas fa-fingerprint"></i> Watermark
     </button>
   </div>
 
   <!-- ENCODE PANEL -->
-  <div class="panel active" id="panel-encode">
+  <div class="panel active" id="panel-encode" role="tabpanel" aria-labelledby="tab-encode">
 
     <div class="field">
-      <label>Visible text</label>
+      <label for="visibleText">Visible text</label>
       <textarea id="visibleText" rows="3" placeholder="Paste or write the ordinary text people will see…" oninput="updateEncodePreview()"></textarea>
       <div class="cover-text-examples">
         <span>Try an example:</span>
@@ -798,7 +794,7 @@
       <div class="field-hint">This stays readable and unchanged. The hidden message is woven into it invisibly.</div>
     </div>
     <div class="field">
-      <label>Message to hide <span class="required">*</span></label>
+      <label for="hiddenMessage">Message to hide <span class="required">*</span></label>
       <input type="text" id="hiddenMessage" placeholder="Type the message you want to hide…" oninput="updateCounter()">
       <div class="char-counter" id="msgCounter">0 chars</div>
       <div class="field-hint" id="encodeLengthHint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
@@ -839,7 +835,7 @@
           <span class="toggle-label">Require a passphrase to reveal the message</span>
         </div>
         <div class="passphrase-field" id="passphraseField">
-          <input type="text" id="passphraseInput" placeholder="Enter a passphrase…" style="margin-top:0.5rem">
+          <input type="password" id="passphraseInput" placeholder="Enter a passphrase…" autocomplete="off" style="margin-top:0.5rem">
           <div class="field-hint">The receiver will need the exact same passphrase. This adds obscurity, not strong encryption.</div>
         </div>
         <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message to verify it works">
@@ -878,7 +874,7 @@
   </div>
 
   <!-- DECODE PANEL -->
-  <div class="panel" id="panel-decode">
+  <div class="panel" id="panel-decode" role="tabpanel" aria-labelledby="tab-decode">
 
     <div class="decode-empty-state" id="decodeEmptyState">
       <p><strong>Paste text below and StegZero will inspect it automatically.</strong><br>If it contains a hidden message, it will appear right away.</p>
@@ -888,7 +884,7 @@
       </div>
     </div>
     <div class="field">
-      <label>Text to inspect</label>
+      <label for="encodedText">Text to inspect</label>
       <textarea id="encodedText" rows="4" placeholder="Paste text here. We’ll check it automatically…" oninput="onDecodeInput()"></textarea>
       <div class="field-hint">Hidden characters are invisible, so suspicious text may look completely normal.</div>
     </div>
@@ -901,7 +897,7 @@
         <span class="toggle-label">I have a passphrase for this message</span>
       </div>
       <div class="passphrase-field" id="decodePassField">
-        <input type="text" id="decodePassInput" placeholder="Enter the passphrase…" style="margin-top:0.5rem" oninput="handleDecode(true)">
+        <input type="password" id="decodePassInput" placeholder="Enter the passphrase…" autocomplete="off" style="margin-top:0.5rem" oninput="handleDecode(true)">
       </div>
     </div>
     <div class="btn-row">
@@ -949,7 +945,7 @@
   </div>
 
   <!-- WATERMARK PANEL -->
-  <div class="panel" id="panel-watermark">
+  <div class="panel" id="panel-watermark" role="tabpanel" aria-labelledby="tab-watermark">
 
     <div class="wm-info-strip">
       <span class="wm-chip"><i class="fas fa-file-alt"></i> .txt &amp; .md</span>
@@ -972,7 +968,7 @@
     <!-- EMBED PANE -->
     <div class="wm-pane active" id="wm-pane-embed">
       <div class="field">
-        <label>File to Watermark</label>
+        <label for="embedFileInput">File to watermark</label>
         <div class="file-drop-zone" id="embedDropZone">
           <input type="file" id="embedFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleEmbedFile(this)">
           <div class="drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
@@ -983,7 +979,7 @@
       </div>
 
       <div class="field">
-        <label>Watermark ID <span class="required">*</span></label>
+        <label for="wmIdInput">Watermark ID <span class="required">*</span></label>
         <div class="wm-id-row">
           <div class="field">
             <input type="text" id="wmIdInput" placeholder="e.g. recipient:alice · leak-check:v1 · doc:42">
@@ -1003,7 +999,7 @@
     <!-- VERIFY PANE -->
     <div class="wm-pane" id="wm-pane-verify">
       <div class="field">
-        <label>File to Verify</label>
+        <label for="verifyFileInput">File to verify</label>
         <div class="file-drop-zone" id="verifyDropZone">
           <input type="file" id="verifyFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleVerifyFile(this)">
           <div class="drop-icon"><i class="fas fa-search-plus"></i></div>
@@ -1142,33 +1138,14 @@
 </main>
 
 <footer>
-  <div class="footer-grid">
-    <div class="footer-section">
-      <h4>Support</h4>
-      <ul class="footer-links">
-        <li><a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener"><i class="fas fa-heart"></i> Sponsor on GitHub</a></li>
-        <li><a href="https://github.com/Clevis22/StegZero/stargazers" target="_blank" rel="noopener"><i class="fas fa-star"></i> Star on GitHub</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h4>Resources</h4>
-      <ul class="footer-links">
-        <li><a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener"><i class="fas fa-book"></i> Documentation</a></li>
-        <li><a href="https://www.kaspersky.com/resource-center/definitions/what-is-steganography" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i> Learn about steganography</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h4>Community</h4>
-      <ul class="footer-links">
-        <li><a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
-        <li><a href="https://twitter.com/intent/tweet?text=Hide%20messages%20in%20plain%20sight%20with%20zero-width%20steganography%20at%20stegzero.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Share on X</a></li>
-        <li><a href="mailto:contact@stegzero.com"><i class="fas fa-envelope"></i> contact@stegzero.com</a></li>
-      </ul>
-    </div>
+  <div class="footer-links-inline" aria-label="Footer links">
+    <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
+    <a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
+    <a href="mailto:contact@stegzero.com">Contact</a>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 StegZero — free online zero-width steganography tool. Open source.</p>
-    <p style="font-size:0.7rem;opacity:0.5">Built with zero-width love ​​​​</p>
+    <p>© 2026 StegZero. Free, open-source, and processed entirely in your browser.</p>
   </div>
 </footer>
 
@@ -1936,7 +1913,17 @@ function showToast(msg,type='success'){const t=document.getElementById('toast');
 // ════════════════════════════════════════
 // TABS
 // ════════════════════════════════════════
-function switchTab(name){['encode','decode','watermark'].forEach(n=>{document.getElementById(`tab-${n}`).classList.toggle('active',n===name);document.getElementById(`panel-${n}`).classList.toggle('active',n===name);});}
+function switchTab(name){
+  ['encode','decode','watermark'].forEach(n=>{
+    const selected=n===name;
+    const tab=document.getElementById(`tab-${n}`);
+    const panel=document.getElementById(`panel-${n}`);
+    tab.classList.toggle('active',selected);
+    tab.setAttribute('aria-selected',String(selected));
+    tab.tabIndex=selected?0:-1;
+    panel.classList.toggle('active',selected);
+  });
+}
 
 // ════════════════════════════════════════
 // NAV
@@ -1951,6 +1938,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   overlay.addEventListener('click',toggleNav);
   nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{if(nav.classList.contains('open'))toggleNav();}));
   window.addEventListener('resize',()=>{if(window.innerWidth>700&&nav.classList.contains('open'))toggleNav();});
+  document.querySelector('.tabs').addEventListener('keydown',e=>{
+    if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+    const tabs=[...document.querySelectorAll('[role="tab"]')];
+    const current=tabs.indexOf(document.activeElement);
+    let next=e.key==='Home'?0:e.key==='End'?tabs.length-1:e.key==='ArrowRight'?(current+1)%tabs.length:(current-1+tabs.length)%tabs.length;
+    tabs[next].focus();
+    tabs[next].click();
+    e.preventDefault();
+  });
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){const active=document.querySelector('.panel.active');if(active.id==='panel-encode')handleEncode();else if(active.id==='panel-decode')handleDecode();e.preventDefault();}});
 });
 </script>
