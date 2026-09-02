@@ -1,0 +1,9 @@
+{
+  "name": "stegzero-static-site",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "generate:unicode": "node scripts/generate-unicode-inspector-data.mjs",
+    "sitemap": "node scripts/update-sitemap.mjs"
+  }
+}

@@ -121,7 +121,7 @@ nav {
   width: min(100% - 32px, 900px);
   max-width: none;
   margin: 0 auto;
-  padding: 50px 0 25px;
+  padding: 26px 0 16px;
   text-align: left;
 }
 
@@ -229,7 +229,7 @@ main {
 
 .panel {
   display: none;
-  padding: clamp(20px, 4vw, 32px);
+  padding: clamp(18px, 3vw, 22px);
   border: 1px solid var(--line);
   border-radius: 0 0 var(--radius) var(--radius);
   background: var(--surface);
@@ -241,7 +241,7 @@ main {
 }
 
 .field {
-  margin: 0 0 22px;
+  margin: 0 0 18px;
 }
 
 .field label,
@@ -278,7 +278,7 @@ input[type="password"] {
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 90px;
   padding: 12px 13px;
   resize: vertical;
 }
@@ -997,7 +997,7 @@ footer {
   }
 
   .hero {
-    padding: 34px 0 20px;
+    padding: 24px 0 16px;
   }
 
   .hero h1 {
@@ -1030,11 +1030,11 @@ footer {
   }
 
   .field {
-    margin-bottom: 19px;
+    margin-bottom: 17px;
   }
 
   textarea {
-    min-height: 112px;
+    min-height: 96px;
   }
 
   .btn-row,

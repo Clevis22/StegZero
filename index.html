@@ -16,10 +16,10 @@
   <meta name="twitter:title" content="Zero-Width Steganography Decoder &amp; Encoder Online | StegZero">
   <meta name="twitter:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
   <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="icon.svg?v=20260901">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <script type="application/ld+json">
@@ -142,10 +142,10 @@
     .cover-text-examples span { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); opacity: 0.8; }
     .cover-example-chip { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--mono); font-size: 0.7rem; color: var(--accent); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--bg3); cursor: pointer; transition: var(--transition); }
     .cover-example-chip:hover { border-color: var(--border-bright); background: rgba(99,179,237,0.08); }
-    textarea, input[type="text"] { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); resize: vertical; transition: var(--transition); line-height: 1.6; }
+    textarea, input[type="text"], input[type="password"] { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); resize: vertical; transition: var(--transition); line-height: 1.6; }
     textarea { min-height: 110px; }
-    input[type="text"] { height: 3.1rem; }
-    textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    input[type="text"], input[type="password"] { height: 3.1rem; }
+    textarea:focus, input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
     .char-counter { text-align: right; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
     .char-counter.warn { color: var(--warn); }
     .char-counter.danger { color: var(--danger); }
@@ -340,11 +340,11 @@
 
     .hero {
       max-width: 760px;
-      padding: 6rem 1.5rem 3.25rem;
+      padding: 2.5rem 1.5rem 1.5rem;
     }
     .hero h1 {
       max-width: 720px;
-      margin: 0 auto 1.35rem;
+      margin: 0 auto 0.65rem;
       background: none;
       color: var(--text);
       -webkit-text-fill-color: currentColor;
@@ -355,10 +355,10 @@
     }
     .hero p {
       max-width: 610px;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.45rem;
       color: var(--text-muted);
       font-size: 1.08rem;
-      line-height: 1.65;
+      line-height: 1.45;
     }
     .hero p strong { color: var(--text); font-weight: 650; }
     .hero-note {
@@ -427,7 +427,7 @@
       border-top: 0;
       border-radius: 0 0 16px 16px;
       background: white;
-      padding: clamp(1.4rem, 4vw, 2.5rem);
+      padding: clamp(1rem, 2vw, 1.25rem);
       box-shadow: 0 18px 48px rgba(25, 33, 29, 0.06);
     }
 
@@ -481,7 +481,7 @@
     .mode-info-v2 { background: #eff6f2; color: #3f6657; }
     .mode-info-binary { background: #faf5ed; color: #73532f; }
 
-    .field { margin-bottom: 1.35rem; }
+    .field { margin-bottom: 1.1rem; }
     .field label,
     .result-label span,
     .preview-section h3 {
@@ -493,7 +493,8 @@
       color: #47514c;
     }
     textarea,
-    input[type="text"] {
+    input[type="text"],
+    input[type="password"] {
       border-color: #d8ddd9;
       background: #fbfcfa;
       color: var(--text);
@@ -502,11 +503,13 @@
       border-radius: 10px;
       padding: 0.9rem 1rem;
     }
-    textarea { min-height: 118px; }
+    textarea { min-height: 82px; }
     textarea::placeholder,
-    input[type="text"]::placeholder { color: #949c97; }
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder { color: #949c97; }
     textarea:focus,
-    input[type="text"]:focus {
+    input[type="text"]:focus,
+    input[type="password"]:focus {
       border-color: var(--accent);
       background: white;
       box-shadow: 0 0 0 3px var(--accent-glow);
@@ -660,6 +663,40 @@
     .advanced-content .mode-selector { margin-bottom: 0.65rem; }
     .advanced-content .mode-info-strip { margin-bottom: 1rem; }
     .advanced-test-btn { margin-top: 1rem; }
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    .field label.passphrase-row,
+    .passphrase-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.5rem 0 0;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 1.45;
+      text-transform: none;
+      cursor: pointer;
+    }
+    .toggle-switch input:focus-visible + .toggle-track {
+      outline: 3px solid rgba(35,104,79,0.25);
+      outline-offset: 3px;
+    }
+    input[aria-invalid="true"] {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(182,71,71,0.14) !important;
+    }
 
     .inline-security-note {
       display: flex;
@@ -711,6 +748,8 @@
     .technical-preview .preview-legend { margin-bottom: 0.95rem; }
 
     .inspection-details { margin-top: 0.9rem; }
+    .reveal-inspector-details > .uzi { margin: 0; padding: 0 0.95rem 0.95rem; border-top: 1px solid var(--border); }
+    .reveal-options .unicode-input-controls { margin-top: 1rem; }
     .inspection-details .detect-result {
       margin: 0 0.95rem 0.8rem;
       border-radius: 9px;
@@ -727,7 +766,7 @@
         box-shadow: -16px 0 40px rgba(25,33,29,0.08);
       }
       .nav-links.open { display: flex; right: 0; transform: none; }
-      .hero { padding: 4.5rem 1rem 2.5rem; }
+      .hero { padding: 2rem 1rem 1.25rem; }
       .hero h1 { font-size: clamp(2.8rem, 14vw, 4.25rem); }
       .hero-pills { gap: 0.4rem; }
       .mode-selector { flex-direction: column; }
@@ -737,14 +776,15 @@
       .result-card { padding: 0.9rem; }
     }
   </style>
-  <link rel="stylesheet" href="utility.css">
+  <link rel="stylesheet" href="utility.css?v=20260901d">
+  <link rel="stylesheet" href="unicode-inspector.css?v=20260901d">
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="#" aria-label="StegZero home">
-      <img src="logo.svg" alt="StegZero">
+      <img src="logo.svg?v=20260901" alt="StegZero">
     </a>
     <div class="nav-links" id="navLinks">
       <a class="nav-link nav-link-secondary" href="#how-it-works">How it works</a>
@@ -783,19 +823,19 @@
 
     <div class="field">
       <label for="visibleText">Visible text</label>
-      <textarea id="visibleText" rows="3" placeholder="Paste or write the ordinary text people will see…" oninput="updateEncodePreview()"></textarea>
+      <textarea id="visibleText" rows="2" placeholder="Paste or write the ordinary text people will see…" oninput="updateEncodePreview(); invalidateEncodeResult()"></textarea>
       <div class="cover-text-examples">
         <span>Try an example:</span>
         <button class="cover-example-chip" onclick="setCoverText('tweet')"><i class="fab fa-twitter"></i> tweet</button>
         <button class="cover-example-chip" onclick="setCoverText('email')"><i class="fas fa-envelope"></i> email</button>
         <button class="cover-example-chip" onclick="setCoverText('bio')"><i class="fas fa-user"></i> bio</button>
-        <button class="cover-example-chip" onclick="setCoverText('blank')"><i class="fas fa-times"></i> none (detectable)</button>
+        <button class="cover-example-chip" onclick="setCoverText('blank')"><i class="fas fa-times"></i> no cover — easy to detect</button>
       </div>
       <div class="field-hint">This stays readable and unchanged. The hidden message is woven into it invisibly.</div>
     </div>
     <div class="field">
-      <label for="hiddenMessage">Message to hide <span class="required">*</span></label>
-      <input type="text" id="hiddenMessage" placeholder="Type the message you want to hide…" oninput="updateCounter()">
+      <label for="hiddenMessage">Message to hide <span class="required" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input type="text" id="hiddenMessage" placeholder="Type the message you want to hide…" required aria-describedby="encodeLengthHint encodeStatus" oninput="updateCounter(); invalidateEncodeResult(); clearEncodeFieldError()">
       <div class="char-counter" id="msgCounter">0 chars</div>
       <div class="field-hint" id="encodeLengthHint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
     </div>
@@ -827,19 +867,20 @@
           <span>Uses the two most widely preserved invisible characters. Try this if Standard messages are lost on a platform.</span>
         </div>
 
-        <div class="passphrase-row">
-          <label class="toggle-switch">
+        <label class="passphrase-row">
+          <span class="toggle-switch">
             <input type="checkbox" id="passphraseToggle" onchange="togglePassphrase()">
             <span class="toggle-track"></span>
-          </label>
+          </span>
           <span class="toggle-label">Require a passphrase to reveal the message</span>
-        </div>
+        </label>
         <div class="passphrase-field" id="passphraseField">
-          <input type="password" id="passphraseInput" placeholder="Enter a passphrase…" autocomplete="off" style="margin-top:0.5rem">
-          <div class="field-hint">The receiver will need the exact same passphrase. This adds obscurity, not strong encryption.</div>
+          <label class="sr-only" for="passphraseInput">Encoding passphrase</label>
+          <input type="password" id="passphraseInput" placeholder="Enter a passphrase…" autocomplete="off" aria-describedby="passphraseHint" oninput="invalidateEncodeResult(); clearEncodeFieldError()" style="margin-top:0.5rem">
+          <div class="field-hint" id="passphraseHint">The receiver will need the exact same passphrase. New messages verify that the passphrase is correct, but this remains obfuscation rather than encryption.</div>
         </div>
-        <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message to verify it works">
-          <i class="fas fa-check-circle"></i> Test this setup
+        <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message in this browser">
+          <i class="fas fa-check-circle"></i> Verify local encode/decode
         </button>
         <div class="rt-result" id="rtResult"></div>
       </div>
@@ -849,7 +890,7 @@
       <button class="btn btn-ghost" onclick="clearEncode()"><i class="fas fa-eraser"></i> Clear</button>
     </div>
     <p class="inline-security-note"><i class="fas fa-info-circle"></i> This hides a message; it does not encrypt it. Don’t use it for sensitive information.</p>
-    <div class="status-line" id="encodeStatus"></div>
+    <div class="status-line" id="encodeStatus" role="status" aria-live="polite"></div>
     <section class="result-card" id="encodeResultCard">
       <div class="result-label result-card-heading">
         <span id="encodeResultHeading">Your encoded text</span>
@@ -888,24 +929,48 @@
       <textarea id="encodedText" rows="4" placeholder="Paste text here. We’ll check it automatically…" oninput="onDecodeInput()"></textarea>
       <div class="field-hint">Hidden characters are invisible, so suspicious text may look completely normal.</div>
     </div>
+    <details class="advanced-options reveal-options">
+      <summary>
+        <span><i class="fas fa-microscope"></i> Unicode inspection options</span>
+        <span class="summary-meta">content type, file, advanced checks</span>
+      </summary>
+      <div class="advanced-content">
+        <div class="unicode-input-controls" aria-label="Unicode inspection options">
+          <label>Content type
+            <select id="revealUnicodeContext">
+              <option value="plain">Plain text</option>
+              <option value="source">Source code or configuration</option>
+              <option value="identifier">Identifier or URL</option>
+            </select>
+          </label>
+          <label>Inspect a local text or code file
+            <input type="file" id="revealUnicodeFile" accept=".txt,.md,.html,.htm,.xml,.csv,.json,.yaml,.yml,.toml,.log,.js,.mjs,.ts,.tsx,.jsx,.py,.rb,.php,.java,.c,.h,.cpp,.hpp,.cs,.go,.rs,.sh,.sql,.css,.svg">
+          </label>
+          <label class="unicode-inline-check"><input type="checkbox" id="revealUnicodeAdvanced"> Include advanced Unicode anomalies</label>
+        </div>
+        <p class="unicode-privacy-note">Files are inspected only in this browser, are not uploaded, and are not saved in local storage. Maximum 1 MiB and 500,000 Unicode code points.</p>
+      </div>
+    </details>
     <div class="field">
-      <div class="passphrase-row">
-        <label class="toggle-switch">
+      <label class="passphrase-row">
+        <span class="toggle-switch">
           <input type="checkbox" id="decodePassToggle" onchange="toggleDecodePass()">
           <span class="toggle-track"></span>
-        </label>
+        </span>
         <span class="toggle-label">I have a passphrase for this message</span>
-      </div>
+      </label>
       <div class="passphrase-field" id="decodePassField">
-        <input type="password" id="decodePassInput" placeholder="Enter the passphrase…" autocomplete="off" style="margin-top:0.5rem" oninput="handleDecode(true)">
+        <label class="sr-only" for="decodePassInput">Reveal passphrase</label>
+        <input type="password" id="decodePassInput" placeholder="Enter the passphrase…" autocomplete="off" aria-describedby="decodePassHint" style="margin-top:0.5rem" oninput="handleDecode(true)">
+        <div class="field-hint" id="decodePassHint">Current passphrase-protected messages verify the passphrase before showing a result. Older messages may not support verification.</div>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Reveal message</button>
+      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Reveal and inspect</button>
       <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')"><i class="fas fa-paste"></i> Paste</button>
       <button class="btn btn-ghost" onclick="clearDecode()"><i class="fas fa-eraser"></i> Clear</button>
     </div>
-    <div class="status-line" id="decodeStatus"></div>
+    <div class="status-line" id="decodeStatus" role="status" aria-live="polite"></div>
     <section class="result-card reveal-result-card" id="revealResultCard">
       <div class="result-label result-card-heading">
         <span id="revealResultHeading">Reveal result</span>
@@ -918,30 +983,14 @@
       </div>
     </section>
 
-    <details class="inspection-details" id="revealInspection" style="display:none">
+    <details class="inspection-details reveal-inspector-details" id="revealInspectorDetails" hidden>
       <summary>
-        <span><i class="fas fa-search"></i> Inspection details</span>
-        <span class="summary-meta" id="inspectionSummary">No hidden characters</span>
+        <span><i class="fas fa-microscope"></i> Unicode inspection details</span>
+        <span class="summary-meta" id="revealInspectorSummary">No report yet</span>
       </summary>
-      <div id="detectResultBox" class="detect-result">
-        <div class="detect-row"><span>Total characters</span><strong id="det-total">—</strong></div>
-        <div class="detect-row"><span>Invisible characters</span><strong id="det-zw">—</strong></div>
-        <div class="detect-row"><span>Distinct invisible types</span><strong id="det-types">—</strong></div>
-        <div class="detect-row"><span>Standard format</span><strong id="det-v2">—</strong></div>
-        <div class="detect-row"><span>Compatibility format</span><strong id="det-binary">—</strong></div>
-        <div class="detect-row"><span>Legacy format</span><strong id="det-legacy">—</strong></div>
-        <div class="detect-row"><span>Verdict</span><strong id="det-verdict">—</strong></div>
-      </div>
-      <button class="btn btn-ghost" onclick="stripZwAndCopy()"><i class="fas fa-broom"></i> Copy without invisible characters</button>
+      <div id="revealUnicodeInspector" hidden></div>
     </details>
-    <div class="preview-section" id="decodePreviewSection" style="display:none">
-      <h3><i class="fas fa-eye"></i> Zero-Width Characters Found in Input</h3>
-      <div class="preview-display" id="decodePreview"></div>
-      <div class="preview-legend" id="decodePreviewLegend">
-        <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
-        <span class="zw-count" id="decodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
-      </div>
-    </div>
+    <p class="unicode-privacy-note">Need a standalone tool? Open the <a href="/invisible-character-detector/">Invisible Unicode Character Detector</a>.</p>
   </div>
 
   <!-- WATERMARK PANEL -->
@@ -1035,21 +1084,21 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-cogs"></i> V2 vs Binary mode</h3>
+      <h3><i class="fas fa-cogs"></i> Standard vs Compatibility mode</h3>
       <ul>
-        <li><strong>V2 (default):</strong> uses 8 zero-width chars — 3 bits per symbol, shorter payload</li>
-        <li><strong>Binary:</strong> uses only ZWSP (U+200B) and ZWNJ (U+200C) — 1 bit per symbol</li>
-        <li>Binary payloads are 4× longer but survive aggressive Unicode stripping (e.g. some SMS gateways, aggressive sanitisers)</li>
-        <li>Always use the Round-Trip test to verify your target platform before relying on either</li>
+        <li><strong>Standard (default):</strong> uses eight zero-width characters — three bits per symbol for a shorter payload</li>
+        <li><strong>Compatibility:</strong> uses only ZWSP (U+200B) and ZWNJ (U+200C) — one bit per symbol</li>
+        <li>Compatibility payloads use about three times as many carrier characters, but the smaller alphabet may be preserved by more platforms</li>
+        <li>The local verification button checks StegZero itself. To test another platform, send the encoded text through it and paste the received result into Reveal.</li>
       </ul>
     </div>
     <div class="info-card">
       <h3><i class="fas fa-exclamation-triangle"></i> Platform compatibility</h3>
       <ul>
         <li>Twitter/X and Facebook strip zero-width characters — messages will be lost in both modes</li>
-        <li>WhatsApp may strip some rarer chars — Binary mode is safer here</li>
+        <li>WhatsApp may strip some rarer characters — Compatibility mode may work better, but verify it before relying on it</li>
         <li>Email, Telegram, Discord, and plain text files generally preserve all ZW chars</li>
-        <li>Use the Round-Trip test to verify any platform before relying on it</li>
+        <li>Always copy a test message through the target platform and paste the received text into Reveal before relying on it</li>
       </ul>
     </div>
     <div class="info-card">
@@ -1065,7 +1114,7 @@
   <h3><i class="fas fa-key"></i> Passphrase obfuscation layer</h3>
   <ul>
     <li>The optional passphrase applies XOR obfuscation to the message bytes before they are encoded as zero-width characters</li>
-    <li>Without the matching passphrase, decoding produces garbled output — the hidden message is unreadable even to someone who knows steganography is present</li>
+    <li>New passphrase-protected messages verify the passphrase before displaying decoded text; older StegZero messages may not support that verification</li>
     <li>XOR obfuscation is not cryptographic encryption and should not be treated as such — it adds obscurity, not security</li>
     <li>For genuinely sensitive content, encrypt with GPG or AES-256 first, then encode the ciphertext here with a passphrase on top</li>
   </ul>
@@ -1087,8 +1136,8 @@
     <div class="info-card">
       <h3><i class="fas fa-code"></i> Which Unicode characters are used?</h3>
       <ul>
-        <li><strong>V2:</strong> ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), BOM/ZWNBS (U+FEFF)</li>
-        <li><strong>Binary:</strong> only ZWSP (U+200B = bit 0) and ZWNJ (U+200C = bit 1) — the most universally preserved pair</li>
+        <li><strong>Standard:</strong> ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), BOM/ZWNBS (U+FEFF)</li>
+        <li><strong>Compatibility:</strong> only ZWSP (U+200B = bit 0) and ZWNJ (U+200C = bit 1) — a smaller, more widely preserved pair</li>
       </ul>
     </div>
     <div class="info-card">
@@ -1108,7 +1157,7 @@
     <div class="info-card">
       <h3><i class="fas fa-fingerprint"></i> How does file watermarking work?</h3>
       <ul>
-        <li>The watermark ID is encoded as zero-width characters using the V2 engine</li>
+        <li>The watermark ID is encoded as zero-width characters using the Standard engine</li>
         <li>Characters are distributed across safe text positions — avoiding JSON values, CSV numbers, etc.</li>
         <li>The original file content is completely unchanged — only invisible characters are added</li>
         <li>Upload a suspected leaked copy to the Verify pane to instantly extract the watermark ID</li>
@@ -1130,7 +1179,7 @@
     <li><strong>Step 2:</strong> Open the Reveal tab above and paste the text into the input field</li>
     <li><strong>Step 3:</strong> StegZero automatically inspects the text and reveals Standard, Compatibility, and legacy messages</li>
     <li><strong>Step 4:</strong> If the message was encoded with a passphrase, toggle the passphrase option and enter it before decoding</li>
-    <li>Open Inspection details to see which invisible characters and message format were found</li>
+    <li>Open Unicode inspection details to see which invisible characters and message format were found</li>
   </ul>
 </div>
   </div>
@@ -1141,6 +1190,7 @@
   <div class="footer-links-inline" aria-label="Footer links">
     <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
+    <a href="/invisible-character-detector/">Unicode Detector</a>
     <a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
     <a href="mailto:contact@stegzero.com">Contact</a>
   </div>
@@ -1151,14 +1201,21 @@
 
 <div id="toast"></div>
 
+<script src="unicode-inspector-data.js"></script>
+<script src="unicode-inspector.js?v=20260901d"></script>
+<script src="unicode-inspector-ui.js?v=20260901d"></script>
 <script>
 // ════════════════════════════════════════
 // CORE V2 STEGANOGRAPHY ENGINE (unchanged)
 // ════════════════════════════════════════
 const ZW_ALPHABET = ['\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'];
 const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
-const MAGIC = 0xA55A, VERSION = 1;
+const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2;
+const PASSPHRASE_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x32]); // "SZP2"
 const te = new TextEncoder(), td = new TextDecoder();
+let revealInspector = null;
+let decodeScanTimer = null;
+let decodeScanGeneration = 0;
 
 function bytesToBits(b){let s='';for(let i=0;i<b.length;i++)s+=b[i].toString(2).padStart(8,'0');return s;}
 function bitsToBytes(s){const o=[];for(let i=0;i+8<=s.length;i+=8)o.push(parseInt(s.slice(i,i+8),2));return new Uint8Array(o);}
@@ -1170,16 +1227,20 @@ function xorshift32(seed){let x=seed>>>0;return()=>{if(x===0)x=0x9E3779B9;x^=x<<
 function obfuscateBits(bits,seed){const next=xorshift32(seed);let acc=0,remain=0,out='';for(let i=0;i<bits.length;i++){if(remain===0){acc=next();remain=32;}const p=acc&1;acc>>>=1;remain--;out+=((bits.charCodeAt(i)&1)^p)?'1':'0';}return out;}
 function bitsToAlphabet(bits){let out='';for(let i=0;i<bits.length;i+=3){const ch=bits.slice(i,i+3).padEnd(3,'0');out+=ZW_ALPHABET[parseInt(ch,2)];}return out;}
 function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));let bits='';for(const ch of Array.from(str)){if(map.has(ch))bits+=map.get(ch).toString(2).padStart(3,'0');}return bits;}
-function buildHeader(nonce,msgBytes){const len=msgBytes.length,crc=crc32(msgBytes);return concatBytes(numToBytesBE(MAGIC,2),numToBytesBE(VERSION,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
-function parseHeader(h){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(MAGIC&0xFFFF))return null;const version=h[2],nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc};}
+function buildHeader(nonce,msgBytes,version=VERSION,magic=MAGIC){const len=msgBytes.length,crc=crc32(msgBytes);return concatBytes(numToBytesBE(magic,2),numToBytesBE(version,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
+function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
 function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
 function xorWithKey(bytes,key){if(!key)return bytes;const kBytes=te.encode(key);const out=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)out[i]=bytes[i]^kBytes[i%kBytes.length];return out;}
+function decodeUtf8Payload(bytes){try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bytes);const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\t\r\n]/u.test(c)).length/chars.length;return printable>=0.85?msg:null;}catch{return null;}}
+function wrapPassphrasePayload(bytes){return concatBytes(PASSPHRASE_MARKER,numToBytesBE(crc32(bytes),4),bytes);}
+function unwrapPassphrasePayload(bytes){if(bytes.length<8)return null;for(let i=0;i<PASSPHRASE_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_MARKER[i])return null;const expected=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];const payload=bytes.slice(8);return crc32(payload)===(expected>>>0)?payload:null;}
 
-function encodeMsg(visible,hidden,passphrase){let msgBytes=te.encode(hidden);if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
+function encodeMsg(visible,hidden,passphrase){let msgBytes=te.encode(hidden),version=VERSION;if(passphrase){version=PASSPHRASE_VERSION;msgBytes=xorWithKey(wrapPassphrasePayload(msgBytes),passphrase);}const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
 
-function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);try{return td.decode(msgBytes);}catch{return null;}}
+function getV2Header(text){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);return bits.length>=88?parseHeader(bitsToBytes(bits.slice(0,88))):null;}
+function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
 
-function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8)return null;try{const msg=td.decode(bitsToBytes(bits));if(msg.replace(/[\s\x20-\x7E\u00A0-\uFFFF]/g,'').length===msg.length)return null;return msg.replace(/\x00+$/g,'');}catch{return null;}}
+function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8)return null;try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bitsToBytes(bits)).replace(/\x00+$/g,'');const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\t\r\n]/u.test(c)).length/chars.length;if(printable<0.85)return null;return msg;}catch{return null;}}
 
 // ════════════════════════════════════════
 // BINARY STEGANOGRAPHY ENGINE
@@ -1209,17 +1270,11 @@ function binaryToBits(str) {
 
 function encodeMsgBinary(visible, hidden, passphrase) {
   let msgBytes = te.encode(hidden);
-  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
+  let version = VERSION;
+  if (passphrase) { version = PASSPHRASE_VERSION; msgBytes = xorWithKey(wrapPassphrasePayload(msgBytes), passphrase); }
   const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
   // Build header with BINARY_MAGIC
-  const len = msgBytes.length, crc = crc32(msgBytes);
-  const header = concatBytes(
-    numToBytesBE(BINARY_MAGIC, 2),
-    numToBytesBE(VERSION, 1),
-    numToBytesBE(nonce, 2),
-    numToBytesBE(len, 2),
-    numToBytesBE(crc, 4)
-  );
+  const header = buildHeader(nonce, msgBytes, version, BINARY_MAGIC);
   const headerBits = bytesToBits(header);
   const msgBits = bytesToBits(msgBytes);
   const seed = ((nonce << 16) | BINARY_MAGIC) >>> 0;
@@ -1238,13 +1293,9 @@ function tryDecodeBinary(text, passphrase) {
   const bits = binaryToBits(extracted);
   if (bits.length < 88) return null;
   const headerBytes = bitsToBytes(bits.slice(0, 88));
-  // Check for binary magic
-  const magic = (headerBytes[0] << 8) | headerBytes[1];
-  if (magic !== (BINARY_MAGIC & 0xFFFF)) return null;
-  const version = headerBytes[2];
-  const nonce = (headerBytes[3] << 8) | headerBytes[4];
-  const len = (headerBytes[5] << 8) | headerBytes[6];
-  const crc = (headerBytes[7] * 2 ** 24) | (headerBytes[8] << 16) | (headerBytes[9] << 8) | headerBytes[10];
+  const hdr = parseHeader(headerBytes, BINARY_MAGIC);
+  if (!hdr) return null;
+  const { version, nonce, len, crc } = hdr;
   const needBits = len * 8;
   const payloadBits = bits.slice(88, 88 + needBits);
   if (payloadBits.length < needBits) return null;
@@ -1253,8 +1304,19 @@ function tryDecodeBinary(text, passphrase) {
   let msgBytes = bitsToBytes(msgBits);
   if (msgBytes.length !== len) return null;
   if (crc32(msgBytes) !== (crc >>> 0)) return null;
-  if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
-  try { return td.decode(msgBytes); } catch { return null; }
+  if (version === PASSPHRASE_VERSION) {
+    if (!passphrase) return null;
+    msgBytes = unwrapPassphrasePayload(xorWithKey(msgBytes, passphrase));
+    if (!msgBytes) return null;
+  } else if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
+  return decodeUtf8Payload(msgBytes);
+}
+
+function getBinaryHeader(text) {
+  let extracted = '';
+  for (const ch of Array.from(text)) if (ch === BIN_0 || ch === BIN_1) extracted += ch;
+  const bits = binaryToBits(extracted);
+  return bits.length >= 88 ? parseHeader(bitsToBytes(bits.slice(0, 88)), BINARY_MAGIC) : null;
 }
 
 // Detect if text has a binary-mode payload (BINARY_MAGIC in header)
@@ -1264,10 +1326,7 @@ function hasBinarySignature(text) {
     if (ch === BIN_0 || ch === BIN_1) extracted += ch;
   }
   if (extracted.length < 88) return false;
-  const bits = binaryToBits(extracted);
-  if (bits.length < 16) return false;
-  const b = bitsToBytes(bits.slice(0, 16));
-  return ((b[0] << 8) | b[1]) === (BINARY_MAGIC & 0xFFFF);
+  return getBinaryHeader(text) !== null;
 }
 
 // ════════════════════════════════════════
@@ -1283,12 +1342,14 @@ function setEncodeMode(mode) {
   document.getElementById('encModeInfoBin').style.display = mode === 'binary' ? '' : 'none';
   const hint = document.getElementById('encodeLengthHint');
   if (mode === 'binary') {
-    hint.textContent = 'Binary mode uses 1 bit per character — payloads are 4× longer than V2. Keep messages very short for best stealth.';
+    hint.textContent = 'Compatibility mode uses 1 bit per carrier — payloads use about 3× as many invisible characters as Standard. Keep messages short.';
   } else {
     hint.textContent = 'Keep it short — longer messages create more zero-width characters, increasing detectability';
   }
   document.getElementById('encodeModeSummary').textContent = mode === 'binary' ? 'Compatibility mode' : 'Standard mode';
+  updateCounter();
   updateEncodePreview();
+  invalidateEncodeResult();
 }
 
 // ════════════════════════════════════════
@@ -1539,7 +1600,7 @@ const EXAMPLES = {
     tweet: { cover: "Just shipped a new feature. Loving how this project is coming together 🚀", hidden: "stegzero was here" },
     email: { cover: "Thanks for getting back to me — I'll circle back once I've had a chance to review.", hidden: "watermark:v1:doc42" },
     watermark: { cover: "This document is confidential and intended solely for the named recipient.", hidden: "leak-check:user:7841" },
-    binary: { cover: "This message uses binary encoding for maximum platform compatibility.", hidden: "binary mode!" }
+    binary: { cover: "This message uses Compatibility mode with a smaller carrier alphabet.", hidden: "compatibility mode!" }
   },
   cover: {
     tweet: "Just shipped a new feature. Loving how this project is coming together 🚀",
@@ -1627,23 +1688,13 @@ function showEncodeResultPreview(result) {
 }
 
 function updateDecodePreview() {
-  const val = document.getElementById('encodedText').value;
-  const sec = document.getElementById('decodePreviewSection');
-  if (!val) { sec.style.display = 'none'; return; }
-  const zw = countZW(val);
-  if (zw > 0) {
-    // Detect which mode to use for preview rendering
-    const isBin = hasBinarySignature(val);
-    sec.style.display = 'block';
-    document.getElementById('decodePreview').innerHTML = isBin ? renderPreviewBinary(val) : renderPreviewV2(val);
-    setPreviewLegend('decodePreviewSection', 'decodePreviewLegend', 'decodeZwCount', val, isBin ? 'binary' : 'v2');
-  } else { sec.style.display = 'none'; }
+  if (revealInspector) revealInspector.schedule();
 }
 
 // ════════════════════════════════════════
 // COVER TEXT EXAMPLES
 // ════════════════════════════════════════
-function setCoverText(key){ document.getElementById('visibleText').value = EXAMPLES.cover[key]; updateEncodePreview(); }
+function setCoverText(key){ document.getElementById('visibleText').value = EXAMPLES.cover[key]; updateEncodePreview(); invalidateEncodeResult(); }
 
 // ════════════════════════════════════════
 // DECODE EMPTY STATE
@@ -1653,11 +1704,38 @@ function loadDecodeExample(key) {
   document.getElementById('encodedText').value = encoded;
   document.getElementById('decodeEmptyState').style.display = 'none';
   onDecodeInput();
-  showToast('Example loaded — hidden message revealed below');
+  showToast('Example loaded and inspected below');
+}
+
+function rejectOversizedDecodeInput(text) {
+  let codePoints = 0;
+  for (const _ of text) {
+    codePoints++;
+    if (codePoints > StegZeroUnicode.MAX_CODE_POINTS) {
+      clearTimeout(decodeScanTimer);
+      decodeScanGeneration++;
+      document.getElementById('decodedResult').textContent = 'Input exceeds 500,000 Unicode code points. Shorten the text before inspecting it.';
+      document.getElementById('decodedResult').className = 'result-box empty';
+      document.getElementById('decodedMeta').textContent = '';
+      document.getElementById('revealResultHeading').textContent = 'Input too large';
+      document.getElementById('revealResultCard').className = 'result-card reveal-result-card needs-attention';
+      document.getElementById('revealCopyBtn').disabled = true;
+      document.getElementById('revealExportBtn').disabled = true;
+      setStatus('decodeStatus', 'err', 'Input exceeds the 500,000-code-point inspection limit');
+      if (revealInspector) revealInspector.inspectNow();
+      document.getElementById('revealUnicodeInspector').hidden = false;
+      document.getElementById('revealInspectorDetails').hidden = false;
+      document.getElementById('revealInspectorSummary').textContent = 'Input too large';
+      return true;
+    }
+  }
+  return false;
 }
 
 function onDecodeInput() {
   const val = document.getElementById('encodedText').value;
+  clearTimeout(decodeScanTimer);
+  const generation = ++decodeScanGeneration;
   if (val.length > 0) {
     document.getElementById('decodeEmptyState').style.display = 'none';
   } else {
@@ -1667,16 +1745,23 @@ function onDecodeInput() {
     document.getElementById('decodedMeta').textContent = '';
     document.getElementById('revealResultHeading').textContent = 'Reveal result';
     document.getElementById('revealResultCard').className = 'result-card reveal-result-card';
-    document.getElementById('revealInspection').style.display = 'none';
+    document.getElementById('revealUnicodeInspector').hidden = true;
+    const inspectorDetails = document.getElementById('revealInspectorDetails');
+    inspectorDetails.hidden = true;
+    inspectorDetails.open = false;
+    if (revealInspector) revealInspector.clear();
     document.getElementById('revealCopyBtn').disabled = true;
     document.getElementById('revealExportBtn').disabled = true;
     document.getElementById('decodeStatus').textContent = '';
     document.getElementById('decodeStatus').className = 'status-line';
   }
-  updateDecodePreview();
   if (val.length > 0) {
-    const inspection = runDetect();
-    handleDecode(true, inspection);
+    if (rejectOversizedDecodeInput(val)) return;
+    decodeScanTimer = setTimeout(() => {
+      if (generation !== decodeScanGeneration || document.getElementById('encodedText').value !== val) return;
+      const inspection = runDetect();
+      handleDecode(true, inspection);
+    }, 180);
   }
 }
 
@@ -1687,11 +1772,36 @@ function updateCounter() {
   const val = document.getElementById('hiddenMessage').value;
   const el = document.getElementById('msgCounter');
   const n = val.length;
-  // Binary mode warning thresholds are lower (4x more chars)
+  // Compatibility mode warning thresholds are lower because it uses roughly 3x more carriers.
   const warnAt = currentEncodeMode === 'binary' ? 25 : 100;
   const dangerAt = currentEncodeMode === 'binary' ? 50 : 200;
   el.textContent = `${n} char${n!==1?'s':''}`;
   el.className = 'char-counter' + (n > dangerAt ? ' danger' : n > warnAt ? ' warn' : '');
+}
+
+function clearEncodeFieldError() {
+  const hidden = document.getElementById('hiddenMessage');
+  const pass = document.getElementById('passphraseInput');
+  if (hidden.value) hidden.removeAttribute('aria-invalid');
+  if (pass.value) pass.removeAttribute('aria-invalid');
+}
+
+function invalidateEncodeResult() {
+  document.getElementById('rtResult').textContent = '';
+  const resultEl = document.getElementById('encodedResult');
+  const cardEl = document.getElementById('encodeResultCard');
+  if (!resultEl.classList.contains('has-content') && !cardEl.classList.contains('is-ready')) return;
+  resultEl.textContent = 'Your inputs or settings changed. Hide the message again to generate an updated result.';
+  resultEl.className = 'result-box empty';
+  document.getElementById('encodedMeta').textContent = '';
+  document.getElementById('encodeResultHeading').textContent = 'Result needs updating';
+  cardEl.className = 'result-card needs-attention';
+  document.getElementById('encodeCopyBtn').disabled = true;
+  document.getElementById('encodeExportBtn').disabled = true;
+  document.getElementById('encodeRevealBtn').disabled = true;
+  document.getElementById('shareBtn').style.display = 'none';
+  document.getElementById('encodePreviewSection').style.display = 'none';
+  setStatus('encodeStatus','warn','Settings changed — hide the message again to refresh the result.');
 }
 
 function handleEncode() {
@@ -1701,7 +1811,24 @@ function handleEncode() {
   const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
   const resultEl = document.getElementById('encodedResult');
   const metaEl = document.getElementById('encodedMeta');
-  if (!hidden) { setStatus('encodeStatus','err','✗ Enter a hidden message first'); showToast('Enter a hidden message','warn'); return; }
+  if (!hidden) {
+    const field = document.getElementById('hiddenMessage');
+    field.setAttribute('aria-invalid','true');
+    setStatus('encodeStatus','err','Enter a message to hide.');
+    field.focus();
+    showToast('Enter a message to hide','warn');
+    return;
+  }
+  if (usePass && !pass) {
+    const field = document.getElementById('passphraseInput');
+    field.setAttribute('aria-invalid','true');
+    setStatus('encodeStatus','err','Enter a passphrase or turn off passphrase protection.');
+    field.focus();
+    showToast('Enter a passphrase','warn');
+    return;
+  }
+  document.getElementById('hiddenMessage').removeAttribute('aria-invalid');
+  document.getElementById('passphraseInput').removeAttribute('aria-invalid');
   const result = currentEncodeMode === 'binary'
     ? encodeMsgBinary(visible, hidden, pass || null)
     : encodeMsg(visible, hidden, pass || null);
@@ -1739,11 +1866,34 @@ function clearEncode() {
   document.getElementById('encodeStatus').className = 'status-line';
   document.getElementById('msgCounter').textContent = '0 chars';
   document.getElementById('rtResult').innerHTML = '';
+  document.getElementById('passphraseToggle').checked = false;
+  document.getElementById('passphraseInput').value = '';
+  document.getElementById('passphraseInput').required = false;
+  document.getElementById('passphraseField').classList.remove('visible');
+  document.getElementById('hiddenMessage').removeAttribute('aria-invalid');
+  document.getElementById('passphraseInput').removeAttribute('aria-invalid');
+  document.getElementById('shareBtn').style.display = 'none';
+  setEncodeMode('v2');
 }
 
 // ════════════════════════════════════════
 // DECODE UI — mode-aware
 // ════════════════════════════════════════
+function publicFormatLabel(format) {
+  return format === 'v2' ? 'Standard' : format === 'binary' ? 'Compatibility' : format === 'legacy' ? 'Legacy' : 'Not detected';
+}
+
+function showRevealInspector(report) {
+  if (!report) return;
+  const count = report.summary.findingCount;
+  const assessment = report.summary.highestAssessment
+    ? report.summary.highestAssessment.charAt(0).toUpperCase() + report.summary.highestAssessment.slice(1)
+    : 'None';
+  document.getElementById('revealUnicodeInspector').hidden = false;
+  document.getElementById('revealInspectorDetails').hidden = false;
+  document.getElementById('revealInspectorSummary').textContent = `${count.toLocaleString()} finding${count === 1 ? '' : 's'} · ${assessment}`;
+}
+
 function handleDecode(silent = false, inspection = null) {
   const text = document.getElementById('encodedText').value || '';
   const usePass = document.getElementById('decodePassToggle').checked;
@@ -1758,16 +1908,19 @@ function handleDecode(silent = false, inspection = null) {
     if (!silent) showToast('Paste some text first', 'warn');
     return;
   }
+  if (rejectOversizedDecodeInput(text)) return;
+  inspection = inspection || runDetect();
 
   let decoded = null;
   let usedMode = '';
+  let usedHeader = null;
 
   // auto: try V2 first, then binary, then legacy
   decoded = tryDecodeV2(text, pass || null);
-  if (decoded) { usedMode = 'v2'; }
+  if (decoded) { usedMode = 'v2'; usedHeader = getV2Header(text); }
   else {
     decoded = tryDecodeBinary(text, pass || null);
-    if (decoded) { usedMode = 'binary'; }
+    if (decoded) { usedMode = 'binary'; usedHeader = getBinaryHeader(text); }
     else {
       decoded = tryDecodeLegacy(text);
       if (decoded) usedMode = 'legacy';
@@ -1775,37 +1928,61 @@ function handleDecode(silent = false, inspection = null) {
   }
 
   if (decoded) {
+    const unverifiedLegacyPassphrase = !!pass && !!usedHeader && usedHeader.version === VERSION;
     resultEl.textContent = decoded;
     resultEl.className = 'result-box has-content';
-    cardEl.className = 'result-card reveal-result-card is-found';
-    headingEl.textContent = 'Hidden message found';
-    metaEl.textContent = usedMode === 'binary' ? 'compatibility format' : usedMode + ' format';
+    cardEl.className = 'result-card reveal-result-card ' + (unverifiedLegacyPassphrase ? 'needs-attention' : 'is-found');
+    headingEl.textContent = unverifiedLegacyPassphrase ? 'Possible hidden message' : 'Hidden message found';
+    metaEl.textContent = `${publicFormatLabel(usedMode)} format${unverifiedLegacyPassphrase ? ' · older, unverified passphrase format' : ''}`;
     document.getElementById('revealCopyBtn').disabled = false;
     document.getElementById('revealExportBtn').disabled = false;
-    setStatus('decodeStatus','ok','✓ Hidden message revealed');
-    if (!silent) showToast('Hidden message revealed!');
+    setStatus('decodeStatus',unverifiedLegacyPassphrase ? 'warn' : 'ok',unverifiedLegacyPassphrase
+      ? 'Older passphrase payload decoded, but this format cannot verify whether the passphrase is correct.'
+      : 'Hidden message revealed and verified.');
+    if (inspection && inspection.report && revealInspector) {
+      inspection.report.stegzero = { format: usedMode, status: unverifiedLegacyPassphrase ? 'possible' : 'decoded' };
+      revealInspector.render(inspection.report);
+      showRevealInspector(inspection.report);
+    }
+    if (!silent) showToast(unverifiedLegacyPassphrase ? 'Possible older message decoded' : 'Hidden message revealed!', unverifiedLegacyPassphrase ? 'warn' : 'success');
   } else {
-    inspection = inspection || runDetect();
     const knownPayload = inspection.isV2 || inspection.isBinary || inspection.isLegacy;
-    resultEl.textContent = inspection.zw === 0
-      ? 'No invisible characters were found in this text.'
-      : knownPayload
-        ? 'Hidden data was found, but it could not be revealed. If the sender used a passphrase, enter it above and try again.'
-        : 'Invisible characters were found, but they do not match a StegZero message.';
+    const protectedPayload = (inspection.v2Header && inspection.v2Header.version === PASSPHRASE_VERSION)
+      || (inspection.binaryHeader && inspection.binaryHeader.version === PASSPHRASE_VERSION);
+    if (knownPayload && inspection.report && revealInspector) {
+      inspection.report.stegzero.status = protectedPayload ? 'passphrase-required' : 'possible';
+      revealInspector.render(inspection.report);
+      showRevealInspector(inspection.report);
+    }
+    resultEl.textContent = inspection.zw === 0 ? 'No inspected hidden Unicode found.'
+      : protectedPayload
+        ? (pass ? 'The passphrase did not match this message. Check it and try again.' : 'This StegZero message requires a passphrase before it can be revealed.')
+        : knownPayload
+          ? 'StegZero-like data was found, but no message could be verified. It may be an older passphrase message or damaged text.'
+          : 'Unicode characters were found, but they do not match a StegZero message or validated payload.';
     resultEl.className = 'result-box empty';
     cardEl.className = 'result-card reveal-result-card' + (inspection.zw > 0 ? ' needs-attention' : '');
-    headingEl.textContent = inspection.zw > 0 ? 'Hidden data detected' : 'No hidden message found';
+    headingEl.textContent = protectedPayload ? (pass ? 'Passphrase not verified' : 'Passphrase required')
+      : knownPayload ? 'StegZero message needs attention'
+        : inspection.zw > 0 ? 'Unicode findings present' : 'No hidden message found';
     metaEl.textContent = '';
     document.getElementById('revealCopyBtn').disabled = true;
     document.getElementById('revealExportBtn').disabled = true;
-    setStatus('decodeStatus', inspection.zw > 0 ? 'warn' : '', inspection.zw > 0 ? 'Invisible characters are present' : 'This text looks clean');
-    if (!silent) showToast(inspection.zw > 0 ? 'Hidden data needs attention' : 'No hidden message found','warn');
+    const statusText = protectedPayload ? (pass ? 'Passphrase did not verify.' : 'A passphrase is required.')
+      : knownPayload ? 'StegZero-like data needs review.'
+        : inspection.zw > 0 ? 'Unicode findings are present; no hidden payload was decoded.' : 'No inspected hidden Unicode found.';
+    setStatus('decodeStatus', inspection.zw > 0 ? 'warn' : '', statusText);
+    if (inspection.report) showRevealInspector(inspection.report);
+    if (!silent) showToast(inspection.zw > 0 ? statusText : 'No hidden message found','warn');
   }
 }
 
 function clearDecode() {
   document.getElementById('encodedText').value = '';
-  document.getElementById('decodePreviewSection').style.display = 'none';
+  document.getElementById('revealUnicodeFile').value = '';
+  document.getElementById('decodePassToggle').checked = false;
+  document.getElementById('decodePassInput').value = '';
+  document.getElementById('decodePassField').classList.remove('visible');
   onDecodeInput();
 }
 
@@ -1814,50 +1991,36 @@ function clearDecode() {
 // ════════════════════════════════════════
 function runDetect() {
   const text = document.getElementById('encodedText').value || '';
-  const box = document.getElementById('detectResultBox');
-  const details = document.getElementById('revealInspection');
-  if (!text) { details.style.display = 'none'; return { zw: 0, isV2: false, isBinary: false, isLegacy: false }; }
-  details.style.display = 'block';
+  if (!text) return { zw: 0, isV2: false, isBinary: false, isLegacy: false, report: null };
   const total = Array.from(text).length;
-  const zw = countZW(text);
-  const types = distinctZWTypes(text);
 
   // V2 check
   const alphaSet = new Set(ZW_ALPHABET);
   let extracted = '';
   for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
   const bits = alphabetToBits(extracted);
-  let isV2 = false;
-  if (bits.length >= 88) { const hdr = parseHeader(bitsToBytes(bits.slice(0,88))); isV2 = hdr !== null; }
+  const v2Header = bits.length >= 88 ? parseHeader(bitsToBytes(bits.slice(0,88))) : null;
+  const isV2 = v2Header !== null;
 
   // Binary check
-  const isBinary = hasBinarySignature(text);
+  const binaryHeader = getBinaryHeader(text);
+  const isBinary = binaryHeader !== null;
 
   // Legacy check
   const legacyBits = Array.from(text).filter(c => c === LEGACY_0 || c === LEGACY_1).length;
   const isLegacy = !isV2 && !isBinary && legacyBits >= 8;
-
-  set('det-total', total);
-  set('det-zw', zw, zw > 0 ? 'badge-found' : 'badge-none');
-  set('det-types', types, types > 0 ? 'badge-found' : 'badge-none');
-  set('det-v2', isV2 ? 'Yes ✓' : 'No', isV2 ? 'badge-ok' : 'badge-none');
-  set('det-binary', isBinary ? 'Yes ✓' : 'No', isBinary ? 'badge-ok' : 'badge-none');
-  set('det-legacy', isLegacy ? 'Yes ✓' : 'No', isLegacy ? 'badge-ok' : 'badge-none');
-
-  const verdict = zw === 0 ? 'Clean — no ZW chars'
-    : isV2 ? 'StegZero V2 payload detected'
-    : isBinary ? 'StegZero Binary payload detected'
-    : isLegacy ? 'Possible legacy StegZero'
-    : 'ZW chars present (unknown encoding)';
-  set('det-verdict', verdict, zw > 0 ? 'badge-found' : 'badge-none');
-  document.getElementById('inspectionSummary').textContent = zw > 0
-    ? `${zw} invisible character${zw!==1?'s':''}`
-    : 'No invisible characters';
-  return { total, zw, types, isV2, isBinary, isLegacy };
+  const format = isV2 ? 'v2' : isBinary ? 'binary' : isLegacy ? 'legacy' : null;
+  const status = format ? 'possible' : 'none';
+  const context = document.getElementById('revealUnicodeContext').value;
+  const includeAdvanced = document.getElementById('revealUnicodeAdvanced').checked;
+  const report = StegZeroUnicode.inspect(text, { context, includeAdvanced, stegzero: { format, status } });
+  document.getElementById('revealUnicodeInspector').hidden = false;
+  if (revealInspector) revealInspector.render(report);
+  showRevealInspector(report);
+  return { total, zw: report.summary.findingCount, types: report.summary.distinctCodePoints, isV2, isBinary, isLegacy, v2Header, binaryHeader, report };
 }
 
-function set(id,val,cls){const el=document.getElementById(id);el.textContent=val;el.className=cls||'';}
-function stripZwAndCopy(){const text=document.getElementById('encodedText').value||'';const cleaned=Array.from(text).filter(c=>!ZW_SET.has(c)).join('');navigator.clipboard.writeText(cleaned).then(()=>showToast('Clean text copied!')).catch(()=>showToast('Copy failed','error'));}
+function set(id,val,cls){const el=document.getElementById(id);if(el){el.textContent=val;el.className=cls||'';}}
 
 // ════════════════════════════════════════
 // ROUND-TRIP TEST — mode-aware
@@ -1868,7 +2031,8 @@ function runRoundTrip() {
   const usePass = document.getElementById('passphraseToggle').checked;
   const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
   const rtEl = document.getElementById('rtResult');
-  if (!hidden) { rtEl.innerHTML = '<span class="rt-fail">Enter a message first</span>'; return; }
+  if (!hidden) { rtEl.textContent = 'Enter a message first.'; document.getElementById('hiddenMessage').focus(); return; }
+  if (usePass && !pass) { rtEl.textContent = 'Enter a passphrase or turn off passphrase protection.'; document.getElementById('passphraseInput').focus(); return; }
   let encoded, decoded;
   if (currentEncodeMode === 'binary') {
     encoded = encodeMsgBinary(visible, hidden, pass || null);
@@ -1878,9 +2042,9 @@ function runRoundTrip() {
     decoded = tryDecodeV2(encoded, pass || null);
   }
   if (decoded === hidden) {
-    rtEl.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Round-trip passed — encode → decode → match ✓</span>';
+    rtEl.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Local verification passed — encode → decode → exact match</span>';
   } else {
-    rtEl.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Round-trip failed — decoded does not match original</span>';
+    rtEl.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Local verification failed — decoded text does not match</span>';
   }
 }
 
@@ -1905,7 +2069,7 @@ function copyResult(id){const text=document.getElementById(id).textContent;navig
 function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;onDecodeInput();showToast('Pasted and inspected');}).catch(()=>showToast('Paste failed','error'));}
 function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
 async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}
-function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;document.getElementById('passphraseField').classList.toggle('visible',on);}
+function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;const input=document.getElementById('passphraseInput');document.getElementById('passphraseField').classList.toggle('visible',on);input.required=on;if(!on){input.value='';input.removeAttribute('aria-invalid');}invalidateEncodeResult();}
 function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);if(!on)document.getElementById('decodePassInput').value='';if(document.getElementById('encodedText').value)handleDecode(true);}
 function setStatus(id,cls,msg){const el=document.getElementById(id);el.textContent=msg;el.className='status-line'+(cls?' '+cls:'');}
 function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast-${type}`;t.style.display='block';clearTimeout(t._timeout);t._timeout=setTimeout(()=>{t.style.display='none';},3000);}
@@ -1948,6 +2112,29 @@ document.addEventListener('DOMContentLoaded',()=>{
     e.preventDefault();
   });
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){const active=document.querySelector('.panel.active');if(active.id==='panel-encode')handleEncode();else if(active.id==='panel-decode')handleDecode();e.preventDefault();}});
+  revealInspector = StegZeroInspectorUI.mount({
+    root: document.getElementById('revealUnicodeInspector'),
+    input: document.getElementById('encodedText'),
+    contextSelect: document.getElementById('revealUnicodeContext'),
+    advancedToggle: document.getElementById('revealUnicodeAdvanced'),
+    fileInput: document.getElementById('revealUnicodeFile'),
+    listen: false,
+    pageSize: 20,
+    getStegZero: text => {
+      const alphaSet = new Set(ZW_ALPHABET);
+      let extracted = '';
+      for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
+      const bits = alphabetToBits(extracted);
+      const isV2 = bits.length >= 88 && parseHeader(bitsToBytes(bits.slice(0, 88))) !== null;
+      const isBinary = getBinaryHeader(text) !== null;
+      const legacyBits = Array.from(text).filter(ch => ch === LEGACY_0 || ch === LEGACY_1).length;
+      return { format: isV2 ? 'v2' : isBinary ? 'binary' : (!isV2 && !isBinary && legacyBits >= 8 ? 'legacy' : null), status: (isV2 || isBinary || legacyBits >= 8) ? 'possible' : 'none' };
+    },
+    onNotice: (message, isError) => { if (isError) showToast(message, 'error'); },
+    onInputLoaded: () => onDecodeInput()
+  });
+  document.getElementById('revealUnicodeContext').addEventListener('change', () => handleDecode(true));
+  document.getElementById('revealUnicodeAdvanced').addEventListener('change', () => handleDecode(true));
 });
 </script>
 </body>

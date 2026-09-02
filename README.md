@@ -13,6 +13,9 @@ Live site: https://stegzero.com
 
 - Encode hidden messages into normal‑looking text
 - Decode / reveal hidden messages from pasted text
+- Inspect invisible, formatting, directional, and suspicious Unicode using pinned Unicode 17.0 data
+- Preview conservative, security-focused, or aggressive cleanup without changing the source input
+- Inspect one local UTF-8 or BOM-marked UTF-16 text/code file entirely in the browser
 - Copy encoded or decoded text with a single click
 - 100% client‑side (no accounts, no backend)
 - Modern, responsive UI
@@ -131,6 +134,28 @@ Then open `http://localhost:8000/` in your browser.
 
 There is no build step; everything is plain static assets.
 
+### Unicode inspector development
+
+The Unicode scanner is a dependency-free browser global in `unicode-inspector.js`:
+
+```js
+StegZeroUnicode.inspect(text, { context: 'plain', includeAdvanced: false });
+StegZeroUnicode.clean(text, report, { preset: 'conservative' });
+StegZeroUnicode.formatReport(report, 'json');
+```
+
+The generated `unicode-inspector-data.js` bundle is pinned to Unicode 17.0.0. To update or verify it, run:
+
+```bash
+npm run generate:unicode
+```
+
+The generator downloads only version-pinned official Unicode data files, checks every SHA-256 digest, and refuses unexpected content. The deployed scanner performs no runtime data fetches. Run the automated tests with:
+
+```bash
+npm test
+```
+
 ---
 
 ## Security & Privacy
@@ -157,4 +182,3 @@ If you find StegZero useful, you can support its development by:
 
 - Sponsoring on GitHub: https://github.com/sponsors/Clevis22
 - Starring the repository: https://github.com/Clevis22/StegZero
-

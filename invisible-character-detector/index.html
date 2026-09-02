@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invisible Unicode Character Detector — Find Hidden Characters | StegZero</title>
+  <meta name="description" content="Find invisible Unicode characters, bidi controls, unusual spaces, Unicode Tags, variation selectors, and hidden text. Inspect and clean text locally in your browser.">
+  <link rel="canonical" href="https://stegzero.com/invisible-character-detector/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Invisible Unicode Character Detector | StegZero">
+  <meta property="og:description" content="Reveal and explain invisible Unicode characters without uploading your text or files.">
+  <meta property="og:url" content="https://stegzero.com/invisible-character-detector/">
+  <meta property="og:image" content="https://stegzero.com/unicode-detector-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://stegzero.com/unicode-detector-preview.png">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="../icon.svg?v=20260901">
+  <link rel="stylesheet" href="../utility.css?v=20260901d">
+  <link rel="stylesheet" href="../unicode-inspector.css?v=20260901d">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "StegZero Invisible Unicode Character Detector",
+    "url": "https://stegzero.com/invisible-character-detector/",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript and a modern browser",
+    "isAccessibleForFree": true,
+    "description": "A browser-based Unicode inspector for invisible, formatting, directional, and suspicious Unicode characters."
+  }
+  </script>
+  <style>
+    :root { --green:#174f39; --ink:#1d2b24; --muted:#617068; --border:#dfe7e1; --surface:#fff; --paper:#f6f9f7; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; }
+    a { color:#17613f; }
+    .site-nav { border-bottom:1px solid var(--border); background:#fff; }
+    .nav-inner { display:flex; justify-content:space-between; align-items:center; width:min(1120px,calc(100% - 2rem)); min-height:66px; margin:auto; }
+    .nav-inner img { width:auto; height:30px; display:block; }
+    .nav-links { display:flex; gap:1rem; align-items:center; }
+    .nav-links a { font-size:.86rem; font-weight:700; text-decoration:none; }
+    main { width:min(1120px,calc(100% - 2rem)); margin:auto; }
+    .hero { padding:2rem 0 .75rem; text-align:center; }
+    .eyebrow { margin:0 0 .6rem; color:#287653; font-size:.74rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+    h1 { max-width:850px; margin:0 auto; font-size:clamp(2rem,6vw,4.1rem); line-height:1.02; letter-spacing:-.045em; }
+    .lede { max-width:760px; margin:.75rem auto; color:var(--muted); font-size:1rem; }
+    .privacy-pill { display:inline-flex; padding:.35rem .65rem; border:1px solid #b9d9c8; border-radius:999px; background:#eaf7f0; color:#155a3b; font-size:.74rem; font-weight:800; }
+    .tool { margin:.75rem 0 2.75rem; padding:clamp(1rem,3vw,1.6rem); border:1px solid var(--border); border-radius:18px; background:#fff; box-shadow:0 18px 50px rgba(29,43,36,.07); }
+    .tool label { font-size:.8rem; font-weight:800; }
+    #unicodeInput { width:100%; min-height:120px; margin-top:.35rem; padding:.9rem; resize:vertical; border:1px solid #cbd8d0; border-radius:10px; background:#fff; color:var(--ink); font:1rem/1.55 inherit; }
+    #unicodeInput:focus { outline:3px solid rgba(37,145,91,.22); border-color:#2e8c61; }
+    .tool-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.8rem; }
+    .primary-button { min-height:42px; padding:.6rem .9rem; border:0; border-radius:9px; background:var(--green); color:#fff; font:inherit; font-size:.84rem; font-weight:800; cursor:pointer; }
+    .content { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1rem; margin-bottom:3rem; }
+    .content section { padding:1.2rem; border:1px solid var(--border); border-radius:14px; background:#fff; }
+    .content h2 { margin:0 0 .5rem; font-size:1.15rem; }
+    .content p, .content li { color:#4f6057; font-size:.88rem; }
+    .content ul { padding-left:1.2rem; }
+    .content .wide { grid-column:1/-1; }
+    footer { padding:2rem 1rem; border-top:1px solid var(--border); background:#fff; text-align:center; color:var(--muted); font-size:.8rem; }
+    footer a { margin:0 .45rem; }
+    @media (max-width:760px) { .hero { padding:1.5rem 0 .5rem; } .content { grid-template-columns:1fr; } .content .wide { grid-column:auto; } .nav-links a:not(:last-child) { display:none; } }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a href="../" aria-label="StegZero home"><img src="../logo.svg?v=20260901" alt="StegZero"></a>
+      <div class="nav-links"><a href="#methodology">Methodology</a><a href="#privacy">Privacy</a><a href="../#tool">Open StegZero</a></div>
+    </div>
+  </nav>
+  <main>
+    <header class="hero">
+      <p class="eyebrow">Unicode 17.0 · local browser tool</p>
+      <h1>Invisible Unicode character detector</h1>
+      <p class="lede">Reveal hidden, blank, directional, formatting, and unusual Unicode characters. See exactly where they occur, understand legitimate uses, and preview conservative cleanup without changing your source text.</p>
+      <span class="privacy-pill">No uploads · no storage · no analytics</span>
+    </header>
+
+    <section class="tool" aria-labelledby="tool-heading">
+      <h2 id="tool-heading">Inspect text</h2>
+      <label for="unicodeInput">Paste or type text</label>
+      <textarea id="unicodeInput" placeholder="Paste text containing invisible or suspicious Unicode…" spellcheck="false"></textarea>
+      <div class="tool-actions"><button type="button" class="primary-button" id="unicodeInspectNow">Inspect now</button></div>
+      <div class="unicode-input-controls" aria-label="Inspection options">
+        <label>Content type
+          <select id="unicodeContext">
+            <option value="plain">Plain text</option>
+            <option value="source">Source code or configuration</option>
+            <option value="identifier">Identifier or URL</option>
+          </select>
+        </label>
+        <label>Inspect one local file
+          <input type="file" id="unicodeFile" accept=".txt,.md,.html,.htm,.xml,.csv,.json,.yaml,.yml,.toml,.log,.js,.mjs,.ts,.tsx,.jsx,.py,.rb,.php,.java,.c,.h,.cpp,.hpp,.cs,.go,.rs,.sh,.sql,.css,.svg">
+        </label>
+        <label class="unicode-inline-check"><input type="checkbox" id="unicodeAdvanced"> Include advanced Unicode anomalies</label>
+      </div>
+      <div class="unicode-drop-zone" id="unicodeDropZone">Or drop one supported text/code file here</div>
+      <p class="unicode-privacy-note">Supports valid UTF-8, UTF-8 BOM, UTF-16LE BOM, and UTF-16BE BOM files up to 1 MiB and inputs up to 500,000 Unicode code points.</p>
+      <div id="standaloneUnicodeInspector" hidden></div>
+    </section>
+
+    <div class="content">
+      <section>
+        <h2>What the detector finds</h2>
+        <p>The inspector reports bidirectional controls, Unicode Tags, variation selectors, join controls, zero-width and line-breaking formats, invisible mathematical operators, control codes, unusual spaces, blank fillers, and other default-ignorable characters. Optional advanced checks cover private-use, noncharacter, unassigned, and orphan combining code points.</p>
+      </section>
+      <section>
+        <h2>Why invisible characters can be legitimate</h2>
+        <p>Invisible does not mean malicious. ZWJ and ZWNJ shape emoji and writing systems; variation selectors choose glyph presentation; word and grapheme controls affect breaking, searching, and collation; and unusual spaces carry real typographic semantics. Findings use Expected, Review, and Suspicious language rather than a misleading risk score.</p>
+      </section>
+      <section>
+        <h2>Bidi and source-code risks</h2>
+        <p>Bidirectional controls support multilingual text, but they can also make displayed source order differ from logical order. The inspector checks unmatched and unterminated controls, overrides, nesting, and context. See <a href="https://www.unicode.org/reports/tr55/">UTS #55</a>, the <a href="https://arxiv.org/abs/2111.00169">Trojan Source paper</a>, and <a href="https://github.blog/changelog/2021-10-31-warning-about-bidirectional-unicode-text/">GitHub’s bidi warning</a>.</p>
+      </section>
+      <section>
+        <h2>Tags and variation-selector steganography</h2>
+        <p>The tool cautiously reconstructs printable Unicode Tag runs and a common variation-selector byte convention. It excludes recognized emoji tag sequences and labels valid candidates as “Possible decoded payload.” The byte convention is not a Unicode standard.</p>
+      </section>
+      <section>
+        <h2>Safe-cleaning limitations</h2>
+        <p>Conservative cleanup removes malformed or ineffectual cases and unexpected controls while preserving context-sensitive formatting. Security and Aggressive modes are opt-in. Cleanup is deterministic, previewed, and applied to a copy because removing invisible characters can change emoji, multilingual shaping, line breaking, collation, matching, and mathematical meaning.</p>
+      </section>
+      <section id="privacy">
+        <h2>Privacy</h2>
+        <p>Inspection, decoding, cleanup, and export occur entirely in your browser. Text, filenames, files, findings, and reports are not sent over the network and are not placed in local storage. The Unicode tables ship with the site, so scans make no runtime data requests.</p>
+      </section>
+      <section id="methodology" class="wide">
+        <h2>Methodology and scope</h2>
+        <p>The scanner reports Unicode data version 17.0.0 and follows the “show hidden” principle described in <a href="https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/">Unicode 17, Chapter 23</a>. Emoji handling follows <a href="https://unicode.org/reports/tr51/">UTS #51</a>, while character properties and data structure follow <a href="https://unicode.org/reports/tr44/">UAX #44</a>.</p>
+        <p>This tool does not provide complete steganalysis. It does not detect homoglyph substitutions, normalization-only differences, third-party arbitrary zero-width alphabets, malware, or authorship. <strong>Invisible Unicode findings do not prove that text was written by AI, and removing them does not remove statistical model watermarks.</strong></p>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <a href="../">StegZero home</a><a href="https://github.com/Clevis22/StegZero/">GitHub</a><a href="mailto:contact@stegzero.com">Contact</a>
+    <p>© 2026 StegZero. Free, open-source, and processed entirely in your browser.</p>
+  </footer>
+  <script src="../unicode-inspector-data.js"></script>
+  <script src="../unicode-inspector.js?v=20260901d"></script>
+  <script src="../unicode-inspector-ui.js?v=20260901d"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const host = document.getElementById('standaloneUnicodeInspector');
+      const inspector = StegZeroInspectorUI.mount({
+        root: host,
+        input: document.getElementById('unicodeInput'),
+        contextSelect: document.getElementById('unicodeContext'),
+        advancedToggle: document.getElementById('unicodeAdvanced'),
+        inspectButton: document.getElementById('unicodeInspectNow'),
+        fileInput: document.getElementById('unicodeFile'),
+        dropZone: document.getElementById('unicodeDropZone'),
+        onInputLoaded: function () { host.hidden = false; }
+      });
+      document.getElementById('unicodeInput').addEventListener('input', function () { host.hidden = false; });
+      document.getElementById('unicodeFile').addEventListener('change', function () { host.hidden = false; });
+      document.getElementById('unicodeInspectNow').addEventListener('click', function () { host.hidden = false; });
+    });
+  </script>
+</body>
+</html>
