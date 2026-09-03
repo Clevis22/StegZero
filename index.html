@@ -52,751 +52,24 @@
         }
       }
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <style>
-    :root {
-      --bg: #080c14;
-      --bg2: #0e1521;
-      --bg3: #141d2e;
-      --border: rgba(99,179,237,0.12);
-      --border-bright: rgba(99,179,237,0.35);
-      --text: #e2ecf8;
-      --text-muted: #6b839e;
-      --accent: #63b3ed;
-      --accent2: #4299e1;
-      --accent-glow: rgba(99,179,237,0.18);
-      --success: #48bb78;
-      --warn: #ed8936;
-      --danger: #fc8181;
-      --binary-color: #8a5d22;
-      --binary-border: rgba(138,93,34,0.28);
-      --binary-glow: rgba(138,93,34,0.14);
-      --binary-bg: rgba(138,93,34,0.07);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --radius: 10px;
-      --transition: all 0.18s ease;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
-    nav { position: sticky; top: 0; z-index: 200; background: rgba(8,12,20,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-    .nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; height: 58px; display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; }
-    .nav-logo span { color: var(--text-muted); }
-    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
-    .nav-link { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: var(--transition); }
-    .nav-link:hover { color: var(--accent); }
-    .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; }
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; backdrop-filter: blur(4px); }
-    .overlay.active { display: block; }
-    .hero { position: relative; z-index: 1; text-align: center; padding: 5rem 1.5rem 3rem; max-width: 780px; margin: 0 auto; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--border-bright); padding: 0.3rem 0.9rem; border-radius: 999px; margin-bottom: 1.5rem; background: rgba(99,179,237,0.06); }
-    .hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.25rem; background: linear-gradient(135deg, #e2ecf8 30%, #63b3ed 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 520px; margin: 0 auto 0.75rem; }
-    .hero-note { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); opacity: 0.7; }
-    .hero-pills { display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
-    .pill { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); border: 1px solid var(--border); padding: 0.35rem 0.85rem; border-radius: 999px; background: var(--bg2); transition: var(--transition); }
-    .pill i { color: var(--accent); font-size: 0.7rem; }
-    .pill:hover { border-color: var(--border-bright); color: var(--text); }
-    .security-banner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto 2.5rem; padding: 0 1.5rem; }
-    .security-banner-inner { background: rgba(237,137,54,0.08); border: 1px solid rgba(237,137,54,0.3); border-left: 3px solid var(--warn); border-radius: var(--radius); padding: 0.9rem 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem; font-family: var(--mono); font-size: 0.8rem; color: rgba(237,137,54,0.9); line-height: 1.5; }
-    .security-banner-inner i { margin-top: 0.1rem; flex-shrink: 0; }
-    main { position: relative; z-index: 1; flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 1.5rem 4rem; width: 100%; }
-    .tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 0; background: var(--bg2); }
-    .tab-btn { flex: 1; min-width: 0; padding: 0.85rem 1rem; background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem; border-right: 1px solid var(--border); }
-    .tab-btn:last-child { border-right: none; }
-    .tab-btn.active { background: rgba(99,179,237,0.1); color: var(--accent); }
-    .tab-btn:hover:not(.active) { background: var(--bg3); color: var(--text); }
-    .panel { display: none; background: var(--bg2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 2rem; }
-    .panel.active { display: block; }
-
-    /* ── MODE SELECTOR ── */
-    .mode-selector { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; background: var(--bg3); }
-    .mode-btn { flex: 1; min-width: 0; padding: 0.75rem 1rem; background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem; border-right: 1px solid var(--border); }
-    .mode-btn:last-child { border-right: none; }
-    .mode-btn.active-v2 { background: rgba(99,179,237,0.1); color: var(--accent); }
-    .mode-btn.active-binary { background: var(--binary-bg); color: var(--binary-color); }
-    .mode-btn:hover:not(.active-v2):not(.active-binary) { background: rgba(255,255,255,0.03); color: var(--text); }
-    .mode-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--mono); font-size: 0.7rem; padding: 0.15rem 0.55rem; border-radius: 999px; border: 1px solid; }
-    .badge-8 { color: var(--accent); border-color: rgba(99,179,237,0.3); background: rgba(99,179,237,0.06); }
-    .badge-2 { color: var(--binary-color); border-color: rgba(138,93,34,0.3); background: rgba(138,93,34,0.06); }
-    .mode-info-strip { border-radius: var(--radius); padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.78rem; line-height: 1.6; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.65rem; }
-    .mode-info-v2 { background: rgba(99,179,237,0.05); border: 1px solid rgba(99,179,237,0.2); color: rgba(99,179,237,0.85); }
-    .mode-info-binary { background: var(--binary-bg); border: 1px solid var(--binary-border); color: rgba(110,72,26,0.92); }
-    .mode-info-strip i { margin-top: 0.1rem; flex-shrink: 0; }
-
-    .decode-empty-state { border: 1px dashed var(--border-bright); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; background: rgba(99,179,237,0.03); }
-    .decode-empty-state p { font-family: var(--mono); font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.6; }
-    .decode-empty-state p strong { color: var(--text); }
-    .decode-empty-state .example-btns { display: flex; justify-content: center; gap: 0.65rem; flex-wrap: wrap; }
-    .example-btn { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.76rem; background: var(--bg3); border: 1px solid var(--border-bright); color: var(--accent); padding: 0.45rem 0.9rem; border-radius: 999px; cursor: pointer; transition: var(--transition); }
-    .example-btn:hover { background: rgba(99,179,237,0.12); }
-    .pipe-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.78rem; background: rgba(99,179,237,0.06); border: 1px solid var(--border-bright); color: var(--accent); padding: 0.45rem 1rem; border-radius: 999px; cursor: pointer; transition: var(--transition); margin-left: auto; }
-    .pipe-btn:hover { background: rgba(99,179,237,0.14); }
-    .field { margin-bottom: 1.5rem; }
-    .field label { display: block; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.55rem; }
-    .field label .required { color: var(--danger); margin-left: 3px; }
-    .field-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.45rem; line-height: 1.5; font-family: var(--mono); }
-    .cover-text-examples { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
-    .cover-text-examples span { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); opacity: 0.8; }
-    .cover-example-chip { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--mono); font-size: 0.7rem; color: var(--accent); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--bg3); cursor: pointer; transition: var(--transition); }
-    .cover-example-chip:hover { border-color: var(--border-bright); background: rgba(99,179,237,0.08); }
-    textarea, input[type="text"], input[type="password"] { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); resize: vertical; transition: var(--transition); line-height: 1.6; }
-    textarea { min-height: 110px; }
-    input[type="text"], input[type="password"] { height: 3.1rem; }
-    textarea:focus, input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-    .char-counter { text-align: right; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
-    .char-counter.warn { color: var(--warn); }
-    .char-counter.danger { color: var(--danger); }
-    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem; }
-    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.05em; border: none; cursor: pointer; transition: var(--transition); white-space: nowrap; }
-    .btn-primary { background: var(--accent2); color: #fff; }
-    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,179,237,0.25); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-    .btn-ghost { background: var(--bg3); color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { border-color: var(--border-bright); color: var(--text); }
-    .btn-success { background: rgba(72,187,120,0.12); color: var(--success); border: 1px solid rgba(72,187,120,0.3); }
-    .btn-success:hover { background: rgba(72,187,120,0.2); }
-    .result-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--mono); font-size: 0.88rem; word-break: break-all; min-height: 80px; line-height: 1.7; color: var(--text); position: relative; transition: border-color 0.2s; }
-    .result-box.has-content { border-color: var(--border-bright); }
-    .result-box.empty { color: var(--text-muted); font-style: italic; }
-    .result-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.55rem; }
-    .result-label span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-    .result-label .result-meta { font-size: 0.7rem; color: var(--text-muted); }
-    .preview-section { margin-top: 1.75rem; }
-    .preview-section h3 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-    .preview-section h3 i { color: var(--accent); }
-    .preview-display { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; font-family: var(--mono); font-size: 0.88rem; line-height: 1.8; word-break: break-word; min-height: 60px; color: var(--text); }
-    .zw-mark { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 7px; height: 14px; vertical-align: middle; margin: 0 0.5px; position: relative; cursor: default; }
-    .zw-mark-bin { display: inline-block; border-radius: 3px; width: 7px; height: 14px; vertical-align: middle; margin: 0 0.5px; position: relative; cursor: default; }
-    .zw-mark-bin.bit0 { background: rgba(138,93,34,0.18); border: 1px solid rgba(138,93,34,0.45); }
-    .zw-mark-bin.bit1 { background: rgba(138,93,34,0.4); border: 1px solid rgba(138,93,34,0.72); }
-    .preview-legend { display: flex; align-items: center; gap: 1rem; margin-top: 0.65rem; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); flex-wrap: wrap; }
-    .preview-legend-item { display: flex; align-items: center; gap: 0.35rem; }
-    .zw-sample { display: inline-block; background: rgba(99,179,237,0.22); border: 1px solid rgba(99,179,237,0.5); border-radius: 3px; width: 10px; height: 12px; }
-    .zw-sample-0 { display: inline-block; background: rgba(138,93,34,0.18); border: 1px solid rgba(138,93,34,0.45); border-radius: 3px; width: 10px; height: 12px; }
-    .zw-sample-1 { display: inline-block; background: rgba(138,93,34,0.4); border: 1px solid rgba(138,93,34,0.72); border-radius: 3px; width: 10px; height: 12px; }
-    .zw-count { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.55rem; background: rgba(99,179,237,0.08); border: 1px solid var(--border); border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; color: var(--accent); }
-    .zw-count-bin { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.55rem; background: var(--binary-bg); border: 1px solid var(--binary-border); border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; color: var(--binary-color); }
-    .detect-result { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1rem; font-family: var(--mono); font-size: 0.82rem; }
-    .detect-row { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); color: var(--text-muted); }
-    .detect-row:last-child { border-bottom: none; }
-    .detect-row strong { color: var(--text); }
-    .badge-ok { color: var(--success); }
-    .badge-none { color: var(--text-muted); }
-    .badge-found { color: var(--warn); }
-    .rt-result { margin-top: 0.75rem; font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
-    .rt-pass { color: var(--success); }
-    .rt-fail { color: var(--danger); }
-    .section-heading { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; }
-    .section-heading i { color: var(--accent); font-size: 1rem; }
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
-    .info-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: var(--transition); }
-    .info-card:hover { border-color: var(--border-bright); }
-    .info-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); font-family: var(--mono); }
-    .info-card ul { list-style: none; }
-    .info-card li { padding: 0.35rem 0; padding-left: 1rem; position: relative; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .info-card li:last-child { border-bottom: none; }
-    .info-card li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
-    .passphrase-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
-    .toggle-switch { position: relative; width: 38px; height: 20px; flex-shrink: 0; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-track { position: absolute; inset: 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; transition: 0.2s; }
-    .toggle-track::after { content: ''; position: absolute; left: 2px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: var(--text-muted); border-radius: 50%; transition: 0.2s; }
-    input:checked + .toggle-track { background: rgba(99,179,237,0.2); border-color: var(--accent); }
-    input:checked + .toggle-track::after { left: 20px; background: var(--accent); }
-    .toggle-label { font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); }
-    .passphrase-field { display: none; margin-top: 0.75rem; }
-    .passphrase-field.visible { display: block; }
-    .export-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
-    #toast { position: fixed; bottom: 1.75rem; right: 1.75rem; padding: 0.75rem 1.25rem; border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; display: none; z-index: 9999; animation: slideUp 0.25s ease; box-shadow: 0 8px 30px rgba(0,0,0,0.35); max-width: 320px; }
-    .toast-success { background: var(--success); color: #fff; }
-    .toast-warn { background: var(--warn); color: #fff; }
-    .toast-error { background: var(--danger); color: #fff; }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .status-line { font-family: var(--mono); font-size: 0.76rem; margin-top: 0.6rem; min-height: 1.1em; color: var(--text-muted); }
-    .status-line.ok { color: var(--success); }
-    .status-line.err { color: var(--danger); }
-    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; max-width: 1080px; margin: 0 auto; width: 100%; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
-    .footer-section h4 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.85rem; }
-    .footer-links { list-style: none; }
-    .footer-links li { margin-bottom: 0.6rem; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; transition: var(--transition); }
-    .footer-links a:hover { color: var(--accent); }
-    .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
-    .footer-bottom p { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); }
-
-    /* ── WATERMARK TAB ── */
-    .wm-sub-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; background: var(--bg3); }
-    .wm-sub-btn { flex: 1; min-width: 0; padding: 0.65rem 1rem; background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.45rem; border-right: 1px solid var(--border); }
-    .wm-sub-btn:last-child { border-right: none; }
-    .wm-sub-btn.active { background: rgba(99,179,237,0.1); color: var(--accent); }
-    .wm-sub-btn:hover:not(.active) { color: var(--text); }
-    .wm-pane { display: none; }
-    .wm-pane.active { display: block; }
-    .file-drop-zone { border: 1px dashed var(--border-bright); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; background: rgba(99,179,237,0.02); cursor: pointer; transition: var(--transition); position: relative; }
-    .file-drop-zone:hover, .file-drop-zone.dragover { border-color: var(--accent); background: rgba(99,179,237,0.06); }
-    .file-drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-    .file-drop-zone .drop-icon { font-size: 1.5rem; color: var(--accent); opacity: 0.6; margin-bottom: 0.75rem; }
-    .file-drop-zone p { font-family: var(--mono); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
-    .file-drop-zone p strong { color: var(--text); }
-    .file-drop-zone .file-types { margin-top: 0.4rem; font-size: 0.72rem; opacity: 0.6; }
-    .file-loaded { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--bg); border: 1px solid var(--border-bright); border-radius: var(--radius); font-family: var(--mono); font-size: 0.82rem; }
-    .file-loaded .file-icon { color: var(--accent); font-size: 1rem; flex-shrink: 0; }
-    .file-loaded .file-name { color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .file-loaded .file-size { color: var(--text-muted); font-size: 0.72rem; flex-shrink: 0; }
-    .file-loaded .file-clear { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.9rem; padding: 0.1rem 0.3rem; transition: var(--transition); flex-shrink: 0; }
-    .file-loaded .file-clear:hover { color: var(--danger); }
-    .wm-id-row { display: flex; gap: 0.75rem; align-items: flex-end; }
-    .wm-id-row .field { flex: 1; margin-bottom: 0; }
-    .wm-id-row .btn { flex-shrink: 0; height: 3.1rem; }
-    .verify-result-card { border-radius: var(--radius); padding: 1.25rem; margin-top: 1.25rem; font-family: var(--mono); font-size: 0.85rem; }
-    .verify-found { background: rgba(72,187,120,0.07); border: 1px solid rgba(72,187,120,0.3); }
-    .verify-not-found { background: rgba(252,129,129,0.06); border: 1px solid rgba(252,129,129,0.2); }
-    .verify-result-card .vr-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
-    .verify-result-card .vr-mark { font-size: 1rem; margin-bottom: 0.35rem; }
-    .verify-result-card .vr-value { color: var(--text); font-size: 0.9rem; word-break: break-all; }
-    .vr-found-color { color: var(--success); }
-    .vr-miss-color { color: var(--danger); }
-    .wm-info-strip { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .wm-chip { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); border: 1px solid var(--border); padding: 0.25rem 0.7rem; border-radius: 999px; background: var(--bg3); }
-    .wm-chip i { color: var(--accent); font-size: 0.65rem; }
-
-    @media (max-width: 700px) {
-      .nav-links { position: fixed; top: 0; right: -260px; height: 100vh; width: 260px; background: var(--bg2); flex-direction: column; padding: 5rem 1.75rem 2rem; gap: 1.5rem; transition: right 0.3s ease; z-index: 300; border-left: 1px solid var(--border); }
-      .nav-links.open { right: 0; }
-      .menu-btn { display: block; z-index: 400; }
-      .tab-btn, .wm-sub-btn { font-size: 0.68rem; letter-spacing: 0.04em; padding: 0.72rem 0.45rem; gap: 0.3rem; }
-      .tab-btn i, .wm-sub-btn i { display: none; }
-      .btn-row { flex-direction: column; }
-      .btn { width: 100%; justify-content: center; }
-      .export-row { flex-direction: column; }
-      .export-row .btn { width: 100%; justify-content: center; }
-      .wm-id-row { flex-direction: column; }
-      .wm-id-row .btn { width: 100%; }
-      .mode-selector { flex-direction: column; }
-      .mode-btn { border-right: none; border-bottom: 1px solid var(--border); }
-      .mode-btn:last-child { border-bottom: none; }
-    }
-    @media (max-width: 480px) {
-      .hero { padding: 3.5rem 1rem 2rem; }
-      .panel { padding: 1.25rem; }
-    }
-
-    /* ── CLEAN NEUTRAL VISUAL SYSTEM ── */
-    :root {
-      --bg: #f6f7f4;
-      --bg2: #ffffff;
-      --bg3: #eef1ed;
-      --border: rgba(25, 33, 29, 0.12);
-      --border-bright: rgba(25, 33, 29, 0.24);
-      --text: #19211d;
-      --text-muted: #68716c;
-      --accent: #23684f;
-      --accent2: #23684f;
-      --accent-glow: rgba(35, 104, 79, 0.13);
-      --success: #23684f;
-      --warn: #a35b16;
-      --danger: #b33b32;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --radius: 12px;
-      --transition: all 0.16s ease;
-    }
-
-    body {
-      background: var(--bg);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.5;
-    }
-    body::before { display: none; }
-
-    nav {
-      background: rgba(246, 247, 244, 0.9);
-      border-bottom-color: var(--border);
-      backdrop-filter: blur(14px);
-    }
-    .nav-inner { max-width: 1120px; height: 68px; }
-    .nav-logo {
-      font-family: var(--sans);
-      font-size: 1rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-    .nav-logo img { display: block; width: auto; height: 32px; }
-    .nav-links { gap: 1.5rem; }
-    .nav-link {
-      font-family: var(--sans);
-      font-size: 0.84rem;
-      font-weight: 600;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .nav-link:hover { color: var(--text); }
-
-    .hero {
-      max-width: 760px;
-      padding: 2.5rem 1.5rem 1.5rem;
-    }
-    .hero h1 {
-      max-width: 720px;
-      margin: 0 auto 0.65rem;
-      background: none;
-      color: var(--text);
-      -webkit-text-fill-color: currentColor;
-      font-size: clamp(3rem, 7vw, 5.25rem);
-      font-weight: 680;
-      letter-spacing: -0.06em;
-      line-height: 0.98;
-    }
-    .hero p {
-      max-width: 610px;
-      margin-bottom: 0.45rem;
-      color: var(--text-muted);
-      font-size: 1.08rem;
-      line-height: 1.45;
-    }
-    .hero p strong { color: var(--text); font-weight: 650; }
-    .hero-note {
-      font-family: var(--sans);
-      font-size: 0.82rem;
-      font-weight: 650;
-      color: var(--accent);
-      opacity: 1;
-    }
-    .hero-pills { margin-top: 1.8rem; gap: 0.55rem; }
-    .pill {
-      border: 0;
-      background: var(--bg3);
-      color: #56605a;
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.42rem 0.75rem;
-    }
-    .pill i { color: var(--accent); }
-    .pill:hover { color: var(--text); }
-
-    .security-banner { max-width: 960px; margin-bottom: 1.25rem; }
-    .security-banner-inner {
-      border: 1px solid #eadfcf;
-      border-left: 1px solid #eadfcf;
-      border-radius: 12px;
-      background: #fffaf2;
-      color: #73532f;
-      font-family: var(--sans);
-      font-size: 0.84rem;
-      line-height: 1.55;
-      padding: 0.9rem 1rem;
-    }
-    .security-banner-inner i { color: #a35b16; margin-top: 0.18rem; }
-
-    main { max-width: 960px; padding-bottom: 5rem; }
-    .tabs {
-      gap: 0.35rem;
-      overflow: visible;
-      border: 0;
-      border-radius: 14px 14px 0 0;
-      background: #e8ece7;
-      padding: 0.4rem;
-    }
-    .tab-btn {
-      min-height: 46px;
-      border: 0;
-      border-radius: 10px;
-      color: var(--text-muted);
-      font-family: var(--sans);
-      font-size: 0.85rem;
-      font-weight: 650;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .tab-btn.active {
-      background: white;
-      color: var(--text);
-      box-shadow: 0 1px 2px rgba(25, 33, 29, 0.08);
-    }
-    .tab-btn.active i { color: var(--accent); }
-    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.5); }
-    .panel {
-      border: 1px solid var(--border);
-      border-top: 0;
-      border-radius: 0 0 16px 16px;
-      background: white;
-      padding: clamp(1rem, 2vw, 1.25rem);
-      box-shadow: 0 18px 48px rgba(25, 33, 29, 0.06);
-    }
-
-    .mode-selector,
-    .wm-sub-tabs {
-      gap: 0.5rem;
-      overflow: visible;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      margin-bottom: 1rem;
-    }
-    .mode-btn,
-    .wm-sub-btn {
-      min-height: 52px;
-      border: 1px solid var(--border) !important;
-      border-radius: 10px;
-      color: var(--text-muted);
-      font-family: var(--sans);
-      font-size: 0.82rem;
-      font-weight: 620;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    .mode-btn.active-v2,
-    .wm-sub-btn.active {
-      border-color: rgba(35,104,79,0.36) !important;
-      background: rgba(35,104,79,0.07);
-      color: var(--accent);
-    }
-    .mode-btn.active-binary {
-      border-color: var(--binary-border) !important;
-      background: var(--binary-bg);
-    }
-    .mode-badge {
-      border: 0;
-      background: rgba(25,33,29,0.06);
-      font-family: var(--sans);
-      font-size: 0.68rem;
-      font-weight: 650;
-    }
-
-    .mode-info-strip {
-      border: 0;
-      border-radius: 9px;
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      line-height: 1.5;
-      padding: 0.75rem 0.85rem;
-    }
-    .mode-info-v2 { background: #eff6f2; color: #3f6657; }
-    .mode-info-binary { background: #faf5ed; color: #73532f; }
-
-    .field { margin-bottom: 1.1rem; }
-    .field label,
-    .result-label span,
-    .preview-section h3 {
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 680;
-      letter-spacing: 0;
-      text-transform: none;
-      color: #47514c;
-    }
-    textarea,
-    input[type="text"],
-    input[type="password"] {
-      border-color: #d8ddd9;
-      background: #fbfcfa;
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 0.95rem;
-      border-radius: 10px;
-      padding: 0.9rem 1rem;
-    }
-    textarea { min-height: 82px; }
-    textarea::placeholder,
-    input[type="text"]::placeholder,
-    input[type="password"]::placeholder { color: #949c97; }
-    textarea:focus,
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      border-color: var(--accent);
-      background: white;
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-    .field-hint,
-    .char-counter,
-    .cover-text-examples span,
-    .toggle-label,
-    .status-line,
-    .rt-result {
-      font-family: var(--sans);
-      color: var(--text-muted);
-      font-size: 0.76rem;
-    }
-    .cover-example-chip,
-    .example-btn,
-    .pipe-btn,
-    .wm-chip {
-      border-color: var(--border);
-      background: white;
-      color: #56605a;
-      font-family: var(--sans);
-      font-weight: 600;
-    }
-    .cover-example-chip:hover,
-    .example-btn:hover,
-    .pipe-btn:hover { border-color: var(--border-bright); background: var(--bg3); color: var(--text); }
-
-    .btn {
-      min-height: 42px;
-      border-radius: 9px;
-      font-family: var(--sans);
-      font-size: 0.84rem;
-      font-weight: 680;
-      letter-spacing: 0;
-      padding: 0.65rem 1.1rem;
-    }
-    .btn-primary { background: var(--text); color: white; }
-    .btn-primary:hover {
-      background: #2b3731;
-      box-shadow: 0 7px 18px rgba(25, 33, 29, 0.14);
-    }
-    .btn-ghost { background: white; color: #56605a; border-color: #d8ddd9; }
-    .btn-ghost:hover { background: var(--bg3); border-color: var(--border-bright); }
-    .btn-success { background: #edf6f1; color: var(--accent); border-color: rgba(35,104,79,0.18); }
-
-    .result-box,
-    .preview-display,
-    .detect-result,
-    .file-loaded {
-      border-color: #d8ddd9;
-      background: #fbfcfa;
-      color: var(--text);
-      border-radius: 10px;
-      box-shadow: none;
-    }
-    .result-box.has-content { border-color: rgba(35,104,79,0.4); }
-    .decode-empty-state,
-    .file-drop-zone {
-      border-color: #cdd5d0;
-      background: #f8faf7;
-      border-radius: 12px;
-    }
-    .decode-empty-state p,
-    .file-drop-zone p { font-family: var(--sans); }
-    .file-drop-zone:hover,
-    .file-drop-zone.dragover { background: #f0f6f2; }
-
-    input:checked + .toggle-track { background: var(--accent); border-color: var(--accent); }
-    input:checked + .toggle-track::after { background: white; }
-    .toggle-track::after { background: #89928d; }
-
-    .info-grid { gap: 0.85rem; }
-    .section-heading { color: var(--text); }
-    .info-card {
-      border-color: var(--border);
-      background: white;
-      padding: 1.35rem;
-      box-shadow: none;
-    }
-    .info-card:hover { border-color: var(--border-bright); }
-    .info-card h3 {
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 0.92rem;
-    }
-    .info-card h3 i,
-    .section-heading i { color: var(--accent); }
-    .info-card li { border-bottom-color: var(--border); color: var(--text-muted); }
-
-    footer { border-top-color: var(--border); padding-top: 3rem; }
-    .footer-section h4,
-    .footer-bottom p { font-family: var(--sans); letter-spacing: 0; text-transform: none; }
-    #toast { font-family: var(--sans); box-shadow: 0 10px 30px rgba(25,33,29,0.18); }
-
-    .advanced-options,
-    .inspection-details,
-    .technical-preview {
-      margin: 0 0 1.35rem;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: #fbfcfa;
-    }
-    .advanced-options > summary,
-    .inspection-details > summary,
-    .technical-preview > summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      min-height: 48px;
-      padding: 0.75rem 0.95rem;
-      color: #4f5a54;
-      font-size: 0.82rem;
-      font-weight: 680;
-      cursor: pointer;
-      list-style: none;
-    }
-    .advanced-options > summary::-webkit-details-marker,
-    .inspection-details > summary::-webkit-details-marker,
-    .technical-preview > summary::-webkit-details-marker { display: none; }
-    .advanced-options > summary::after,
-    .inspection-details > summary::after,
-    .technical-preview > summary::after {
-      content: '⌄';
-      color: var(--text-muted);
-      font-size: 1rem;
-      transition: transform 0.16s ease;
-    }
-    .advanced-options[open] > summary::after,
-    .inspection-details[open] > summary::after,
-    .technical-preview[open] > summary::after { transform: rotate(180deg); }
-    .advanced-options > summary > span:first-child,
-    .inspection-details > summary > span:first-child { display: inline-flex; align-items: center; gap: 0.45rem; }
-    .summary-meta {
-      margin-left: auto;
-      color: var(--accent);
-      font-size: 0.73rem;
-      font-weight: 650;
-    }
-    .advanced-content {
-      padding: 0 0.95rem 1rem;
-      border-top: 1px solid var(--border);
-    }
-    .advanced-label {
-      margin: 1rem 0 0.55rem;
-      color: #47514c;
-      font-size: 0.76rem;
-      font-weight: 680;
-    }
-    .advanced-content .mode-selector { margin-bottom: 0.65rem; }
-    .advanced-content .mode-info-strip { margin-bottom: 1rem; }
-    .advanced-test-btn { margin-top: 1rem; }
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
-    }
-    .field label.passphrase-row,
-    .passphrase-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 0.5rem 0 0;
-      color: var(--text-muted);
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0;
-      line-height: 1.45;
-      text-transform: none;
-      cursor: pointer;
-    }
-    .toggle-switch input:focus-visible + .toggle-track {
-      outline: 3px solid rgba(35,104,79,0.25);
-      outline-offset: 3px;
-    }
-    input[aria-invalid="true"] {
-      border-color: var(--danger) !important;
-      box-shadow: 0 0 0 3px rgba(182,71,71,0.14) !important;
-    }
-
-    .inline-security-note {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.45rem;
-      margin: 0.75rem 0 0;
-      color: var(--text-muted);
-      font-size: 0.74rem;
-      line-height: 1.5;
-    }
-    .inline-security-note i { color: #a35b16; margin-top: 0.15rem; }
-
-    .result-card {
-      margin-top: 1.5rem;
-      padding: 1.1rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fbfcfa;
-      transition: background 0.18s ease, border-color 0.18s ease;
-    }
-    .result-card.is-ready,
-    .result-card.is-found {
-      border-color: rgba(35,104,79,0.26);
-      background: #f2f8f4;
-    }
-    .result-card.needs-attention {
-      border-color: #eadfcf;
-      background: #fffaf2;
-    }
-    .result-card-heading { margin-bottom: 0.7rem; }
-    .result-card-heading > span:first-child { color: var(--text); font-size: 0.86rem; }
-    .result-card.is-ready .result-card-heading > span:first-child,
-    .result-card.is-found .result-card-heading > span:first-child { color: var(--accent); }
-    .result-card .result-box { background: white; }
-    .btn:disabled,
-    .pipe-btn:disabled {
-      opacity: 0.42;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .technical-preview { margin-top: 0.9rem; }
-    .technical-preview > summary { justify-content: flex-start; }
-    .technical-preview > summary::after { margin-left: auto; }
-    .technical-preview .preview-display,
-    .technical-preview .preview-legend { margin-inline: 0.95rem; }
-    .technical-preview .preview-display { margin-top: 0.15rem; }
-    .technical-preview .preview-legend { margin-bottom: 0.95rem; }
-
-    .inspection-details { margin-top: 0.9rem; }
-    .reveal-inspector-details > .uzi { margin: 0; padding: 0 0.95rem 0.95rem; border-top: 1px solid var(--border); }
-    .reveal-options .unicode-input-controls { margin-top: 1rem; }
-    .inspection-details .detect-result {
-      margin: 0 0.95rem 0.8rem;
-      border-radius: 9px;
-    }
-    .inspection-details > .btn { margin: 0 0.95rem 0.95rem; }
-    .status-line.warn { color: var(--warn); }
-
-    @media (max-width: 700px) {
-      .nav-links {
-        display: none;
-        right: 0;
-        transform: none;
-        background: white;
-        box-shadow: -16px 0 40px rgba(25,33,29,0.08);
-      }
-      .nav-links.open { display: flex; right: 0; transform: none; }
-      .hero { padding: 2rem 1rem 1.25rem; }
-      .hero h1 { font-size: clamp(2.8rem, 14vw, 4.25rem); }
-      .hero-pills { gap: 0.4rem; }
-      .mode-selector { flex-direction: column; }
-      .tabs { gap: 0.2rem; }
-      .tab-btn { padding-inline: 0.4rem; font-size: 0.75rem; }
-      .summary-meta { display: none; }
-      .result-card { padding: 0.9rem; }
-    }
-  </style>
-  <link rel="stylesheet" href="utility.css?v=20260901d">
-  <link rel="stylesheet" href="unicode-inspector.css?v=20260901d">
+  <link rel="stylesheet" href="utility.css?v=20260903-3">
+  <link rel="stylesheet" href="unicode-inspector.css?v=20260903">
 </head>
 <body>
 
-<nav>
+<nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a class="nav-logo" href="#" aria-label="StegZero home">
       <img src="logo.svg?v=20260901" alt="StegZero">
     </a>
     <div class="nav-links" id="navLinks">
+      <a class="nav-link" href="invisible-character-detector/index.html">Unicode detector</a>
       <a class="nav-link nav-link-secondary" href="#how-it-works">How it works</a>
       <a class="nav-link nav-link-secondary" href="#faq">FAQ</a>
-      <a class="nav-link" href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
+      <a class="nav-link nav-link-github" href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
     </div>
-    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
-      <i class="fas fa-bars" id="menuIcon"></i>
-    </button>
   </div>
 </nav>
-<div class="overlay" id="overlay"></div>
 
 <div class="hero">
   <h1>Zero-width text encoder &amp; decoder</h1>
@@ -808,13 +81,13 @@
 
   <div class="tabs" role="tablist" aria-label="StegZero tools">
     <button class="tab-btn active" type="button" role="tab" aria-selected="true" aria-controls="panel-encode" onclick="switchTab('encode')" id="tab-encode">
-      <i class="fas fa-lock"></i> Encode
+      Encode
     </button>
     <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-decode" tabindex="-1" onclick="switchTab('decode')" id="tab-decode">
-      <i class="fas fa-eye"></i> Reveal
+      Reveal
     </button>
     <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-watermark" tabindex="-1" onclick="switchTab('watermark')" id="tab-watermark">
-      <i class="fas fa-fingerprint"></i> Watermark
+      File watermark
     </button>
   </div>
 
@@ -826,10 +99,10 @@
       <textarea id="visibleText" rows="2" placeholder="Paste or write the ordinary text people will see…" oninput="updateEncodePreview(); invalidateEncodeResult()"></textarea>
       <div class="cover-text-examples">
         <span>Try an example:</span>
-        <button class="cover-example-chip" onclick="setCoverText('tweet')"><i class="fab fa-twitter"></i> tweet</button>
-        <button class="cover-example-chip" onclick="setCoverText('email')"><i class="fas fa-envelope"></i> email</button>
-        <button class="cover-example-chip" onclick="setCoverText('bio')"><i class="fas fa-user"></i> bio</button>
-        <button class="cover-example-chip" onclick="setCoverText('blank')"><i class="fas fa-times"></i> no cover — easy to detect</button>
+        <button class="cover-example-chip" onclick="setCoverText('tweet')">tweet</button>
+        <button class="cover-example-chip" onclick="setCoverText('email')">email</button>
+        <button class="cover-example-chip" onclick="setCoverText('bio')">bio</button>
+        <button class="cover-example-chip" onclick="setCoverText('blank')">no cover — easy to detect</button>
       </div>
       <div class="field-hint">This stays readable and unchanged. The hidden message is woven into it invisibly.</div>
     </div>
@@ -841,29 +114,25 @@
     </div>
     <details class="advanced-options">
       <summary>
-        <span><i class="fas fa-sliders-h"></i> Advanced options</span>
+        <span>Advanced options</span>
         <span class="summary-meta" id="encodeModeSummary">Standard mode</span>
       </summary>
       <div class="advanced-content">
         <div class="advanced-label">Compatibility</div>
         <div class="mode-selector" id="encodeModeSelector">
           <button class="mode-btn active-v2" id="encModeV2" onclick="setEncodeMode('v2')" type="button">
-            <i class="fas fa-bolt"></i>
             Standard
             <span class="mode-badge badge-8">Recommended</span>
           </button>
           <button class="mode-btn" id="encModeBin" onclick="setEncodeMode('binary')" type="button">
-            <i class="fas fa-signal"></i>
             Compatibility mode
             <span class="mode-badge badge-2">Longer</span>
           </button>
         </div>
         <div class="mode-info-strip mode-info-v2" id="encModeInfoV2">
-          <i class="fas fa-info-circle"></i>
           <span>Best for most uses. Produces a shorter, less noticeable payload.</span>
         </div>
         <div class="mode-info-strip mode-info-binary" id="encModeInfoBin" style="display:none">
-          <i class="fas fa-signal"></i>
           <span>Uses the two most widely preserved invisible characters. Try this if Standard messages are lost on a platform.</span>
         </div>
 
@@ -880,16 +149,16 @@
           <div class="field-hint" id="passphraseHint">The receiver will need the exact same passphrase. New messages verify that the passphrase is correct, but this remains obfuscation rather than encryption.</div>
         </div>
         <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message in this browser">
-          <i class="fas fa-check-circle"></i> Verify local encode/decode
+          Verify local encode/decode
         </button>
         <div class="rt-result" id="rtResult"></div>
       </div>
     </details>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleEncode()"><i class="fas fa-eye-slash"></i> Hide message</button>
-      <button class="btn btn-ghost" onclick="clearEncode()"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="btn btn-primary" onclick="handleEncode()">Hide message</button>
+      <button class="btn btn-ghost" onclick="clearEncode()">Clear</button>
     </div>
-    <p class="inline-security-note"><i class="fas fa-info-circle"></i> This hides a message; it does not encrypt it. Don’t use it for sensitive information.</p>
+    <p class="inline-security-note">This hides a message; it does not encrypt it. Don’t use it for sensitive information.</p>
     <div class="status-line" id="encodeStatus" role="status" aria-live="polite"></div>
     <section class="result-card" id="encodeResultCard">
       <div class="result-label result-card-heading">
@@ -898,18 +167,18 @@
       </div>
       <div class="result-box empty" id="encodedResult" aria-live="polite">Encoded message will appear here.</div>
       <div class="export-row">
-        <button class="btn btn-primary" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled><i class="fas fa-copy"></i> Copy encoded text</button>
-        <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none"><i class="fas fa-share-alt"></i> Share</button>
-        <button class="btn btn-ghost" id="encodeExportBtn" onclick="exportTxt('encodedResult','stegzero_encoded.txt')" disabled><i class="fas fa-file-download"></i> Export .txt</button>
-        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Open this result in Reveal" disabled><i class="fas fa-arrow-right"></i> Test in Reveal</button>
+        <button class="btn btn-primary" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled>Copy encoded text</button>
+        <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none">Share</button>
+        <button class="btn btn-ghost" id="encodeExportBtn" onclick="exportTxt('encodedResult','stegzero_encoded.txt')" disabled>Export .txt</button>
+        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Open this result in Reveal" disabled>Test in Reveal</button>
       </div>
     </section>
     <details class="technical-preview preview-section" id="encodePreviewSection" style="display:none">
-      <summary><i class="fas fa-code"></i> View technical preview</summary>
+      <summary>View technical preview</summary>
       <div class="preview-display" id="encodePreview"></div>
       <div class="preview-legend" id="encodePreviewLegend">
         <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
-        <span class="zw-count" id="encodeZwCount"><i class="fas fa-hashtag"></i> 0 hidden chars</span>
+        <span class="zw-count" id="encodeZwCount">0 hidden chars</span>
       </div>
     </details>
   </div>
@@ -920,8 +189,8 @@
     <div class="decode-empty-state" id="decodeEmptyState">
       <p><strong>Paste text below and StegZero will inspect it automatically.</strong><br>If it contains a hidden message, it will appear right away.</p>
       <div class="example-btns">
-        <button class="example-btn" onclick="loadDecodeExample('tweet')"><i class="fas fa-comment"></i> Try a hidden message</button>
-        <button class="example-btn" onclick="loadDecodeExample('binary')"><i class="fas fa-signal"></i> Try compatibility mode</button>
+        <button class="example-btn" onclick="loadDecodeExample('tweet')">Try a hidden message</button>
+        <button class="example-btn" onclick="loadDecodeExample('binary')">Try compatibility mode</button>
       </div>
     </div>
     <div class="field">
@@ -931,7 +200,7 @@
     </div>
     <details class="advanced-options reveal-options">
       <summary>
-        <span><i class="fas fa-microscope"></i> Unicode inspection options</span>
+        <span>Unicode inspection options</span>
         <span class="summary-meta">content type, file, advanced checks</span>
       </summary>
       <div class="advanced-content">
@@ -966,9 +235,9 @@
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleDecode()"><i class="fas fa-eye"></i> Reveal and inspect</button>
-      <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')"><i class="fas fa-paste"></i> Paste</button>
-      <button class="btn btn-ghost" onclick="clearDecode()"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="btn btn-primary" onclick="handleDecode()">Reveal and inspect</button>
+      <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')">Paste</button>
+      <button class="btn btn-ghost" onclick="clearDecode()">Clear</button>
     </div>
     <div class="status-line" id="decodeStatus" role="status" aria-live="polite"></div>
     <section class="result-card reveal-result-card" id="revealResultCard">
@@ -978,39 +247,39 @@
       </div>
       <div class="result-box empty" id="decodedResult" aria-live="polite">Paste text above to begin.</div>
       <div class="export-row">
-        <button class="btn btn-primary" id="revealCopyBtn" onclick="copyResult('decodedResult')" disabled><i class="fas fa-copy"></i> Copy revealed message</button>
-        <button class="btn btn-ghost" id="revealExportBtn" onclick="exportTxt('decodedResult','stegzero_decoded.txt')" disabled><i class="fas fa-file-download"></i> Export .txt</button>
+        <button class="btn btn-primary" id="revealCopyBtn" onclick="copyResult('decodedResult')" disabled>Copy revealed message</button>
+        <button class="btn btn-ghost" id="revealExportBtn" onclick="exportTxt('decodedResult','stegzero_decoded.txt')" disabled>Export .txt</button>
       </div>
     </section>
 
     <details class="inspection-details reveal-inspector-details" id="revealInspectorDetails" hidden>
       <summary>
-        <span><i class="fas fa-microscope"></i> Unicode inspection details</span>
+        <span>Unicode inspection details</span>
         <span class="summary-meta" id="revealInspectorSummary">No report yet</span>
       </summary>
       <div id="revealUnicodeInspector" hidden></div>
     </details>
-    <p class="unicode-privacy-note">Need a standalone tool? Open the <a href="/invisible-character-detector/">Invisible Unicode Character Detector</a>.</p>
+    <p class="unicode-privacy-note">Need a standalone tool? Open the <a href="invisible-character-detector/index.html">Invisible Unicode Character Detector</a>.</p>
   </div>
 
   <!-- WATERMARK PANEL -->
   <div class="panel" id="panel-watermark" role="tabpanel" aria-labelledby="tab-watermark">
 
     <div class="wm-info-strip">
-      <span class="wm-chip"><i class="fas fa-file-alt"></i> .txt &amp; .md</span>
-      <span class="wm-chip"><i class="fas fa-code"></i> .html &amp; .xml</span>
-      <span class="wm-chip"><i class="fas fa-table"></i> .csv</span>
-      <span class="wm-chip"><i class="fas fa-brackets-curly" style="font-family:var(--mono);">{}</i> .json</span>
-      <span class="wm-chip"><i class="fas fa-lock"></i> 100% client-side</span>
+      <span class="wm-chip">.txt &amp; .md</span>
+      <span class="wm-chip">.html &amp; .xml</span>
+      <span class="wm-chip">.csv</span>
+      <span class="wm-chip">.json</span>
+      <span class="wm-chip">100% client-side</span>
     </div>
 
     <!-- Sub-tabs: Embed / Verify -->
     <div class="wm-sub-tabs">
       <button class="wm-sub-btn active" onclick="switchWmPane('embed')" id="wm-tab-embed">
-        <i class="fas fa-stamp"></i> Embed Watermark
+        Embed Watermark
       </button>
       <button class="wm-sub-btn" onclick="switchWmPane('verify')" id="wm-tab-verify">
-        <i class="fas fa-search-plus"></i> Verify / Extract
+        Verify / Extract
       </button>
     </div>
 
@@ -1020,7 +289,7 @@
         <label for="embedFileInput">File to watermark</label>
         <div class="file-drop-zone" id="embedDropZone">
           <input type="file" id="embedFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleEmbedFile(this)">
-          <div class="drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <div class="drop-icon"></div>
           <p><strong>Drop a text file here</strong> or click to browse</p>
           <p class="file-types">.txt · .md · .html · .xml · .csv · .json</p>
         </div>
@@ -1033,14 +302,14 @@
           <div class="field">
             <input type="text" id="wmIdInput" placeholder="e.g. recipient:alice · leak-check:v1 · doc:42">
           </div>
-          <button class="btn btn-ghost" onclick="generateWmId()"><i class="fas fa-dice"></i> Generate</button>
+          <button class="btn btn-ghost" onclick="generateWmId()">Generate</button>
         </div>
         <div class="field-hint">This ID will be invisibly embedded throughout the file. Keep it unique per recipient or distribution copy.</div>
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="handleEmbed()"><i class="fas fa-stamp"></i> Embed &amp; Download</button>
-        <button class="btn btn-ghost" onclick="clearEmbed()"><i class="fas fa-eraser"></i> Clear</button>
+        <button class="btn btn-primary" onclick="handleEmbed()">Embed &amp; Download</button>
+        <button class="btn btn-ghost" onclick="clearEmbed()">Clear</button>
       </div>
       <div class="status-line" id="embedStatus"></div>
     </div>
@@ -1051,7 +320,7 @@
         <label for="verifyFileInput">File to verify</label>
         <div class="file-drop-zone" id="verifyDropZone">
           <input type="file" id="verifyFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleVerifyFile(this)">
-          <div class="drop-icon"><i class="fas fa-search-plus"></i></div>
+          <div class="drop-icon"></div>
           <p><strong>Drop the file to inspect</strong> or click to browse</p>
           <p class="file-types">.txt · .md · .html · .xml · .csv · .json</p>
         </div>
@@ -1059,8 +328,8 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="handleVerify()"><i class="fas fa-search-plus"></i> Extract Watermark</button>
-        <button class="btn btn-ghost" onclick="clearVerify()"><i class="fas fa-eraser"></i> Clear</button>
+        <button class="btn btn-primary" onclick="handleVerify()">Extract Watermark</button>
+        <button class="btn btn-ghost" onclick="clearVerify()">Clear</button>
       </div>
       <div class="status-line" id="verifyStatus"></div>
 
@@ -1072,10 +341,10 @@
 
   <hr class="divider" id="how-it-works">
 
-  <h2 class="section-heading"><i class="fas fa-info-circle"></i> How Zero-Width Steganography Works</h2>
+  <h2 class="section-heading">How Zero-Width Steganography Works</h2>
   <div class="info-grid">
     <div class="info-card">
-      <h3><i class="fas fa-question-circle"></i> What is zero-width steganography?</h3>
+      <h3>What is zero-width steganography?</h3>
       <ul>
         <li>A technique for hiding secret messages inside ordinary visible text</li>
         <li>Uses invisible Unicode characters — zero-width spaces, joiners, and separators</li>
@@ -1084,7 +353,7 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-cogs"></i> Standard vs Compatibility mode</h3>
+      <h3>Standard vs Compatibility mode</h3>
       <ul>
         <li><strong>Standard (default):</strong> uses eight zero-width characters — three bits per symbol for a shorter payload</li>
         <li><strong>Compatibility:</strong> uses only ZWSP (U+200B) and ZWNJ (U+200C) — one bit per symbol</li>
@@ -1093,7 +362,7 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-exclamation-triangle"></i> Platform compatibility</h3>
+      <h3>Platform compatibility</h3>
       <ul>
         <li>Twitter/X and Facebook strip zero-width characters — messages will be lost in both modes</li>
         <li>WhatsApp may strip some rarer characters — Compatibility mode may work better, but verify it before relying on it</li>
@@ -1102,7 +371,7 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-lightbulb"></i> Good use cases</h3>
+      <h3>Good use cases</h3>
       <ul>
         <li>Hiding watermarks in shared documents to track leaks</li>
         <li>Easter eggs in web pages, GitHub READMEs, or blog posts</li>
@@ -1111,7 +380,7 @@
       </ul>
     </div>
     <div class="info-card">
-  <h3><i class="fas fa-key"></i> Passphrase obfuscation layer</h3>
+  <h3>Passphrase obfuscation layer</h3>
   <ul>
     <li>The optional passphrase applies XOR obfuscation to the message bytes before they are encoded as zero-width characters</li>
     <li>New passphrase-protected messages verify the passphrase before displaying decoded text; older StegZero messages may not support that verification</li>
@@ -1123,10 +392,10 @@
 
   <hr class="divider" id="faq">
 
-  <h2 class="section-heading"><i class="fas fa-question-circle"></i> Zero-Width Steganography — Frequently Asked Questions</h2>
+  <h2 class="section-heading">Zero-Width Steganography — Frequently Asked Questions</h2>
   <div class="info-grid">
     <div class="info-card">
-      <h3><i class="fas fa-shield-alt"></i> Is zero-width steganography secure?</h3>
+      <h3>Is zero-width steganography secure?</h3>
       <ul>
         <li>No — it's obfuscation, not encryption. Pasting into any decoder reveals the message.</li>
         <li>For real security: encrypt with GPG or AES first, then hide the ciphertext here.</li>
@@ -1134,20 +403,20 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-code"></i> Which Unicode characters are used?</h3>
+      <h3>Which Unicode characters are used?</h3>
       <ul>
         <li><strong>Standard:</strong> ZWSP (U+200B), ZWNJ (U+200C), ZWJ (U+200D), Word Joiner (U+2060), Invisible Times (U+2062), Invisible Separator (U+2063), Invisible Plus (U+2064), BOM/ZWNBS (U+FEFF)</li>
         <li><strong>Compatibility:</strong> only ZWSP (U+200B = bit 0) and ZWNJ (U+200C = bit 1) — a smaller, more widely preserved pair</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-code"></i>How do I decode a steganography message?</h3>
+      <h3>How do I decode a steganography message?</h3>
       <ul>
         <li>Paste the text into the Reveal tab above. StegZero automatically inspects it and extracts hidden messages in Standard, Compatibility, and legacy formats.</li>
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-server"></i> Is my data sent anywhere?</h3>
+      <h3>Is my data sent anywhere?</h3>
       <ul>
         <li>No. Everything runs in your browser via JavaScript.</li>
         <li>No text is ever sent to a server — not even anonymised telemetry.</li>
@@ -1155,7 +424,7 @@
       </ul>
     </div>
     <div class="info-card">
-      <h3><i class="fas fa-fingerprint"></i> How does file watermarking work?</h3>
+      <h3>How does file watermarking work?</h3>
       <ul>
         <li>The watermark ID is encoded as zero-width characters using the Standard engine</li>
         <li>Characters are distributed across safe text positions — avoiding JSON values, CSV numbers, etc.</li>
@@ -1164,7 +433,7 @@
       </ul>
     </div>
     <div class="info-card">
-  <h3><i class="fas fa-image"></i> Can StegZero decode Steghide files?</h3>
+  <h3>Can StegZero decode Steghide files?</h3>
   <ul>
     <li>No — Steghide is an <em>image and audio</em> steganography tool that hides data inside JPEG/BMP/WAV files. StegZero handles <em>text</em> steganography using invisible Unicode characters.</li>
     <li>If you have a Steghide-encoded image, you need the <code>steghide</code> command-line tool or a dedicated image steg decoder — not StegZero.</li>
@@ -1173,7 +442,7 @@
   </ul>
 </div>
 <div class="info-card">
-  <h3><i class="fas fa-list-ol"></i> How to decode a hidden text message</h3>
+  <h3>How to decode a hidden text message</h3>
   <ul>
     <li><strong>Step 1:</strong> Copy the text you suspect contains a hidden message — it will look completely normal</li>
     <li><strong>Step 2:</strong> Open the Reveal tab above and paste the text into the input field</li>
@@ -1190,7 +459,7 @@
   <div class="footer-links-inline" aria-label="Footer links">
     <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
-    <a href="/invisible-character-detector/">Unicode Detector</a>
+    <a href="invisible-character-detector/index.html">Unicode Detector</a>
     <a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
     <a href="mailto:contact@stegzero.com">Contact</a>
   </div>
@@ -1201,21 +470,76 @@
 
 <div id="toast"></div>
 
-<script src="unicode-inspector-data.js"></script>
-<script src="unicode-inspector.js?v=20260901d"></script>
-<script src="unicode-inspector-ui.js?v=20260901d"></script>
 <script>
 // ════════════════════════════════════════
-// CORE V2 STEGANOGRAPHY ENGINE (unchanged)
+// CORE STEGANOGRAPHY ENGINE
 // ════════════════════════════════════════
 const ZW_ALPHABET = ['\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'];
 const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
-const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2;
-const PASSPHRASE_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x32]); // "SZP2"
+const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2, PASSPHRASE_BOUND_VERSION = 3;
+const PASSPHRASE_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x32]); // "SZP2" (legacy authenticated wrapper)
+const PASSPHRASE_BOUND_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x33]); // "SZP3" (binds the full passphrase)
 const te = new TextEncoder(), td = new TextDecoder();
 let revealInspector = null;
 let decodeScanTimer = null;
 let decodeScanGeneration = 0;
+let unicodeInspectorLoadPromise = null;
+
+function loadLocalScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`Unable to load ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+function mountRevealInspector() {
+  if (revealInspector || !window.StegZeroInspectorUI) return;
+  revealInspector = StegZeroInspectorUI.mount({
+    root: document.getElementById('revealUnicodeInspector'),
+    input: document.getElementById('encodedText'),
+    contextSelect: document.getElementById('revealUnicodeContext'),
+    advancedToggle: document.getElementById('revealUnicodeAdvanced'),
+    fileInput: document.getElementById('revealUnicodeFile'),
+    listen: false,
+    pageSize: 20,
+    getStegZero: text => {
+      const alphaSet = new Set(ZW_ALPHABET);
+      let extracted = '';
+      for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
+      const bits = alphabetToBits(extracted);
+      const isV2 = bits.length >= 88 && parseHeader(bitsToBytes(bits.slice(0, 88))) !== null;
+      const isBinary = getBinaryHeader(text) !== null;
+      const legacyBits = Array.from(text).filter(ch => ch === LEGACY_0 || ch === LEGACY_1).length;
+      const isLegacy = !isV2 && !isBinary && legacyBits >= 8 && legacyBits % 8 === 0;
+      return { format: isV2 ? 'v2' : isBinary ? 'binary' : (isLegacy ? 'legacy' : null), status: (isV2 || isBinary || isLegacy) ? 'possible' : 'none' };
+    },
+    onNotice: (message, isError) => { if (isError) showToast(message, 'error'); },
+    onInputLoaded: () => onDecodeInput()
+  });
+  document.getElementById('revealUnicodeContext').addEventListener('change', () => handleDecode(true));
+  document.getElementById('revealUnicodeAdvanced').addEventListener('change', () => handleDecode(true));
+}
+
+function ensureUnicodeInspector() {
+  if (window.StegZeroInspectorUI && window.StegZeroUnicode) {
+    mountRevealInspector();
+    return Promise.resolve();
+  }
+  if (!unicodeInspectorLoadPromise) {
+    unicodeInspectorLoadPromise = loadLocalScript('unicode-inspector-data.js')
+      .then(() => loadLocalScript('unicode-inspector.js?v=20260903'))
+      .then(() => loadLocalScript('unicode-inspector-ui.js?v=20260903'))
+      .then(() => mountRevealInspector())
+      .catch(error => {
+        unicodeInspectorLoadPromise = null;
+        throw error;
+      });
+  }
+  return unicodeInspectorLoadPromise;
+}
 
 function bytesToBits(b){let s='';for(let i=0;i<b.length;i++)s+=b[i].toString(2).padStart(8,'0');return s;}
 function bitsToBytes(s){const o=[];for(let i=0;i+8<=s.length;i+=8)o.push(parseInt(s.slice(i,i+8),2));return new Uint8Array(o);}
@@ -1227,20 +551,23 @@ function xorshift32(seed){let x=seed>>>0;return()=>{if(x===0)x=0x9E3779B9;x^=x<<
 function obfuscateBits(bits,seed){const next=xorshift32(seed);let acc=0,remain=0,out='';for(let i=0;i<bits.length;i++){if(remain===0){acc=next();remain=32;}const p=acc&1;acc>>>=1;remain--;out+=((bits.charCodeAt(i)&1)^p)?'1':'0';}return out;}
 function bitsToAlphabet(bits){let out='';for(let i=0;i<bits.length;i+=3){const ch=bits.slice(i,i+3).padEnd(3,'0');out+=ZW_ALPHABET[parseInt(ch,2)];}return out;}
 function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));let bits='';for(const ch of Array.from(str)){if(map.has(ch))bits+=map.get(ch).toString(2).padStart(3,'0');}return bits;}
-function buildHeader(nonce,msgBytes,version=VERSION,magic=MAGIC){const len=msgBytes.length,crc=crc32(msgBytes);return concatBytes(numToBytesBE(magic,2),numToBytesBE(version,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
-function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
+function buildHeader(nonce,msgBytes,version=VERSION,magic=MAGIC){const len=msgBytes.length;if(len>0xFFFF)throw new RangeError('The hidden message is too large. StegZero supports at most 65,535 encoded bytes, including passphrase metadata.');const crc=crc32(msgBytes);return concatBytes(numToBytesBE(magic,2),numToBytesBE(version,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
+function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION&&version!==PASSPHRASE_BOUND_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
 function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
 function xorWithKey(bytes,key){if(!key)return bytes;const kBytes=te.encode(key);const out=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)out[i]=bytes[i]^kBytes[i%kBytes.length];return out;}
-function decodeUtf8Payload(bytes){try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bytes);const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\t\r\n]/u.test(c)).length/chars.length;return printable>=0.85?msg:null;}catch{return null;}}
+function decodeUtf8Payload(bytes){try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return Array.from(msg).length?msg:null;}catch{return null;}}
 function wrapPassphrasePayload(bytes){return concatBytes(PASSPHRASE_MARKER,numToBytesBE(crc32(bytes),4),bytes);}
 function unwrapPassphrasePayload(bytes){if(bytes.length<8)return null;for(let i=0;i<PASSPHRASE_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_MARKER[i])return null;const expected=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];const payload=bytes.slice(8);return crc32(payload)===(expected>>>0)?payload:null;}
+function wrapBoundPassphrasePayload(bytes,passphrase){return concatBytes(PASSPHRASE_BOUND_MARKER,numToBytesBE(crc32(te.encode(passphrase)),4),numToBytesBE(crc32(bytes),4),bytes);}
+function unwrapBoundPassphrasePayload(bytes,passphrase){if(bytes.length<12)return null;for(let i=0;i<PASSPHRASE_BOUND_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_BOUND_MARKER[i])return null;const expectedPassphrase=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];if(crc32(te.encode(passphrase))!==(expectedPassphrase>>>0))return null;const expectedPayload=(bytes[8]*2**24)|(bytes[9]<<16)|(bytes[10]<<8)|bytes[11];const payload=bytes.slice(12);return crc32(payload)===(expectedPayload>>>0)?payload:null;}
+function assertCarrierFree(text,alphabet,label){const carrierSet=new Set(alphabet);for(const ch of Array.from(text)){if(!carrierSet.has(ch))continue;const codePoint='U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0');throw new Error(`${label} already contains StegZero carrier character ${codePoint}. Inspect or remove it before encoding so the new message can be decoded reliably.`);}}
 
-function encodeMsg(visible,hidden,passphrase){let msgBytes=te.encode(hidden),version=VERSION;if(passphrase){version=PASSPHRASE_VERSION;msgBytes=xorWithKey(wrapPassphrasePayload(msgBytes),passphrase);}const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
+function encodeMsg(visible,hidden,passphrase){assertCarrierFree(visible,ZW_ALPHABET,'The cover text');let msgBytes=te.encode(hidden),version=VERSION;if(passphrase){version=PASSPHRASE_BOUND_VERSION;msgBytes=xorWithKey(wrapBoundPassphrasePayload(msgBytes,passphrase),passphrase);}const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
 
 function getV2Header(text){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);return bits.length>=88?parseHeader(bitsToBytes(bits.slice(0,88))):null;}
-function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
+function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_BOUND_VERSION){if(!passphrase)return null;msgBytes=unwrapBoundPassphrasePayload(xorWithKey(msgBytes,passphrase),passphrase);if(!msgBytes)return null;}else if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
 
-function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8)return null;try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bitsToBytes(bits)).replace(/\x00+$/g,'');const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\t\r\n]/u.test(c)).length/chars.length;if(printable<0.85)return null;return msg;}catch{return null;}}
+function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8||bits.length%8!==0)return null;try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bitsToBytes(bits)).replace(/\x00+$/g,'');const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Mark}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\p{Format}\t\r\n]/u.test(c)).length/chars.length;if(printable<0.85)return null;return msg;}catch{return null;}}
 
 // ════════════════════════════════════════
 // BINARY STEGANOGRAPHY ENGINE
@@ -1269,9 +596,10 @@ function binaryToBits(str) {
 }
 
 function encodeMsgBinary(visible, hidden, passphrase) {
+  assertCarrierFree(visible, [BIN_0, BIN_1], 'The cover text');
   let msgBytes = te.encode(hidden);
   let version = VERSION;
-  if (passphrase) { version = PASSPHRASE_VERSION; msgBytes = xorWithKey(wrapPassphrasePayload(msgBytes), passphrase); }
+  if (passphrase) { version = PASSPHRASE_BOUND_VERSION; msgBytes = xorWithKey(wrapBoundPassphrasePayload(msgBytes, passphrase), passphrase); }
   const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
   // Build header with BINARY_MAGIC
   const header = buildHeader(nonce, msgBytes, version, BINARY_MAGIC);
@@ -1304,7 +632,11 @@ function tryDecodeBinary(text, passphrase) {
   let msgBytes = bitsToBytes(msgBits);
   if (msgBytes.length !== len) return null;
   if (crc32(msgBytes) !== (crc >>> 0)) return null;
-  if (version === PASSPHRASE_VERSION) {
+  if (version === PASSPHRASE_BOUND_VERSION) {
+    if (!passphrase) return null;
+    msgBytes = unwrapBoundPassphrasePayload(xorWithKey(msgBytes, passphrase), passphrase);
+    if (!msgBytes) return null;
+  } else if (version === PASSPHRASE_VERSION) {
     if (!passphrase) return null;
     msgBytes = unwrapPassphrasePayload(xorWithKey(msgBytes, passphrase));
     if (!msgBytes) return null;
@@ -1365,6 +697,7 @@ function getFileType(filename) {
 }
 
 function wmEncode(content, wmId, fileType) {
+  assertCarrierFree(content, ZW_ALPHABET, 'The source file');
   const payload = encodeMsg('', wmId, null);
   const payloadChars = Array.from(payload);
   if (!payloadChars.length) return content;
@@ -1440,17 +773,11 @@ function formatBytes(n) {
 }
 
 function renderFileLoaded(containerId, file) {
-  const ext = file.name.split('.').pop().toUpperCase();
-  const iconMap = { JSON:'fa-brackets-curly', CSV:'fa-table', HTML:'fa-code', HTM:'fa-code', XML:'fa-code', MD:'fa-markdown', TXT:'fa-file-alt' };
-  const icon = iconMap[ext] || 'fa-file-alt';
   document.getElementById(containerId).innerHTML = `
     <div class="file-loaded">
-      <i class="fas ${icon} file-icon"></i>
       <span class="file-name">${escHtml(file.name)}</span>
       <span class="file-size">${formatBytes(file.size)}</span>
-      <button class="file-clear" onclick="clearFileSlot('${containerId}')" title="Remove file">
-        <i class="fas fa-times"></i>
-      </button>
+      <button class="file-clear" onclick="clearFileSlot('${containerId}')" aria-label="Remove file">Remove</button>
     </div>`;
   document.getElementById(containerId).style.display = 'block';
   const dzId = containerId.replace('FileLoaded', 'DropZone');
@@ -1534,7 +861,7 @@ function handleVerify() {
     card.className = 'verify-result-card verify-found';
     card.innerHTML = `
       <div class="vr-label">Watermark Status</div>
-      <div class="vr-mark vr-found-color"><i class="fas fa-check-circle"></i> Watermark found</div>
+      <div class="vr-mark vr-found-color">Watermark found</div>
       <div class="vr-label" style="margin-top:0.85rem">Embedded ID</div>
       <div class="vr-value">${escHtml(wmId)}</div>`;
     card.style.display = 'block';
@@ -1544,8 +871,8 @@ function handleVerify() {
     card.className = 'verify-result-card verify-not-found';
     card.innerHTML = `
       <div class="vr-label">Watermark Status</div>
-      <div class="vr-mark vr-miss-color"><i class="fas fa-times-circle"></i> No watermark found</div>
-      <div class="vr-value" style="color:var(--text-muted);margin-top:0.5rem;font-size:0.8rem">This file contains no StegZero watermark, or it was stripped during transfer.</div>`;
+      <div class="vr-mark vr-miss-color">No watermark found</div>
+      <div class="vr-value" style="color:var(--muted);margin-top:0.5rem;font-size:13px">This file contains no StegZero watermark, or it was stripped during transfer.</div>`;
     card.style.display = 'block';
     setStatus('verifyStatus', 'err', '✗ No watermark detected');
     showToast('No watermark found', 'warn');
@@ -1658,11 +985,11 @@ function setPreviewLegend(sectionId, legendId, countId, str, mode) {
     document.getElementById(legendId).innerHTML = `
       <div class="preview-legend-item"><span class="zw-sample-0"></span><span>= ZWSP (bit 0)</span></div>
       <div class="preview-legend-item"><span class="zw-sample-1"></span><span>= ZWNJ (bit 1)</span></div>
-      <span class="zw-count-bin" id="${countId}"><i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}</span>`;
+      <span class="zw-count-bin" id="${countId}">${zw} hidden char${zw!==1?'s':''}</span>`;
   } else {
     document.getElementById(legendId).innerHTML = `
       <div class="preview-legend-item"><span class="zw-sample"></span><span>= one zero-width character</span></div>
-      <span class="zw-count" id="${countId}"><i class="fas fa-hashtag"></i> ${zw} hidden char${zw!==1?'s':''}</span>`;
+      <span class="zw-count" id="${countId}">${zw} hidden char${zw!==1?'s':''}</span>`;
   }
 }
 
@@ -1734,6 +1061,17 @@ function rejectOversizedDecodeInput(text) {
 
 function onDecodeInput() {
   const val = document.getElementById('encodedText').value;
+  if (!window.StegZeroUnicode) {
+    if (val) setStatus('decodeStatus', '', 'Loading the Unicode inspector…');
+    ensureUnicodeInspector()
+      .then(() => {
+        if (document.getElementById('encodedText').value === val) onDecodeInput();
+      })
+      .catch(() => {
+        setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.');
+      });
+    return;
+  }
   clearTimeout(decodeScanTimer);
   const generation = ++decodeScanGeneration;
   if (val.length > 0) {
@@ -1829,9 +1167,17 @@ function handleEncode() {
   }
   document.getElementById('hiddenMessage').removeAttribute('aria-invalid');
   document.getElementById('passphraseInput').removeAttribute('aria-invalid');
-  const result = currentEncodeMode === 'binary'
-    ? encodeMsgBinary(visible, hidden, pass || null)
-    : encodeMsg(visible, hidden, pass || null);
+  let result;
+  try {
+    result = currentEncodeMode === 'binary'
+      ? encodeMsgBinary(visible, hidden, pass || null)
+      : encodeMsg(visible, hidden, pass || null);
+  } catch (error) {
+    const message = error && error.message ? error.message : 'The message could not be encoded.';
+    setStatus('encodeStatus','err',message);
+    showToast(message,'error');
+    return;
+  }
   resultEl.textContent = result;
   resultEl.classList.remove('empty');
   resultEl.classList.add('has-content');
@@ -1896,6 +1242,12 @@ function showRevealInspector(report) {
 
 function handleDecode(silent = false, inspection = null) {
   const text = document.getElementById('encodedText').value || '';
+  if (!window.StegZeroUnicode) {
+    ensureUnicodeInspector()
+      .then(() => handleDecode(silent, inspection))
+      .catch(() => setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.'));
+    return;
+  }
   const usePass = document.getElementById('decodePassToggle').checked;
   const pass = usePass ? (document.getElementById('decodePassInput').value || '') : '';
   const resultEl = document.getElementById('decodedResult');
@@ -1929,26 +1281,30 @@ function handleDecode(silent = false, inspection = null) {
 
   if (decoded) {
     const unverifiedLegacyPassphrase = !!pass && !!usedHeader && usedHeader.version === VERSION;
+    const unverifiedLegacyPayload = usedMode === 'legacy';
+    const unverifiedPayload = unverifiedLegacyPassphrase || unverifiedLegacyPayload;
     resultEl.textContent = decoded;
     resultEl.className = 'result-box has-content';
-    cardEl.className = 'result-card reveal-result-card ' + (unverifiedLegacyPassphrase ? 'needs-attention' : 'is-found');
-    headingEl.textContent = unverifiedLegacyPassphrase ? 'Possible hidden message' : 'Hidden message found';
-    metaEl.textContent = `${publicFormatLabel(usedMode)} format${unverifiedLegacyPassphrase ? ' · older, unverified passphrase format' : ''}`;
+    cardEl.className = 'result-card reveal-result-card ' + (unverifiedPayload ? 'needs-attention' : 'is-found');
+    headingEl.textContent = unverifiedLegacyPayload ? 'Possible legacy payload' : unverifiedLegacyPassphrase ? 'Possible hidden message' : 'Hidden message found';
+    metaEl.textContent = `${publicFormatLabel(usedMode)} format${unverifiedLegacyPayload ? ' · unframed and unverified' : unverifiedLegacyPassphrase ? ' · older, unverified passphrase format' : ''}`;
     document.getElementById('revealCopyBtn').disabled = false;
     document.getElementById('revealExportBtn').disabled = false;
-    setStatus('decodeStatus',unverifiedLegacyPassphrase ? 'warn' : 'ok',unverifiedLegacyPassphrase
-      ? 'Older passphrase payload decoded, but this format cannot verify whether the passphrase is correct.'
+    setStatus('decodeStatus',unverifiedPayload ? 'warn' : 'ok',unverifiedLegacyPayload
+      ? 'Possible legacy text decoded, but this unframed format has no signature or checksum and may be a false positive.'
+      : unverifiedLegacyPassphrase
+        ? 'Older passphrase payload decoded, but this format cannot verify whether the passphrase is correct.'
       : 'Hidden message revealed and verified.');
     if (inspection && inspection.report && revealInspector) {
-      inspection.report.stegzero = { format: usedMode, status: unverifiedLegacyPassphrase ? 'possible' : 'decoded' };
+      inspection.report.stegzero = { format: usedMode, status: unverifiedPayload ? 'possible' : 'decoded' };
       revealInspector.render(inspection.report);
       showRevealInspector(inspection.report);
     }
-    if (!silent) showToast(unverifiedLegacyPassphrase ? 'Possible older message decoded' : 'Hidden message revealed!', unverifiedLegacyPassphrase ? 'warn' : 'success');
+    if (!silent) showToast(unverifiedLegacyPayload ? 'Possible legacy payload decoded' : unverifiedLegacyPassphrase ? 'Possible older message decoded' : 'Hidden message revealed!', unverifiedPayload ? 'warn' : 'success');
   } else {
     const knownPayload = inspection.isV2 || inspection.isBinary || inspection.isLegacy;
-    const protectedPayload = (inspection.v2Header && inspection.v2Header.version === PASSPHRASE_VERSION)
-      || (inspection.binaryHeader && inspection.binaryHeader.version === PASSPHRASE_VERSION);
+    const protectedPayload = (inspection.v2Header && (inspection.v2Header.version === PASSPHRASE_VERSION || inspection.v2Header.version === PASSPHRASE_BOUND_VERSION))
+      || (inspection.binaryHeader && (inspection.binaryHeader.version === PASSPHRASE_VERSION || inspection.binaryHeader.version === PASSPHRASE_BOUND_VERSION));
     if (knownPayload && inspection.report && revealInspector) {
       inspection.report.stegzero.status = protectedPayload ? 'passphrase-required' : 'possible';
       revealInspector.render(inspection.report);
@@ -2008,7 +1364,7 @@ function runDetect() {
 
   // Legacy check
   const legacyBits = Array.from(text).filter(c => c === LEGACY_0 || c === LEGACY_1).length;
-  const isLegacy = !isV2 && !isBinary && legacyBits >= 8;
+  const isLegacy = !isV2 && !isBinary && legacyBits >= 8 && legacyBits % 8 === 0;
   const format = isV2 ? 'v2' : isBinary ? 'binary' : isLegacy ? 'legacy' : null;
   const status = format ? 'possible' : 'none';
   const context = document.getElementById('revealUnicodeContext').value;
@@ -2042,9 +1398,9 @@ function runRoundTrip() {
     decoded = tryDecodeV2(encoded, pass || null);
   }
   if (decoded === hidden) {
-    rtEl.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success)"></i> <span class="rt-pass">Local verification passed — encode → decode → exact match</span>';
+    rtEl.innerHTML = '<span class="rt-pass">Local verification passed — encode → decode → exact match</span>';
   } else {
-    rtEl.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger)"></i> <span class="rt-fail">Local verification failed — decoded text does not match</span>';
+    rtEl.innerHTML = '<span class="rt-fail">Local verification failed — decoded text does not match</span>';
   }
 }
 
@@ -2087,21 +1443,17 @@ function switchTab(name){
     tab.tabIndex=selected?0:-1;
     panel.classList.toggle('active',selected);
   });
+  if (name === 'decode') {
+    ensureUnicodeInspector().catch(() => {
+      setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.');
+    });
+  }
 }
 
 // ════════════════════════════════════════
 // NAV
 // ════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  const btn=document.getElementById('menuBtn');
-  const nav=document.getElementById('navLinks');
-  const overlay=document.getElementById('overlay');
-  const icon=document.getElementById('menuIcon');
-  function toggleNav(){const open=nav.classList.toggle('open');overlay.classList.toggle('active',open);document.body.style.overflow=open?'hidden':'';icon.className=open?'fas fa-times':'fas fa-bars';}
-  btn.addEventListener('click',toggleNav);
-  overlay.addEventListener('click',toggleNav);
-  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{if(nav.classList.contains('open'))toggleNav();}));
-  window.addEventListener('resize',()=>{if(window.innerWidth>700&&nav.classList.contains('open'))toggleNav();});
   document.querySelector('.tabs').addEventListener('keydown',e=>{
     if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
     const tabs=[...document.querySelectorAll('[role="tab"]')];
@@ -2112,29 +1464,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     e.preventDefault();
   });
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){const active=document.querySelector('.panel.active');if(active.id==='panel-encode')handleEncode();else if(active.id==='panel-decode')handleDecode();e.preventDefault();}});
-  revealInspector = StegZeroInspectorUI.mount({
-    root: document.getElementById('revealUnicodeInspector'),
-    input: document.getElementById('encodedText'),
-    contextSelect: document.getElementById('revealUnicodeContext'),
-    advancedToggle: document.getElementById('revealUnicodeAdvanced'),
-    fileInput: document.getElementById('revealUnicodeFile'),
-    listen: false,
-    pageSize: 20,
-    getStegZero: text => {
-      const alphaSet = new Set(ZW_ALPHABET);
-      let extracted = '';
-      for (const ch of Array.from(text)) if (alphaSet.has(ch)) extracted += ch;
-      const bits = alphabetToBits(extracted);
-      const isV2 = bits.length >= 88 && parseHeader(bitsToBytes(bits.slice(0, 88))) !== null;
-      const isBinary = getBinaryHeader(text) !== null;
-      const legacyBits = Array.from(text).filter(ch => ch === LEGACY_0 || ch === LEGACY_1).length;
-      return { format: isV2 ? 'v2' : isBinary ? 'binary' : (!isV2 && !isBinary && legacyBits >= 8 ? 'legacy' : null), status: (isV2 || isBinary || legacyBits >= 8) ? 'possible' : 'none' };
-    },
-    onNotice: (message, isError) => { if (isError) showToast(message, 'error'); },
-    onInputLoaded: () => onDecodeInput()
-  });
-  document.getElementById('revealUnicodeContext').addEventListener('change', () => handleDecode(true));
-  document.getElementById('revealUnicodeAdvanced').addEventListener('change', () => handleDecode(true));
 });
 </script>
 </body>

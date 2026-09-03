@@ -40,7 +40,7 @@
   margin: 0;
 }
 .uzi-summary > div { padding: .65rem; border: 1px solid var(--uzi-border); border-radius: 9px; }
-.uzi-summary dt { color: var(--uzi-muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; }
+.uzi-summary dt { color: var(--uzi-muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
 .uzi-summary dd { margin: .2rem 0 0; font-family: var(--mono, ui-monospace, monospace); font-size: .86rem; font-weight: 700; overflow-wrap: anywhere; }
 .uzi-technical-summary { margin-top: .75rem; border-top: 1px solid var(--uzi-border); }
 .uzi-technical-summary > summary {
@@ -111,8 +111,8 @@
 .uzi-finding-identity { display: grid; min-width: 0; gap: .12rem; }
 .uzi-finding-name { min-width: 0; font-size: .8rem; font-weight: 720; overflow-wrap: anywhere; }
 .uzi-finding-codepoint { color: var(--uzi-muted); font: .7rem/1.4 var(--mono, monospace); overflow-wrap: anywhere; }
-.uzi-occurrence-count { color: var(--uzi-muted); font-size: .72rem; font-weight: 720; white-space: nowrap; }
-.uzi-assessment { padding: .22rem .45rem; border-radius: 999px; font-size: .68rem; font-weight: 800; }
+.uzi-occurrence-count { color: var(--uzi-muted); font-size: .75rem; font-weight: 720; white-space: nowrap; }
+.uzi-assessment { padding: .22rem .45rem; border-radius: 999px; font-size: .75rem; font-weight: 800; }
 .uzi-assessment.is-expected { background: #e4f5eb; color: #17603e; }
 .uzi-assessment.is-review { background: #fff1ca; color: #76500a; }
 .uzi-assessment.is-suspicious { background: #ffe2df; color: #8e2929; }
