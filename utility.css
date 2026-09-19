@@ -705,6 +705,7 @@ textarea:focus-visible {
   color: inherit;
 }
 
+.field label.passphrase-row,
 .passphrase-row {
   display: flex;
   align-items: center;
@@ -712,6 +713,7 @@ textarea:focus-visible {
 }
 
 .toggle-switch {
+  display: inline-block;
   position: relative;
   width: 34px;
   height: 20px;
@@ -735,6 +737,11 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
+input:focus-visible + .toggle-track {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .toggle-track::after {
   position: absolute;
   top: 50%;
@@ -753,7 +760,12 @@ input:checked + .toggle-track {
   background: var(--accent);
 }
 
-input:checked + .toggle-track::after {
+.toggle-switch input:checked:focus-visible + .toggle-track {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.toggle-switch input:checked + .toggle-track::after {
   left: 16px;
   background: #fff;
 }

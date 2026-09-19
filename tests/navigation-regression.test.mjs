@@ -28,3 +28,11 @@ test('detector navigation uses explicit homepage files for local previews', () =
   assert.match(detector, /href="\.\.\/index\.html#tool"/);
   assert.doesNotMatch(detector, /href="\.\.\/"/);
 });
+
+test('passphrase switches retain their layout and only move the thumb when checked', () => {
+  assert.match(utilityCss, /\.field label\.passphrase-row,\s*\.passphrase-row\s*\{[^}]*display:\s*flex;/s);
+  assert.match(utilityCss, /\.toggle-switch\s*\{[^}]*display:\s*inline-block;/s);
+  assert.match(utilityCss, /\.toggle-track::after\s*\{[^}]*left:\s*2px;[^}]*background:\s*var\(--muted\);/s);
+  assert.match(utilityCss, /\.toggle-switch input:checked \+ \.toggle-track::after\s*\{[^}]*left:\s*16px;[^}]*background:\s*#fff;/s);
+  assert.doesNotMatch(utilityCss, /(?:^|\})\s*\.toggle-track::after\s*\{[^}]*left:\s*16px;/s);
+});
