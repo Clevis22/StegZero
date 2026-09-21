@@ -7,7 +7,7 @@ import { TextDecoder, TextEncoder } from 'node:util';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)];
-const source = scripts.at(-1)[1] + '\n;globalThis.__protocol={encodeMsg,tryDecodeV2,getV2Header,encodeMsgBinary,tryDecodeBinary,getBinaryHeader,tryDecodeLegacy,wmEncode,wmDecode};';
+const source = await readFile(new URL('../stegzero-protocol.js', import.meta.url), 'utf8') + '\n' + scripts.at(-1)[1] + '\n;globalThis.__protocol={encodeMsg,tryDecodeV2,getV2Header,encodeMsgBinary,tryDecodeBinary,getBinaryHeader,tryDecodeLegacy,wmEncode,wmDecode};';
 const stub = () => ({
   style: {}, classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
   addEventListener() {}, querySelectorAll() { return []; }, setAttribute() {}, append() {}, click() {},
@@ -148,4 +148,80 @@ test('legacy fallback accepts valid UTF-8 and rejects malformed bytes', () => {
 test('file watermark embedding and verification remain compatible', () => {
   const watermarked = protocol.wmEncode('alpha\nbeta', 'build:123', 'txt');
   assert.equal(protocol.wmDecode(watermarked), 'build:123');
+});
+
+test('JSON watermarks preserve parsed values and existing file contents', () => {
+  for (const source of ['{"name":"Alice","count":1}', '[1,{"nested":[true,null,"😀"]}]', '42', '"hello"', 'false', 'null', ' {"a":1} \r\n\t']) {
+    const output = protocol.wmEncode(source, 'build:123 🔎', 'json');
+    assert.ok(output.startsWith(source));
+    assert.deepEqual(JSON.parse(output), JSON.parse(source));
+    assert.equal(protocol.wmDecode(output), 'build:123 🔎');
+    assert.throws(() => protocol.wmEncode(output, 'second-id', 'json'), /already contains/);
+  }
+  assert.throws(() => protocol.wmEncode('{broken', 'id', 'json'), /not valid JSON/);
+  assert.equal(protocol.wmDecode('{"a":1}\n' + ' '.repeat(200) + '\n'), null);
+  const output = protocol.wmEncode('{}', 'id', 'json');
+  const at = output.indexOf('\n') + 40;
+  const corrupted = output.slice(0, at) + (output[at] === ' ' ? '\t' : ' ') + output.slice(at + 1);
+  assert.equal(protocol.wmDecode(corrupted), null);
+});
+
+test('HTML/XML watermarks preserve scripts, styles, doctypes, and declarations', () => {
+  for (const [type, source] of [
+    ['html', '<!doctype html><html><script>const answer = 42;</script><style>p { color:red }</style><p>Hi</p></html>'],
+    ['html', '<script>const unclosed = 42;'],
+    ['xml', '<?xml version="1.0" encoding="UTF-8"?><root><value>42</value></root>'],
+    ['xml', '<!DOCTYPE root><root/>']
+  ]) {
+    const output = protocol.wmEncode(source, 'doc:42', type);
+    assert.equal(protocol.wmDecode(output), 'doc:42');
+    assert.equal(output.replace(/<!--[\s\S]*?-->/, ''), source);
+    if (source.startsWith('<?xml')) assert.ok(output.startsWith(source.slice(0, source.indexOf('?>') + 2)));
+    const script = output.match(/<script>([\s\S]*?)<\/script>/);
+    if (script) assert.doesNotThrow(() => new vm.Script(script[1]));
+  }
+});
+
+test('CSV watermark placement respects quoted commas, escaped quotes, and multiline fields', () => {
+  for (const source of ['name,count\r\nAlice,42', '"name","count"\r\n"Alice, A.",42', '"a""b\nnext",42', '1,2\n3,4', '"",name\n1,2', '']) {
+    const output = protocol.wmEncode(source, 'csv:42', 'csv');
+    assert.equal(protocol.wmDecode(output), 'csv:42');
+    assert.equal(output.replace(/[\u200B\u200C\u200D\u2060\u2062\u2063\u2064\uFEFF]/g, ''), source);
+  }
+  for (const source of ['"unterminated', '"closed"oops,1', 'ba"re,2']) {
+    assert.throws(() => protocol.wmEncode(source, 'id', 'csv'), /CSV/);
+  }
+});
+
+test('encoding limits include cover code points, byte size, and passphrase metadata', () => {
+  const plain = protocol.encodeMsgBinary('', 'a'.repeat(62489), null);
+  assert.equal(Array.from(plain).length, 500000);
+  assert.equal(protocol.tryDecodeBinary(plain, null), 'a'.repeat(62489));
+  assert.throws(() => protocol.encodeMsgBinary('x', 'a'.repeat(62489), null), /500,000/);
+  assert.throws(() => protocol.encodeMsgBinary('Cover', 'a'.repeat(62500), null), /500,000/);
+  const protectedText = protocol.encodeMsgBinary('', 'a'.repeat(62477), 'pass');
+  assert.equal(Array.from(protectedText).length, 500000);
+  assert.equal(protocol.tryDecodeBinary(protectedText, 'pass'), 'a'.repeat(62477));
+  assert.throws(() => protocol.encodeMsgBinary('', 'a'.repeat(62478), 'pass'), /500,000/);
+  const emojiCover = '😀'.repeat(500000 - 32);
+  assert.equal(Array.from(protocol.encodeMsg(emojiCover, 'a', null)).length, 500000);
+  assert.throws(() => protocol.encodeMsg(emojiCover + 'x', 'a', null), /500,000/);
+});
+
+test('large previews are bounded without changing the encoded output', () => {
+  for (const [encode, render, decode] of [[protocol.encodeMsg, context.renderPreviewV2, protocol.tryDecodeV2], [protocol.encodeMsgBinary, context.renderPreviewBinary, protocol.tryDecodeBinary]]) {
+    const message = 'a'.repeat(4000);
+    const encoded = encode('<cover>😀', message, null);
+    const preview = render(encoded);
+    assert.ok((preview.match(/class="zw-mark/g) || []).length <= 2000);
+    assert.match(preview, /Preview limited to the first 2,000 characters/);
+    assert.ok(preview.includes('&lt;'));
+    assert.equal(decode(encoded, null), message);
+    assert.doesNotMatch(render('<short>😀'), /Preview limited/);
+  }
+});
+
+test('watermarks produced before these changes remain readable', async () => {
+  const fixtures = JSON.parse(await readFile(new URL('fixtures/legacy-watermarks.json', import.meta.url), 'utf8'));
+  for (const fixture of fixtures) assert.equal(protocol.wmDecode(fixture.watermarked), fixture.id, fixture.format);
 });

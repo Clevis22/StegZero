@@ -19,7 +19,7 @@
 .uzi-help, .uzi-position, .uzi-treatment, .uzi-cleanup-meta, .uzi-cleanup-description, .uzi-findings-intro {
   margin: .45rem 0;
   color: var(--uzi-muted);
-  font-size: .82rem;
+  font-size: .875rem;
   line-height: 1.55;
 }
 .uzi-verdict {
@@ -50,7 +50,7 @@
   font-weight: 750;
   cursor: pointer;
 }
-.uzi-technical-summary > summary:focus-visible { outline: 3px solid rgba(37,145,91,.3); outline-offset: 3px; border-radius: 4px; }
+.uzi-technical-summary > summary:focus-visible { outline: 2px solid #1f6a4f; outline-offset: 3px; border-radius: 4px; }
 .uzi-summary-technical { margin-top: .75rem; }
 .uzi-escaped, .uzi-context, .uzi-candidate-value {
   box-sizing: border-box;
@@ -90,7 +90,7 @@
 }
 .uzi-button-secondary { background: #fff; color: #244035; }
 .uzi-button:disabled { cursor: not-allowed; opacity: .48; }
-.uzi-button:focus-visible, .uzi-select:focus-visible, .uzi-check input:focus-visible, .uzi-chart-row:focus-visible, .uzi-chart-reset:focus-visible { outline: 3px solid rgba(37, 145, 91, .3); outline-offset: 2px; }
+.uzi-button:focus-visible, .uzi-select:focus-visible, .uzi-check input:focus-visible, .uzi-chart-row:focus-visible, .uzi-chart-reset:focus-visible { outline: 2px solid #1f6a4f; outline-offset: 2px; }
 .uzi-findings-intro { margin-bottom: .8rem; }
 .uzi-chart-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .4rem; }
 .uzi-chart-header h4 { margin: 0; font-size: .78rem; }
@@ -117,20 +117,20 @@
 .uzi-assessment.is-review { background: #fff1ca; color: #76500a; }
 .uzi-assessment.is-suspicious { background: #ffe2df; color: #8e2929; }
 .uzi-finding-body { padding: 0 .8rem .8rem; border-top: 1px solid var(--uzi-border); }
-.uzi-finding-body > p:not(.uzi-position):not(.uzi-treatment) { font-size: .82rem; line-height: 1.55; }
+.uzi-finding-body > p:not(.uzi-position):not(.uzi-treatment) { font-size: .875rem; line-height: 1.55; }
 .uzi-occurrences { display: grid; gap: .45rem; }
 .uzi-occurrence { border: 1px solid var(--uzi-border); border-radius: 8px; background: #fbfcfb; overflow: hidden; }
 .uzi-occurrence > summary { display: flex; align-items: center; justify-content: space-between; gap: .65rem; padding: .6rem .7rem; cursor: pointer; }
 .uzi-occurrence .uzi-position { margin: 0; }
 .uzi-occurrence-body { padding: 0 .7rem .7rem; border-top: 1px solid var(--uzi-border); }
-.uzi-occurrence-body > p:not(.uzi-position):not(.uzi-treatment) { font-size: .8rem; line-height: 1.5; }
+.uzi-occurrence-body > p:not(.uzi-position):not(.uzi-treatment) { font-size: .875rem; line-height: 1.5; }
 .uzi-occurrence-more { justify-self: start; }
 .uzi-candidates { display: grid; gap: .75rem; }
 .uzi-candidate { min-width: 0; padding: .8rem; border: 1px solid var(--uzi-border); border-radius: 9px; }
 .uzi-candidate h4 { margin: 0; }
-.uzi-control { display: grid; gap: .3rem; font-size: .75rem; font-weight: 700; }
+.uzi-control { display: grid; gap: .3rem; font-size: .875rem; font-weight: 700; }
 .uzi-select { min-height: 40px; padding: .45rem .65rem; border: 1px solid var(--uzi-border); border-radius: 8px; background: #fff; font: inherit; }
-.uzi-check { display: inline-flex; gap: .45rem; align-items: flex-start; font-size: .78rem; line-height: 1.35; }
+.uzi-check { display: inline-flex; gap: .45rem; align-items: flex-start; font-size: .875rem; line-height: 1.35; }
 .uzi-check input { margin-top: .15rem; }
 .uzi-cleanup-controls { align-items: end; }
 .uzi-cleanup-description { max-width: 58rem; margin-bottom: .75rem; }
@@ -156,7 +156,7 @@
 .uzi-actions { margin-top: .8rem; }
 .uzi-notice { padding: .7rem .8rem; border-radius: 8px; font-size: .8rem; }
 .uzi-notice-error { background: #fff0ef; color: #852c28; }
-.uzi-empty { color: var(--uzi-muted); font-size: .82rem; }
+.uzi-empty { color: var(--uzi-muted); font-size: .875rem; }
 .uzi .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .unicode-input-controls {
   display: grid;
@@ -165,10 +165,10 @@
   margin: .75rem 0;
   align-items: end;
 }
-.unicode-input-controls label { display: grid; gap: .3rem; color: var(--text-muted, #617068); font-size: .74rem; font-weight: 700; }
+.unicode-input-controls label { display: grid; gap: .3rem; color: var(--text-muted, #617068); font-size: .875rem; font-weight: 700; }
 .unicode-input-controls select, .unicode-input-controls input[type="file"] { box-sizing: border-box; width: 100%; min-height: 42px; padding: .5rem; border: 1px solid var(--border, #dfe7e1); border-radius: 8px; background: #fff; }
 .unicode-input-controls .unicode-inline-check { display: flex; flex-direction: row; align-items: center; min-height: 42px; }
-.unicode-privacy-note { color: var(--text-muted, #617068); font-size: .75rem; line-height: 1.5; }
+.unicode-privacy-note { color: var(--text-muted, #617068); font-size: .875rem; line-height: 1.5; }
 .unicode-drop-zone { margin-top:.65rem; padding:.8rem; border:1px dashed #9bb8a8; border-radius:9px; background:#f6faf8; color:var(--text-muted, #617068); text-align:center; font-size:.78rem; }
 .unicode-drop-zone.is-dragging { border-color:#267a53; background:#e9f7ef; color:#155a3b; }
 
@@ -184,3 +184,18 @@
 @media (prefers-reduced-motion: reduce) {
   .uzi *, .uzi *::before, .uzi *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Keep specialist controls available without crowding the initial task. */
+.inspection-options { margin-top: .85rem; border: 1px solid #dfe2df; border-radius: 6px; }
+.inspection-options > summary, .uzi-diagnostic > summary {
+  min-height: 44px; padding: .65rem .8rem; color: #464e49;
+  font-size: .875rem; font-weight: 650; cursor: pointer;
+}
+.inspection-options > summary:focus-visible, .uzi-diagnostic > summary:focus-visible {
+  outline: 2px solid #1f6a4f; outline-offset: 2px;
+}
+.inspection-options-body { padding: 0 .85rem .85rem; }
+.inspection-hint { margin: .6rem 0; color: #626a65; font-size: .875rem; }
+.uzi-diagnostic { padding: 0; }
+.uzi-diagnostic > summary { margin: 0; }
+.uzi-diagnostic > p, .uzi-diagnostic > pre { margin: .75rem 1rem 1rem; }

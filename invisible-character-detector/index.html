@@ -17,8 +17,8 @@
   <meta name="twitter:image" content="https://stegzero.com/unicode-detector-preview.png">
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" sizes="any" href="../icon.svg?v=20260901">
-  <link rel="stylesheet" href="../utility.css?v=20260903-3">
-  <link rel="stylesheet" href="../unicode-inspector.css?v=20260903">
+  <link rel="stylesheet" href="../utility.css?v=20260908-ux1">
+  <link rel="stylesheet" href="../unicode-inspector.css?v=20260908-ux1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -51,8 +51,8 @@
     .privacy-pill { display:flex; align-items:center; gap:.45rem; margin-top:.45rem; padding:0; border:0; border-radius:0; background:transparent; color:var(--green); font-size:.8125rem; font-weight:650; }
     .privacy-pill::before { color:var(--green); content:'●'; font-size:.45rem; }
     .tool { margin:0 0 3rem; padding:clamp(1rem,3vw,1.35rem); border:1px solid var(--border); border-radius:7px; background:#fff; box-shadow:none; }
-    .tool label { font-size:.8125rem; font-weight:650; }
-    #unicodeInput { width:100%; min-height:120px; margin-top:.35rem; padding:.8rem; resize:vertical; border:1px solid #c9ceca; border-radius:6px; background:#fff; color:var(--ink); font:1rem/1.55 inherit; }
+    .tool label { font-size:.875rem; font-weight:650; }
+    #unicodeInput { width:100%; min-height:120px; margin-top:.35rem; padding:.8rem; resize:vertical; border:1px solid #c9ceca; border-radius:6px; background:#fff; color:var(--ink); font:inherit; font-size:1rem; line-height:1.55; }
     #unicodeInput:focus { outline:3px solid rgba(37,145,91,.22); border-color:#2e8c61; }
     .tool-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.8rem; }
     .primary-button { min-height:42px; padding:.6rem .9rem; border:1px solid var(--ink); border-radius:6px; background:var(--ink); color:#fff; font:inherit; font-size:.84rem; font-weight:700; cursor:pointer; }
@@ -79,7 +79,7 @@
     <header class="hero">
       <p class="eyebrow">Unicode 17.0 · local browser tool</p>
       <h1>Invisible Unicode character detector</h1>
-      <p class="lede">Reveal hidden, blank, directional, formatting, and unusual Unicode characters. See exactly where they occur, understand legitimate uses, and preview conservative cleanup without changing your source text.</p>
+      <p class="lede">Find invisible characters, see where they occur, and preview a cleaned copy. Your original text stays unchanged.</p>
       <span class="privacy-pill">No uploads · no storage · no analytics</span>
     </header>
 
@@ -88,6 +88,10 @@
       <label for="unicodeInput">Paste or type text</label>
       <textarea id="unicodeInput" placeholder="Paste text containing invisible or suspicious Unicode…" spellcheck="false"></textarea>
       <div class="tool-actions"><button type="button" class="primary-button" id="unicodeInspectNow">Inspect now</button></div>
+      <p class="inspection-hint">Checks as you type. Your original text stays unchanged.</p>
+      <details class="inspection-options">
+        <summary>Inspection options and local files</summary>
+        <div class="inspection-options-body">
       <div class="unicode-input-controls" aria-label="Inspection options">
         <label>Content type
           <select id="unicodeContext">
@@ -103,6 +107,8 @@
       </div>
       <div class="unicode-drop-zone" id="unicodeDropZone">Or drop one supported text/code file here</div>
       <p class="unicode-privacy-note">Supports valid UTF-8, UTF-8 BOM, UTF-16LE BOM, and UTF-16BE BOM files up to 1 MiB and inputs up to 500,000 Unicode code points.</p>
+        </div>
+      </details>
       <div id="standaloneUnicodeInspector" hidden></div>
     </section>
 
@@ -143,8 +149,8 @@
     <p>© 2026 StegZero. Free, open-source, and processed entirely in your browser.</p>
   </footer>
   <script src="../unicode-inspector-data.js"></script>
-  <script src="../unicode-inspector.js?v=20260903"></script>
-  <script src="../unicode-inspector-ui.js?v=20260903"></script>
+  <script src="../unicode-inspector.js?v=20260908-ux"></script>
+  <script src="../unicode-inspector-ui.js?v=20260908-ux"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const host = document.getElementById('standaloneUnicodeInspector');

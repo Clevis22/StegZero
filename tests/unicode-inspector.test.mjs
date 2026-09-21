@@ -162,3 +162,28 @@ test('local file decoder accepts UTF-8 and BOM-marked UTF-16 without replacement
   assert.throws(() => ui.decodeLocalFile(Uint8Array.from([0xC3, 0x28]).buffer), /not valid/);
   assert.throws(() => ui.decodeLocalFile(Uint8Array.from([0, 1, 2, 3]).buffer), /binary/);
 });
+
+test('UI cleanup policy preserves legitimate occurrences in mixed categories', () => {
+  const flag = '🏴' + [...'gbeng'].map(c => cp(0xE0000 + c.codePointAt(0))).join('') + cp(0xE007F);
+  const invalidTags = [...'hide'].map(c => cp(0xE0000 + c.codePointAt(0))).join('');
+  const value = flag + ' ' + invalidTags;
+  const report = inspect(value);
+  for (const preset of ['conservative', 'security']) {
+    assert.equal(unicode.clean(value, report, { preset, selectedCategories: [], removeStegZero: false }).text, flag + ' ');
+  }
+  assert.equal(unicode.clean(value, report, { preset: 'conservative', selectedCategories: ['unicode-tag'] }).text, '🏴 ');
+  assert.equal(unicode.clean(value, report, { preset: 'custom', selectedCategories: [] }).text, value);
+});
+
+test('cleanup rejects stale reports, including edits that keep the same length', () => {
+  const source = 'a\u0000bc';
+  const report = inspect(source);
+  for (const changed of ['abcd', 'ab\u0000c', 'z\u0000bc', source + 'x']) {
+    assert.throws(() => unicode.clean(changed, report), /text has changed/i);
+  }
+  assert.equal(unicode.clean(source, report).text, 'abc');
+  assert.ok(!unicode.formatReport(report, 'json').includes(source));
+  const exported = JSON.parse(unicode.formatReport(report, 'json'));
+  assert.equal(unicode.clean(source, exported).text, 'abc');
+  assert.throws(() => unicode.clean('abcd', exported), /text has changed/i);
+});

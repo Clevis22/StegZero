@@ -77,7 +77,7 @@
     if (!host || !input) throw new Error('Inspector root and input are required.');
 
     const pageSize = Math.max(1, Number(options.pageSize) || PAGE_SIZE);
-    const state = { report: null, timer: null, generation: 0, visible: pageSize, category: 'all', fileName: null };
+    const state = { report: null, sourceText: null, timer: null, generation: 0, visible: pageSize, category: 'all', fileName: null };
     host.classList.add('uzi');
     host.textContent = '';
 
@@ -96,8 +96,8 @@
     technicalDetails.append(technicalSummary);
     summarySection.append(verdict, summary, technicalDetails);
 
-    const hiddenSection = el('section', 'uzi-section');
-    hiddenSection.append(el('h3', 'uzi-heading', 'Show-hidden diagnostic view'));
+    const hiddenSection = el('details', 'uzi-section uzi-diagnostic');
+    hiddenSection.append(el('summary', 'uzi-heading', 'Show hidden characters'));
     const hiddenHelp = el('p', 'uzi-help', 'This logical-order escaped view is diagnostic and may not reproduce the original text shaping. Raw bidirectional controls are never rendered here.');
     const escaped = el('pre', 'uzi-escaped');
     escaped.dir = 'ltr';
@@ -198,7 +198,7 @@
         });
         if (generation !== state.generation) return null;
         render(report);
-        announce(`Inspection complete: ${report.summary.findingCount.toLocaleString()} finding${report.summary.findingCount === 1 ? '' : 's'}.`, false);
+        if (options.announceInspection !== false) announce(`Inspection complete: ${report.summary.findingCount.toLocaleString()} finding${report.summary.findingCount === 1 ? '' : 's'}.`, false);
         return report;
       } catch (scanError) {
         if (generation !== state.generation) return null;
@@ -210,8 +210,8 @@
     }
 
     function schedule() {
-      clearTimeout(state.timer);
-      const generation = ++state.generation;
+      invalidate();
+      const generation = state.generation;
       state.timer = setTimeout(() => {
         if (generation !== state.generation) return;
         inspectNow();
@@ -220,6 +220,9 @@
 
     function render(report) {
       state.report = report;
+      state.sourceText = input.value;
+      copyTextReport.disabled = false;
+      downloadJson.disabled = false;
       state.visible = pageSize;
       state.category = 'all';
       renderSummary();
@@ -233,6 +236,9 @@
     }
 
     function renderEmpty() {
+      invalidate();
+      verdict.textContent = 'No current inspection';
+      candidatesSection.hidden = true;
       summary.textContent = '';
       technicalSummary.textContent = '';
       escaped.textContent = '';
@@ -251,6 +257,23 @@
       copyClean.disabled = true;
       downloadClean.disabled = true;
       more.hidden = true;
+    }
+
+    function invalidate() {
+      clearTimeout(state.timer);
+      state.generation++;
+      state.report = null;
+      state.sourceText = null;
+      copyClean.disabled = true;
+      downloadClean.disabled = true;
+      copyTextReport.disabled = true;
+      downloadJson.disabled = true;
+      verdict.textContent = 'Text changed; a new inspection is needed.';
+      cleanupMeta.textContent = 'Inspect the current text before creating a cleaned copy.';
+    }
+
+    function hasCurrentReport() {
+      return !!state.report && state.sourceText === input.value;
     }
 
     function addSummary(target, label, value) {
@@ -311,6 +334,7 @@
     }
 
     function selectCategory(category) {
+      if (!hasCurrentReport()) return;
       state.category = category; state.visible = pageSize;
       chart.querySelectorAll('button').forEach(node => {
         const active = node.dataset.category === category;
@@ -326,6 +350,7 @@
     }
 
     function renderRows() {
+      if (!hasCurrentReport()) return;
       const findings = filteredFindings();
       rows.textContent = '';
       if (!findings.length) {
@@ -357,6 +382,7 @@
         body.append(occurrenceList);
         let occurrenceVisible = Math.min(20, pageSize);
         const renderOccurrences = () => {
+          if (!hasCurrentReport()) return;
           occurrenceList.textContent = '';
           group.findings.slice(0, occurrenceVisible).forEach(item => occurrenceList.append(renderOccurrence(item)));
           if (group.findings.length > occurrenceVisible) {
@@ -431,7 +457,7 @@
     function cleaned() { return scanner.clean(input.value, state.report, cleanupPolicy()); }
 
     function renderCleanup() {
-      if (!state.report) return;
+      if (!hasCurrentReport()) return;
       const descriptions = {
         conservative: 'Recommended cleanup removes only malformed, deprecated, or ineffectual characters. Legitimate formatting, emoji, multilingual shaping, spaces, and bidi controls are preserved.',
         security: 'Security-focused cleanup also removes bidi controls, suspicious payload-like characters, and confirmed StegZero carriers. Join controls and unusual spaces remain unless you add them below.',
@@ -513,7 +539,7 @@
     }
 
     function applyCleanup(action) {
-      if (!state.report || !confirmAggressive()) return;
+      if (!hasCurrentReport() || !confirmAggressive()) return;
       const result = cleaned();
       if (!result.changes) return;
       if (action === 'copy') copy(result.text).then(() => announce('Cleaned text copied; the source input was not changed.', false)).catch(e => announce(e.message, true));
@@ -521,11 +547,11 @@
     }
 
     function copyReport(format) {
-      if (!state.report) return;
+      if (!hasCurrentReport()) return;
       copy(scanner.formatReport(state.report, format)).then(() => announce('Report copied.', false)).catch(e => announce(e.message, true));
     }
     function downloadReport() {
-      if (!state.report) return;
+      if (!hasCurrentReport()) return;
       download('stegzero-unicode-report.json', scanner.formatReport(state.report, 'json'), 'application/json');
     }
 
@@ -534,7 +560,7 @@
     if (options.contextSelect) options.contextSelect.addEventListener('change', inspectNow);
     if (options.advancedToggle) options.advancedToggle.addEventListener('change', inspectNow);
     if (options.inspectButton) options.inspectButton.addEventListener('click', inspectNow);
-    if (options.listen !== false) input.addEventListener('input', schedule);
+    input.addEventListener('input', options.listen !== false ? schedule : invalidate);
     async function processFile(file, fileInput) {
       if (!file) return;
       if (file.size > MAX_FILE_BYTES) { announce('Files must be 1 MiB or smaller.', true); if (fileInput) fileInput.value = ''; return; }
@@ -562,7 +588,7 @@
     }
 
     renderEmpty();
-    return Object.freeze({ inspectNow, schedule, render, clear: renderEmpty, getReport: () => state.report });
+    return Object.freeze({ inspectNow, schedule, render, invalidate, clear: renderEmpty, getReport: () => hasCurrentReport() ? state.report : null });
   }
 
   root.StegZeroInspectorUI = Object.freeze({ mount, decodeLocalFile, MAX_FILE_BYTES });

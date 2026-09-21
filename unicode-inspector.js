@@ -5,6 +5,8 @@
   const DATA_VERSION = '17.0.0';
   if (PINNED_DATA && PINNED_DATA.version !== DATA_VERSION) throw new Error('StegZero Unicode data version mismatch');
   const MAX_CODE_POINTS = 500000;
+  // Bind reports to their input without including source text in exported reports.
+  const reportSources = new WeakMap();
 
   const CP = {
     0x00AD: ['SOFT HYPHEN', 'SHY'], 0x034F: ['COMBINING GRAPHEME JOINER', 'CGJ'],
@@ -254,6 +256,7 @@
     let utf16Offset = 0, line = 1, column = 1;
     for (const value of text) {
       const cp = rawCodePoint(value);
+      if (items.length >= MAX_CODE_POINTS) throw new RangeError('Input exceeds 500,000 Unicode code points');
       items.push({ value, cp, utf16Offset, codePointIndex: items.length + 1, line, column });
       utf16Offset += value.length;
       if (cp === 10) { line++; column = 1; } else { column++; }
@@ -388,7 +391,7 @@
     for (const f of findings) categories[f.category] = (categories[f.category] || 0) + 1;
     const highest = findings.reduce((best, f) => severityRank(f.assessment) > severityRank(best) ? f.assessment : best, 'expected');
     const stegzero = Object.assign({ format: null, status: 'none' }, options.stegzero || {});
-    return {
+    const report = {
       unicodeVersion: DATA_VERSION,
       input: { codePoints: items.length, utf16Units: text.length, lines: text.length ? items[items.length - 1].line : 0 },
       summary: { findingCount: findings.length, distinctCodePoints: new Set(findings.map(f => f.codePoint)).size, categories, highestAssessment: findings.length ? highest : null },
@@ -396,6 +399,8 @@
       findings,
       candidates
     };
+    reportSources.set(report, text);
+    return report;
   }
 
   function presetCategories(report, preset) {
@@ -420,7 +425,14 @@
 
   /** Produce cleaned text without modifying the inspected source. */
   function clean(text, report, policy) {
+    if (typeof text !== 'string' || !report || !Array.isArray(report.findings)) throw new TypeError('Text and an inspection report are required.');
+    if ((reportSources.has(report) && reportSources.get(report) !== text) ||
+        report.input.utf16Units !== text.length ||
+        report.findings.some(f => text.codePointAt(f.utf16Offset) !== f.codePointValue)) {
+      throw new Error('The text has changed. Inspect it again before cleaning.');
+    }
     policy = Object.assign({ preset: 'conservative', selectedCategories: null, removeStegZero: false }, policy || {});
+    const explicitCategories = new Set(policy.selectedCategories || []);
     const selected = policy.preset === 'custom' ? new Set(policy.selectedCategories || []) : presetCategories(report, policy.preset);
     if (Array.isArray(policy.selectedCategories)) for (const c of policy.selectedCategories) selected.add(c);
     const byOffset = new Map(report.findings.map(f => [f.utf16Offset, f]));
@@ -431,7 +443,7 @@
     for (const value of text) {
       const f = byOffset.get(offset);
       let replace = null;
-      const explicitlySelected = Array.isArray(policy.selectedCategories) && selected.has(f && f.category);
+      const explicitlySelected = explicitCategories.has(f && f.category);
       const presetSelected = f && policy.preset !== 'custom' && presetRemovesFinding(f, policy.preset);
       const customSelected = f && policy.preset === 'custom' && selected.has(f.category);
       if (f && (explicitlySelected || presetSelected || customSelected)) {
@@ -489,3 +501,9 @@
 
   root.StegZeroUnicode = Object.freeze({ DATA_VERSION, MAX_CODE_POINTS, inspect, clean, formatReport, tokenFor, escapedView, contextFor });
 })(typeof window !== 'undefined' ? window : globalThis);
+
+// Node/CommonJS adapter for the CLI. Browser behavior is unchanged because
+// `module` is undefined when this file loads as a classic script.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = (typeof window !== 'undefined' ? window : globalThis).StegZeroUnicode;
+}

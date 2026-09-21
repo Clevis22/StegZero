@@ -261,7 +261,7 @@ main {
   margin: 0 0 7px;
   color: #3d443f;
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 650;
   letter-spacing: 0;
   text-transform: none;
@@ -281,7 +281,7 @@ input[type="password"] {
   background: var(--surface);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.5;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
@@ -327,7 +327,7 @@ textarea:focus-visible {
 .toggle-label {
   color: var(--muted);
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -336,6 +336,7 @@ textarea:focus-visible {
 }
 
 .char-counter {
+  font-size: 13px;
   margin-top: 5px;
   text-align: right;
 }
@@ -405,7 +406,7 @@ textarea:focus-visible {
   border: 1px solid transparent;
   border-radius: 6px;
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 650;
   letter-spacing: 0;
   line-height: 1;
@@ -549,6 +550,11 @@ textarea:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.result-box {
+  font-size: 15px;
+  white-space: pre-wrap;
+}
+
 .result-box.empty {
   color: var(--faint);
   font-family: var(--sans);
@@ -586,7 +592,7 @@ textarea:focus-visible {
   gap: 10px;
   color: #464e49;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 620;
   list-style: none;
 }
@@ -1164,7 +1170,7 @@ footer {
 
 .footer-bottom p {
   margin: 0;
-  color: var(--faint);
+  color: var(--muted);
   font-family: var(--sans);
   font-size: 12px;
   letter-spacing: 0;
@@ -1261,8 +1267,10 @@ footer {
   .tab-btn {
     flex: 1;
     min-width: 0;
-    min-height: 45px;
-    padding: 0 6px;
+    min-height: 48px;
+    padding: 6px;
+    line-height: 1.3;
+    white-space: normal;
     font-size: 12px;
   }
 
@@ -1290,6 +1298,7 @@ footer {
     width: 100%;
   }
 
+  #encodeSubmitBtn,
   .btn-row .btn-primary,
   .export-row .btn-primary {
     grid-column: 1 / -1;

@@ -52,8 +52,8 @@
         }
       }
   </script>
-  <link rel="stylesheet" href="utility.css?v=20260903-3">
-  <link rel="stylesheet" href="unicode-inspector.css?v=20260903">
+  <link rel="stylesheet" href="utility.css?v=20260908-ux1">
+  <link rel="stylesheet" href="unicode-inspector.css?v=20260908-ux1">
 </head>
 <body>
 
@@ -81,13 +81,13 @@
 
   <div class="tabs" role="tablist" aria-label="StegZero tools">
     <button class="tab-btn active" type="button" role="tab" aria-selected="true" aria-controls="panel-encode" onclick="switchTab('encode')" id="tab-encode">
-      Encode
+      Hide message
     </button>
     <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-decode" tabindex="-1" onclick="switchTab('decode')" id="tab-decode">
-      Reveal
+      Reveal message
     </button>
     <button class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="panel-watermark" tabindex="-1" onclick="switchTab('watermark')" id="tab-watermark">
-      File watermark
+      Watermark file
     </button>
   </div>
 
@@ -108,7 +108,7 @@
     </div>
     <div class="field">
       <label for="hiddenMessage">Message to hide <span class="required" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
-      <input type="text" id="hiddenMessage" placeholder="Type the message you want to hide…" required aria-describedby="encodeLengthHint encodeStatus" oninput="updateCounter(); invalidateEncodeResult(); clearEncodeFieldError()">
+      <textarea id="hiddenMessage" rows="3" placeholder="Type the message you want to hide…" required aria-describedby="encodeLengthHint encodeStatus" oninput="updateCounter(); invalidateEncodeResult(); clearEncodeFieldError()"></textarea>
       <div class="char-counter" id="msgCounter">0 chars</div>
       <div class="field-hint" id="encodeLengthHint">Keep it short — longer messages create more zero-width characters, increasing detectability</div>
     </div>
@@ -144,18 +144,18 @@
           <span class="toggle-label">Require a passphrase to reveal the message</span>
         </label>
         <div class="passphrase-field" id="passphraseField">
-          <label class="sr-only" for="passphraseInput">Encoding passphrase</label>
+          <label class="sr-only" for="passphraseInput">Message passphrase</label>
           <input type="password" id="passphraseInput" placeholder="Enter a passphrase…" autocomplete="off" aria-describedby="passphraseHint" oninput="invalidateEncodeResult(); clearEncodeFieldError()" style="margin-top:0.5rem">
           <div class="field-hint" id="passphraseHint">The receiver will need the exact same passphrase. New messages verify that the passphrase is correct, but this remains obfuscation rather than encryption.</div>
         </div>
         <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message in this browser">
-          Verify local encode/decode
+          Test hiding and revealing
         </button>
-        <div class="rt-result" id="rtResult"></div>
+        <div class="rt-result" id="rtResult" role="status" aria-live="polite"></div>
       </div>
     </details>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleEncode()">Hide message</button>
+      <button class="btn btn-primary" id="encodeSubmitBtn" onclick="handleEncode()">Hide message</button>
       <button class="btn btn-ghost" onclick="clearEncode()">Clear</button>
     </div>
     <p class="inline-security-note">This hides a message; it does not encrypt it. Don’t use it for sensitive information.</p>
@@ -165,12 +165,12 @@
         <span id="encodeResultHeading">Your encoded text</span>
         <span class="result-meta" id="encodedMeta"></span>
       </div>
-      <div class="result-box empty" id="encodedResult" aria-live="polite">Encoded message will appear here.</div>
+      <div class="result-box empty" id="encodedResult">Encoded message will appear here.</div>
       <div class="export-row">
-        <button class="btn btn-primary" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled>Copy encoded text</button>
+        <button class="btn btn-ghost" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled>Copy encoded text</button>
         <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none">Share</button>
         <button class="btn btn-ghost" id="encodeExportBtn" onclick="exportTxt('encodedResult','stegzero_encoded.txt')" disabled>Export .txt</button>
-        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Open this result in Reveal" disabled>Test in Reveal</button>
+        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Check this text in Reveal message" disabled>Test message</button>
       </div>
     </section>
     <details class="technical-preview preview-section" id="encodePreviewSection" style="display:none">
@@ -235,7 +235,7 @@
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="handleDecode()">Reveal and inspect</button>
+      <button class="btn btn-primary" onclick="handleDecode()">Reveal message</button>
       <button class="btn btn-ghost" onclick="pasteClipboard('encodedText')">Paste</button>
       <button class="btn btn-ghost" onclick="clearDecode()">Clear</button>
     </div>
@@ -245,7 +245,7 @@
         <span id="revealResultHeading">Reveal result</span>
         <span class="result-meta" id="decodedMeta"></span>
       </div>
-      <div class="result-box empty" id="decodedResult" aria-live="polite">Paste text above to begin.</div>
+      <div class="result-box empty" id="decodedResult">Paste text above to begin.</div>
       <div class="export-row">
         <button class="btn btn-primary" id="revealCopyBtn" onclick="copyResult('decodedResult')" disabled>Copy revealed message</button>
         <button class="btn btn-ghost" id="revealExportBtn" onclick="exportTxt('decodedResult','stegzero_decoded.txt')" disabled>Export .txt</button>
@@ -276,10 +276,10 @@
     <!-- Sub-tabs: Embed / Verify -->
     <div class="wm-sub-tabs">
       <button class="wm-sub-btn active" onclick="switchWmPane('embed')" id="wm-tab-embed">
-        Embed Watermark
+        Watermark file
       </button>
       <button class="wm-sub-btn" onclick="switchWmPane('verify')" id="wm-tab-verify">
-        Verify / Extract
+        Check watermark
       </button>
     </div>
 
@@ -308,16 +308,16 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="handleEmbed()">Embed &amp; Download</button>
+        <button class="btn btn-primary" onclick="handleEmbed()">Watermark and download</button>
         <button class="btn btn-ghost" onclick="clearEmbed()">Clear</button>
       </div>
-      <div class="status-line" id="embedStatus"></div>
+      <div class="status-line" id="embedStatus" role="status" aria-live="polite"></div>
     </div>
 
     <!-- VERIFY PANE -->
     <div class="wm-pane" id="wm-pane-verify">
       <div class="field">
-        <label for="verifyFileInput">File to verify</label>
+        <label for="verifyFileInput">File to check</label>
         <div class="file-drop-zone" id="verifyDropZone">
           <input type="file" id="verifyFileInput" accept=".txt,.md,.html,.htm,.xml,.csv,.json" onchange="handleVerifyFile(this)">
           <div class="drop-icon"></div>
@@ -328,10 +328,10 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="handleVerify()">Extract Watermark</button>
+        <button class="btn btn-primary" onclick="handleVerify()">Check watermark</button>
         <button class="btn btn-ghost" onclick="clearVerify()">Clear</button>
       </div>
-      <div class="status-line" id="verifyStatus"></div>
+      <div class="status-line" id="verifyStatus" role="status" aria-live="polite"></div>
 
       <div id="verifyResultCard" style="display:none"></div>
     </div>
@@ -426,10 +426,10 @@
     <div class="info-card">
       <h3>How does file watermarking work?</h3>
       <ul>
-        <li>The watermark ID is encoded as zero-width characters using the Standard engine</li>
-        <li>Characters are distributed across safe text positions — avoiding JSON values, CSV numbers, etc.</li>
+        <li>The watermark ID uses a checksummed frame; placement depends on the file format</li>
+        <li>JSON uses trailing spaces and tabs; HTML/XML use comments; CSV embeds inside a field without breaking its quoting. Plain text uses distributed zero-width characters.</li>
         <li>The original file content is completely unchanged — only invisible characters are added</li>
-        <li>Upload a suspected leaked copy to the Verify pane to instantly extract the watermark ID</li>
+        <li>Upload a suspected leaked copy to the Check watermark pane to instantly extract the watermark ID</li>
       </ul>
     </div>
     <div class="info-card">
@@ -468,18 +468,13 @@
   </div>
 </footer>
 
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
+<script src="stegzero-protocol.js?v=20260908-ux"></script>
 <script>
 // ════════════════════════════════════════
-// CORE STEGANOGRAPHY ENGINE
+// INSPECTOR LOADING
 // ════════════════════════════════════════
-const ZW_ALPHABET = ['\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'];
-const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
-const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2, PASSPHRASE_BOUND_VERSION = 3;
-const PASSPHRASE_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x32]); // "SZP2" (legacy authenticated wrapper)
-const PASSPHRASE_BOUND_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x33]); // "SZP3" (binds the full passphrase)
-const te = new TextEncoder(), td = new TextDecoder();
 let revealInspector = null;
 let decodeScanTimer = null;
 let decodeScanGeneration = 0;
@@ -516,7 +511,7 @@ function mountRevealInspector() {
       const isLegacy = !isV2 && !isBinary && legacyBits >= 8 && legacyBits % 8 === 0;
       return { format: isV2 ? 'v2' : isBinary ? 'binary' : (isLegacy ? 'legacy' : null), status: (isV2 || isBinary || isLegacy) ? 'possible' : 'none' };
     },
-    onNotice: (message, isError) => { if (isError) showToast(message, 'error'); },
+    announceInspection: false,
     onInputLoaded: () => onDecodeInput()
   });
   document.getElementById('revealUnicodeContext').addEventListener('change', () => handleDecode(true));
@@ -530,8 +525,8 @@ function ensureUnicodeInspector() {
   }
   if (!unicodeInspectorLoadPromise) {
     unicodeInspectorLoadPromise = loadLocalScript('unicode-inspector-data.js')
-      .then(() => loadLocalScript('unicode-inspector.js?v=20260903'))
-      .then(() => loadLocalScript('unicode-inspector-ui.js?v=20260903'))
+      .then(() => loadLocalScript('unicode-inspector.js?v=20260908-ux'))
+      .then(() => loadLocalScript('unicode-inspector-ui.js?v=20260908-ux'))
       .then(() => mountRevealInspector())
       .catch(error => {
         unicodeInspectorLoadPromise = null;
@@ -539,126 +534,6 @@ function ensureUnicodeInspector() {
       });
   }
   return unicodeInspectorLoadPromise;
-}
-
-function bytesToBits(b){let s='';for(let i=0;i<b.length;i++)s+=b[i].toString(2).padStart(8,'0');return s;}
-function bitsToBytes(s){const o=[];for(let i=0;i+8<=s.length;i+=8)o.push(parseInt(s.slice(i,i+8),2));return new Uint8Array(o);}
-const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let i=0;i<256;i++){let c=i;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[i]=c>>>0;}return t;})();
-function crc32(b){let c=0xFFFFFFFF>>>0;for(let i=0;i<b.length;i++)c=CRC_TABLE[(c^b[i])&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
-function numToBytesBE(n,l){const o=new Uint8Array(l);for(let i=l-1;i>=0;i--){o[i]=n&0xFF;n>>>=8;}return o;}
-function concatBytes(...a){const t=a.reduce((s,x)=>s+x.length,0),o=new Uint8Array(t);let off=0;for(const x of a){o.set(x,off);off+=x.length;}return o;}
-function xorshift32(seed){let x=seed>>>0;return()=>{if(x===0)x=0x9E3779B9;x^=x<<13;x>>>=0;x^=x>>>17;x>>>=0;x^=x<<5;x>>>=0;return x>>>0;};}
-function obfuscateBits(bits,seed){const next=xorshift32(seed);let acc=0,remain=0,out='';for(let i=0;i<bits.length;i++){if(remain===0){acc=next();remain=32;}const p=acc&1;acc>>>=1;remain--;out+=((bits.charCodeAt(i)&1)^p)?'1':'0';}return out;}
-function bitsToAlphabet(bits){let out='';for(let i=0;i<bits.length;i+=3){const ch=bits.slice(i,i+3).padEnd(3,'0');out+=ZW_ALPHABET[parseInt(ch,2)];}return out;}
-function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));let bits='';for(const ch of Array.from(str)){if(map.has(ch))bits+=map.get(ch).toString(2).padStart(3,'0');}return bits;}
-function buildHeader(nonce,msgBytes,version=VERSION,magic=MAGIC){const len=msgBytes.length;if(len>0xFFFF)throw new RangeError('The hidden message is too large. StegZero supports at most 65,535 encoded bytes, including passphrase metadata.');const crc=crc32(msgBytes);return concatBytes(numToBytesBE(magic,2),numToBytesBE(version,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
-function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION&&version!==PASSPHRASE_BOUND_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
-function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
-function xorWithKey(bytes,key){if(!key)return bytes;const kBytes=te.encode(key);const out=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)out[i]=bytes[i]^kBytes[i%kBytes.length];return out;}
-function decodeUtf8Payload(bytes){try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return Array.from(msg).length?msg:null;}catch{return null;}}
-function wrapPassphrasePayload(bytes){return concatBytes(PASSPHRASE_MARKER,numToBytesBE(crc32(bytes),4),bytes);}
-function unwrapPassphrasePayload(bytes){if(bytes.length<8)return null;for(let i=0;i<PASSPHRASE_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_MARKER[i])return null;const expected=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];const payload=bytes.slice(8);return crc32(payload)===(expected>>>0)?payload:null;}
-function wrapBoundPassphrasePayload(bytes,passphrase){return concatBytes(PASSPHRASE_BOUND_MARKER,numToBytesBE(crc32(te.encode(passphrase)),4),numToBytesBE(crc32(bytes),4),bytes);}
-function unwrapBoundPassphrasePayload(bytes,passphrase){if(bytes.length<12)return null;for(let i=0;i<PASSPHRASE_BOUND_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_BOUND_MARKER[i])return null;const expectedPassphrase=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];if(crc32(te.encode(passphrase))!==(expectedPassphrase>>>0))return null;const expectedPayload=(bytes[8]*2**24)|(bytes[9]<<16)|(bytes[10]<<8)|bytes[11];const payload=bytes.slice(12);return crc32(payload)===(expectedPayload>>>0)?payload:null;}
-function assertCarrierFree(text,alphabet,label){const carrierSet=new Set(alphabet);for(const ch of Array.from(text)){if(!carrierSet.has(ch))continue;const codePoint='U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0');throw new Error(`${label} already contains StegZero carrier character ${codePoint}. Inspect or remove it before encoding so the new message can be decoded reliably.`);}}
-
-function encodeMsg(visible,hidden,passphrase){assertCarrierFree(visible,ZW_ALPHABET,'The cover text');let msgBytes=te.encode(hidden),version=VERSION;if(passphrase){version=PASSPHRASE_BOUND_VERSION;msgBytes=xorWithKey(wrapBoundPassphrasePayload(msgBytes,passphrase),passphrase);}const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
-
-function getV2Header(text){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);return bits.length>=88?parseHeader(bitsToBytes(bits.slice(0,88))):null;}
-function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_BOUND_VERSION){if(!passphrase)return null;msgBytes=unwrapBoundPassphrasePayload(xorWithKey(msgBytes,passphrase),passphrase);if(!msgBytes)return null;}else if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
-
-function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8||bits.length%8!==0)return null;try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bitsToBytes(bits)).replace(/\x00+$/g,'');const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Mark}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\p{Format}\t\r\n]/u.test(c)).length/chars.length;if(printable<0.85)return null;return msg;}catch{return null;}}
-
-// ════════════════════════════════════════
-// BINARY STEGANOGRAPHY ENGINE
-// Uses only ZWSP (U+200B = 0) and ZWNJ (U+200C = 1)
-// Same header structure as V2 but bits encoded 1-per-char
-// Magic marker for binary: 0xB100 to distinguish from V2
-// ════════════════════════════════════════
-const BIN_0 = '\u200B'; // bit 0 = ZWSP
-const BIN_1 = '\u200C'; // bit 1 = ZWNJ
-const BIN_SET = new Set([BIN_0, BIN_1]);
-const BINARY_MAGIC = 0xB100; // distinct from V2 MAGIC (0xA55A)
-
-function bitsToBinary(bits) {
-  let out = '';
-  for (let i = 0; i < bits.length; i++) out += bits[i] === '1' ? BIN_1 : BIN_0;
-  return out;
-}
-
-function binaryToBits(str) {
-  let bits = '';
-  for (const ch of Array.from(str)) {
-    if (ch === BIN_0) bits += '0';
-    else if (ch === BIN_1) bits += '1';
-  }
-  return bits;
-}
-
-function encodeMsgBinary(visible, hidden, passphrase) {
-  assertCarrierFree(visible, [BIN_0, BIN_1], 'The cover text');
-  let msgBytes = te.encode(hidden);
-  let version = VERSION;
-  if (passphrase) { version = PASSPHRASE_BOUND_VERSION; msgBytes = xorWithKey(wrapBoundPassphrasePayload(msgBytes, passphrase), passphrase); }
-  const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
-  // Build header with BINARY_MAGIC
-  const header = buildHeader(nonce, msgBytes, version, BINARY_MAGIC);
-  const headerBits = bytesToBits(header);
-  const msgBits = bytesToBits(msgBytes);
-  const seed = ((nonce << 16) | BINARY_MAGIC) >>> 0;
-  const obfBits = obfuscateBits(msgBits, seed);
-  const payload = bitsToBinary(headerBits + obfBits);
-  return interleavePayload(visible, payload);
-}
-
-function tryDecodeBinary(text, passphrase) {
-  // Extract only BIN_0 / BIN_1 chars
-  let extracted = '';
-  for (const ch of Array.from(text)) {
-    if (ch === BIN_0 || ch === BIN_1) extracted += ch;
-  }
-  if (!extracted.length) return null;
-  const bits = binaryToBits(extracted);
-  if (bits.length < 88) return null;
-  const headerBytes = bitsToBytes(bits.slice(0, 88));
-  const hdr = parseHeader(headerBytes, BINARY_MAGIC);
-  if (!hdr) return null;
-  const { version, nonce, len, crc } = hdr;
-  const needBits = len * 8;
-  const payloadBits = bits.slice(88, 88 + needBits);
-  if (payloadBits.length < needBits) return null;
-  const seed = ((nonce << 16) | BINARY_MAGIC) >>> 0;
-  const msgBits = obfuscateBits(payloadBits, seed);
-  let msgBytes = bitsToBytes(msgBits);
-  if (msgBytes.length !== len) return null;
-  if (crc32(msgBytes) !== (crc >>> 0)) return null;
-  if (version === PASSPHRASE_BOUND_VERSION) {
-    if (!passphrase) return null;
-    msgBytes = unwrapBoundPassphrasePayload(xorWithKey(msgBytes, passphrase), passphrase);
-    if (!msgBytes) return null;
-  } else if (version === PASSPHRASE_VERSION) {
-    if (!passphrase) return null;
-    msgBytes = unwrapPassphrasePayload(xorWithKey(msgBytes, passphrase));
-    if (!msgBytes) return null;
-  } else if (passphrase) msgBytes = xorWithKey(msgBytes, passphrase);
-  return decodeUtf8Payload(msgBytes);
-}
-
-function getBinaryHeader(text) {
-  let extracted = '';
-  for (const ch of Array.from(text)) if (ch === BIN_0 || ch === BIN_1) extracted += ch;
-  const bits = binaryToBits(extracted);
-  return bits.length >= 88 ? parseHeader(bitsToBytes(bits.slice(0, 88)), BINARY_MAGIC) : null;
-}
-
-// Detect if text has a binary-mode payload (BINARY_MAGIC in header)
-function hasBinarySignature(text) {
-  let extracted = '';
-  for (const ch of Array.from(text)) {
-    if (ch === BIN_0 || ch === BIN_1) extracted += ch;
-  }
-  if (extracted.length < 88) return false;
-  return getBinaryHeader(text) !== null;
 }
 
 // ════════════════════════════════════════
@@ -685,74 +560,7 @@ function setEncodeMode(mode) {
 }
 
 // ════════════════════════════════════════
-// WATERMARK ENGINE (unchanged)
-// ════════════════════════════════════════
-
-function getFileType(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  if (['json'].includes(ext)) return 'json';
-  if (['csv'].includes(ext)) return 'csv';
-  if (['html','htm','xml'].includes(ext)) return 'html';
-  return 'text';
-}
-
-function wmEncode(content, wmId, fileType) {
-  assertCarrierFree(content, ZW_ALPHABET, 'The source file');
-  const payload = encodeMsg('', wmId, null);
-  const payloadChars = Array.from(payload);
-  if (!payloadChars.length) return content;
-  const chars = Array.from(content);
-  const safePositions = [];
-  if (fileType === 'json') {
-    let inString = false, escape = false;
-    for (let i = 0; i < chars.length; i++) {
-      const c = chars[i];
-      if (escape) { escape = false; continue; }
-      if (c === '\\') { escape = true; continue; }
-      if (c === '"') { inString = !inString; if (!inString) safePositions.push(i + 1); continue; }
-      if (!inString && (c === ',' || c === '{' || c === '[' || c === '}' || c === ']' || c === '\n')) safePositions.push(i + 1);
-    }
-  } else if (fileType === 'csv') {
-    for (let i = 0; i < chars.length; i++) {
-      const c = chars[i];
-      if (c === '\n' || c === ',') {
-        let j = i + 1;
-        while (j < chars.length && chars[j] === ' ') j++;
-        const peek = chars.slice(j, j + 12).join('');
-        if (!/^-?[\d.]+[,\n\r"]/.test(peek)) safePositions.push(i + 1);
-      }
-    }
-  } else if (fileType === 'html') {
-    let inTag = false;
-    for (let i = 0; i < chars.length; i++) {
-      if (chars[i] === '<') { inTag = true; continue; }
-      if (chars[i] === '>') { inTag = false; continue; }
-      if (!inTag && /\S/.test(chars[i])) safePositions.push(i + 1);
-    }
-  } else {
-    for (let i = 0; i < chars.length; i++) {
-      if (/\S/.test(chars[i])) safePositions.push(i + 1);
-    }
-  }
-  if (!safePositions.length) return content + payload;
-  const step = Math.max(1, Math.floor(safePositions.length / payloadChars.length));
-  const insertAt = new Map();
-  for (let i = 0; i < payloadChars.length; i++) {
-    const pos = safePositions[Math.min(i * step, safePositions.length - 1)];
-    insertAt.set(pos, (insertAt.get(pos) || '') + payloadChars[i]);
-  }
-  let result = '';
-  for (let i = 0; i < chars.length; i++) {
-    result += chars[i];
-    if (insertAt.has(i + 1)) result += insertAt.get(i + 1);
-  }
-  return result;
-}
-
-function wmDecode(content) { return tryDecodeV2(content, null); }
-
-// ════════════════════════════════════════
-// WATERMARK UI STATE (unchanged)
+// WATERMARK UI STATE
 // ════════════════════════════════════════
 let embedFileData = null;
 let verifyFileData = null;
@@ -832,10 +640,10 @@ function generateWmId() {
 function handleEmbed() {
   if (!embedFileData) { showToast('Load a file first', 'warn'); return; }
   const wmId = document.getElementById('wmIdInput').value.trim();
-  if (!wmId) { setStatus('embedStatus', 'err', '✗ Enter a watermark ID first'); showToast('Enter a watermark ID', 'warn'); return; }
+  if (!wmId) { setStatus('embedStatus', 'err', '✗ Enter a watermark ID first'); return; }
   try {
     const watermarked = wmEncode(embedFileData.content, wmId, embedFileData.type);
-    const zwAdded = countZW(watermarked) - countZW(embedFileData.content);
+    const added = Array.from(watermarked).length - Array.from(embedFileData.content).length;
     const blob = new Blob([watermarked], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     const dotIdx = embedFileData.name.lastIndexOf('.');
@@ -845,11 +653,9 @@ function handleEmbed() {
     a.download = `${base}.watermarked${ext}`;
     a.click();
     URL.revokeObjectURL(a.href);
-    setStatus('embedStatus', 'ok', `✓ Watermarked — ${zwAdded} hidden characters embedded · downloading…`);
-    showToast('Watermarked file downloaded!');
+    setStatus('embedStatus', 'ok', `✓ Watermarked — ${added} watermark characters added · downloading…`);
   } catch (e) {
     setStatus('embedStatus', 'err', '✗ Embedding failed — ' + e.message);
-    showToast('Embedding failed', 'error');
   }
 }
 
@@ -866,7 +672,6 @@ function handleVerify() {
       <div class="vr-value">${escHtml(wmId)}</div>`;
     card.style.display = 'block';
     setStatus('verifyStatus', 'ok', `✓ Watermark recovered from "${verifyFileData.name}"`);
-    showToast('Watermark found!');
   } else {
     card.className = 'verify-result-card verify-not-found';
     card.innerHTML = `
@@ -875,7 +680,6 @@ function handleVerify() {
       <div class="vr-value" style="color:var(--muted);margin-top:0.5rem;font-size:13px">This file contains no StegZero watermark, or it was stripped during transfer.</div>`;
     card.style.display = 'block';
     setStatus('verifyStatus', 'err', '✗ No watermark detected');
-    showToast('No watermark found', 'warn');
   }
 }
 
@@ -953,21 +757,40 @@ function distinctZWTypes(str){return new Set(Array.from(str).filter(c=>ZW_SET.ha
 // ════════════════════════════════════════
 // LIVE PREVIEW — mode-aware rendering
 // ════════════════════════════════════════
+const MAX_PREVIEW_CODE_POINTS = 2000;
+
+function previewCharacters(str) {
+  const characters = [];
+  for (const ch of str) {
+    if (characters.length === MAX_PREVIEW_CODE_POINTS) break;
+    characters.push(ch);
+  }
+  return characters;
+}
+
+function previewLimitNote(str, characters) {
+  return characters.join('').length < str.length
+    ? '<span class="preview-limit-note"> Preview limited to the first 2,000 characters. Copy and download include the full result.</span>'
+    : '';
+}
+
 function renderPreviewV2(str) {
   let html = '';
-  for (const ch of Array.from(str)) {
+  const characters = previewCharacters(str);
+  for (const ch of characters) {
     if (ZW_SET.has(ch)) {
       html += `<span class="zw-mark" title="U+${ch.charCodeAt(0).toString(16).toUpperCase().padStart(4,'0')}"></span>`;
     } else {
       html += ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
   }
-  return html;
+  return html + previewLimitNote(str, characters);
 }
 
 function renderPreviewBinary(str) {
   let html = '';
-  for (const ch of Array.from(str)) {
+  const characters = previewCharacters(str);
+  for (const ch of characters) {
     if (ch === BIN_0) {
       html += `<span class="zw-mark-bin bit0" title="U+200B (ZWSP = 0)"></span>`;
     } else if (ch === BIN_1) {
@@ -976,7 +799,7 @@ function renderPreviewBinary(str) {
       html += ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
   }
-  return html;
+  return html + previewLimitNote(str, characters);
 }
 
 function setPreviewLegend(sectionId, legendId, countId, str, mode) {
@@ -1031,7 +854,6 @@ function loadDecodeExample(key) {
   document.getElementById('encodedText').value = encoded;
   document.getElementById('decodeEmptyState').style.display = 'none';
   onDecodeInput();
-  showToast('Example loaded and inspected below');
 }
 
 function rejectOversizedDecodeInput(text) {
@@ -1045,6 +867,7 @@ function rejectOversizedDecodeInput(text) {
       document.getElementById('decodedResult').className = 'result-box empty';
       document.getElementById('decodedMeta').textContent = '';
       document.getElementById('revealResultHeading').textContent = 'Input too large';
+      document.getElementById('revealResultCard').setAttribute('aria-busy', 'false');
       document.getElementById('revealResultCard').className = 'result-card reveal-result-card needs-attention';
       document.getElementById('revealCopyBtn').disabled = true;
       document.getElementById('revealExportBtn').disabled = true;
@@ -1059,24 +882,22 @@ function rejectOversizedDecodeInput(text) {
   return false;
 }
 
+function showDecodeLoadError() {
+  document.getElementById('revealResultCard').setAttribute('aria-busy', 'false');
+  document.getElementById('revealResultHeading').textContent = 'Unable to check text';
+  document.getElementById('decodedResult').textContent = 'Reload the page and try again.';
+  setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.');
+}
+
 function onDecodeInput() {
   const val = document.getElementById('encodedText').value;
-  if (!window.StegZeroUnicode) {
-    if (val) setStatus('decodeStatus', '', 'Loading the Unicode inspector…');
-    ensureUnicodeInspector()
-      .then(() => {
-        if (document.getElementById('encodedText').value === val) onDecodeInput();
-      })
-      .catch(() => {
-        setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.');
-      });
-    return;
-  }
   clearTimeout(decodeScanTimer);
   const generation = ++decodeScanGeneration;
-  if (val.length > 0) {
-    document.getElementById('decodeEmptyState').style.display = 'none';
-  } else {
+  if (revealInspector) revealInspector.invalidate();
+  document.getElementById('revealCopyBtn').disabled = true;
+  document.getElementById('revealExportBtn').disabled = true;
+  document.getElementById('revealResultCard').setAttribute('aria-busy', String(!!val));
+  if (!val) {
     document.getElementById('decodeEmptyState').style.display = 'block';
     document.getElementById('decodedResult').textContent = 'Paste text above to begin.';
     document.getElementById('decodedResult').className = 'result-box empty';
@@ -1092,15 +913,26 @@ function onDecodeInput() {
     document.getElementById('revealExportBtn').disabled = true;
     document.getElementById('decodeStatus').textContent = '';
     document.getElementById('decodeStatus').className = 'status-line';
+    return;
   }
-  if (val.length > 0) {
-    if (rejectOversizedDecodeInput(val)) return;
-    decodeScanTimer = setTimeout(() => {
-      if (generation !== decodeScanGeneration || document.getElementById('encodedText').value !== val) return;
-      const inspection = runDetect();
-      handleDecode(true, inspection);
-    }, 180);
+  document.getElementById('decodeEmptyState').style.display = 'none';
+  document.getElementById('decodedResult').textContent = 'Checking the current text…';
+  document.getElementById('decodedResult').className = 'result-box empty';
+  document.getElementById('decodedMeta').textContent = '';
+  document.getElementById('revealResultHeading').textContent = 'Checking message…';
+  document.getElementById('revealResultCard').className = 'result-card reveal-result-card';
+  setStatus('decodeStatus', '', 'Checking message…');
+  if (!window.StegZeroUnicode || !revealInspector) {
+    ensureUnicodeInspector()
+      .then(() => { if (generation === decodeScanGeneration) onDecodeInput(); })
+      .catch(() => { if (generation === decodeScanGeneration) showDecodeLoadError(); });
+    return;
   }
+  if (rejectOversizedDecodeInput(val)) return;
+  decodeScanTimer = setTimeout(() => {
+    if (generation !== decodeScanGeneration || document.getElementById('encodedText').value !== val) return;
+    handleDecode(true);
+  }, 180);
 }
 
 // ════════════════════════════════════════
@@ -1109,7 +941,7 @@ function onDecodeInput() {
 function updateCounter() {
   const val = document.getElementById('hiddenMessage').value;
   const el = document.getElementById('msgCounter');
-  const n = val.length;
+  const n = Array.from(val).length;
   // Compatibility mode warning thresholds are lower because it uses roughly 3x more carriers.
   const warnAt = currentEncodeMode === 'binary' ? 25 : 100;
   const dangerAt = currentEncodeMode === 'binary' ? 50 : 200;
@@ -1124,7 +956,17 @@ function clearEncodeFieldError() {
   if (pass.value) pass.removeAttribute('aria-invalid');
 }
 
+function setEncodeActionReady(ready) {
+  const submit = document.getElementById('encodeSubmitBtn');
+  const copy = document.getElementById('encodeCopyBtn');
+  submit.classList.toggle('btn-primary', !ready);
+  submit.classList.toggle('btn-ghost', ready);
+  copy.classList.toggle('btn-primary', ready);
+  copy.classList.toggle('btn-ghost', !ready);
+}
+
 function invalidateEncodeResult() {
+  setEncodeActionReady(false);
   document.getElementById('rtResult').textContent = '';
   const resultEl = document.getElementById('encodedResult');
   const cardEl = document.getElementById('encodeResultCard');
@@ -1154,7 +996,6 @@ function handleEncode() {
     field.setAttribute('aria-invalid','true');
     setStatus('encodeStatus','err','Enter a message to hide.');
     field.focus();
-    showToast('Enter a message to hide','warn');
     return;
   }
   if (usePass && !pass) {
@@ -1162,7 +1003,6 @@ function handleEncode() {
     field.setAttribute('aria-invalid','true');
     setStatus('encodeStatus','err','Enter a passphrase or turn off passphrase protection.');
     field.focus();
-    showToast('Enter a passphrase','warn');
     return;
   }
   document.getElementById('hiddenMessage').removeAttribute('aria-invalid');
@@ -1175,7 +1015,6 @@ function handleEncode() {
   } catch (error) {
     const message = error && error.message ? error.message : 'The message could not be encoded.';
     setStatus('encodeStatus','err',message);
-    showToast(message,'error');
     return;
   }
   resultEl.textContent = result;
@@ -1187,16 +1026,17 @@ function handleEncode() {
   document.getElementById('encodeResultHeading').textContent = 'Your message is ready';
   document.getElementById('encodeResultCard').classList.add('is-ready');
   document.getElementById('encodeCopyBtn').disabled = false;
+  setEncodeActionReady(true);
   document.getElementById('encodeExportBtn').disabled = false;
   document.getElementById('encodeRevealBtn').disabled = false;
   setStatus('encodeStatus','ok',`✓ Ready — message hidden using ${modeLabel}`);
   showEncodeResultPreview(result);
   document.getElementById('encodePreviewSection').style.display = 'block';
   if (navigator.share) document.getElementById('shareBtn').style.display = 'inline-flex';
-  showToast('Encoded successfully');
 }
 
 function clearEncode() {
+  setEncodeActionReady(false);
   document.getElementById('visibleText').value = '';
   document.getElementById('hiddenMessage').value = '';
   document.getElementById('encodedResult').textContent = 'Encoded message will appear here.';
@@ -1241,11 +1081,13 @@ function showRevealInspector(report) {
 }
 
 function handleDecode(silent = false, inspection = null) {
+  clearTimeout(decodeScanTimer);
+  const generation = ++decodeScanGeneration;
   const text = document.getElementById('encodedText').value || '';
   if (!window.StegZeroUnicode) {
     ensureUnicodeInspector()
-      .then(() => handleDecode(silent, inspection))
-      .catch(() => setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.'));
+      .then(() => { if (generation === decodeScanGeneration) handleDecode(silent, inspection); })
+      .catch(() => { if (generation === decodeScanGeneration) showDecodeLoadError(); });
     return;
   }
   const usePass = document.getElementById('decodePassToggle').checked;
@@ -1257,11 +1099,12 @@ function handleDecode(silent = false, inspection = null) {
 
   if (!text) {
     onDecodeInput();
-    if (!silent) showToast('Paste some text first', 'warn');
+    if (!silent) setStatus('decodeStatus', 'warn', 'Paste some text first.');
     return;
   }
   if (rejectOversizedDecodeInput(text)) return;
   inspection = inspection || runDetect();
+  cardEl.setAttribute('aria-busy', 'false');
 
   let decoded = null;
   let usedMode = '';
@@ -1300,7 +1143,6 @@ function handleDecode(silent = false, inspection = null) {
       revealInspector.render(inspection.report);
       showRevealInspector(inspection.report);
     }
-    if (!silent) showToast(unverifiedLegacyPayload ? 'Possible legacy payload decoded' : unverifiedLegacyPassphrase ? 'Possible older message decoded' : 'Hidden message revealed!', unverifiedPayload ? 'warn' : 'success');
   } else {
     const knownPayload = inspection.isV2 || inspection.isBinary || inspection.isLegacy;
     const protectedPayload = (inspection.v2Header && (inspection.v2Header.version === PASSPHRASE_VERSION || inspection.v2Header.version === PASSPHRASE_BOUND_VERSION))
@@ -1329,7 +1171,6 @@ function handleDecode(silent = false, inspection = null) {
         : inspection.zw > 0 ? 'Unicode findings are present; no hidden payload was decoded.' : 'No inspected hidden Unicode found.';
     setStatus('decodeStatus', inspection.zw > 0 ? 'warn' : '', statusText);
     if (inspection.report) showRevealInspector(inspection.report);
-    if (!silent) showToast(inspection.zw > 0 ? statusText : 'No hidden message found','warn');
   }
 }
 
@@ -1390,12 +1231,17 @@ function runRoundTrip() {
   if (!hidden) { rtEl.textContent = 'Enter a message first.'; document.getElementById('hiddenMessage').focus(); return; }
   if (usePass && !pass) { rtEl.textContent = 'Enter a passphrase or turn off passphrase protection.'; document.getElementById('passphraseInput').focus(); return; }
   let encoded, decoded;
+  try {
   if (currentEncodeMode === 'binary') {
     encoded = encodeMsgBinary(visible, hidden, pass || null);
     decoded = tryDecodeBinary(encoded, pass || null);
   } else {
     encoded = encodeMsg(visible, hidden, pass || null);
     decoded = tryDecodeV2(encoded, pass || null);
+  }
+  } catch (error) {
+    rtEl.textContent = error.message || 'Local verification could not run.';
+    return;
   }
   if (decoded === hidden) {
     rtEl.innerHTML = '<span class="rt-pass">Local verification passed — encode → decode → exact match</span>';
@@ -1415,14 +1261,13 @@ function pipeToDecoder() {
   switchTab('decode');
   onDecodeInput();
   document.getElementById('encodedText').scrollIntoView({behavior:'smooth',block:'center'});
-  showToast('Opened in Reveal — message found');
 }
 
 // ════════════════════════════════════════
 // SHARED UTILITIES
 // ════════════════════════════════════════
 function copyResult(id){const text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Copy failed','error'));}
-function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;onDecodeInput();showToast('Pasted and inspected');}).catch(()=>showToast('Paste failed','error'));}
+function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;onDecodeInput();}).catch(()=>showToast('Paste failed','error'));}
 function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
 async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}
 function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;const input=document.getElementById('passphraseInput');document.getElementById('passphraseField').classList.toggle('visible',on);input.required=on;if(!on){input.value='';input.removeAttribute('aria-invalid');}invalidateEncodeResult();}

@@ -36,7 +36,7 @@ Live site: https://stegzero.com
 
 ## How It Works (Under the Hood)
 
-This section describes the current "v2" format that the app writes and reads.
+The shared engine in `stegzero-protocol.js` reads and writes Standard and Compatibility frames. “v2” is the historical name for Standard mode, not the version byte inside its header.
 
 - **Message → bytes → bits**
     - Your secret message is encoded as UTF‑8 bytes so any Unicode text is supported.
@@ -81,6 +81,20 @@ This section describes the current "v2" format that the app writes and reads.
     - If everything checks out, the bytes are decoded as UTF‑8 to recover your
         original message.
 
+- **Compatibility mode**
+    - Uses the same 11-byte header layout with magic `0xB100`, instead of Standard's `0xA55A`.
+    - Stores one bit per character using ZWSP and ZWNJ; Standard stores three bits per character.
+
+- **Passphrase versions**
+    - Unprotected frames use version 1. New passphrase frames use version 3, with a 12-byte wrapper containing a marker, a checksum of the full passphrase, and a checksum of the plaintext, followed by repeating-key XOR.
+    - The decoder retains support for older version 1 and version 2 passphrase messages.
+    - These checks detect mismatches; they are not cryptographic authentication or encryption.
+
+- **Size and preview limits**
+    - A frame holds at most 65,535 payload bytes, including passphrase metadata.
+    - New encoded messages must also fit within the inspector's 500,000-code-point limit, including cover text. Compatibility mode therefore reaches its limit sooner.
+    - The visual preview shows at most 2,000 code points. Copying and downloading retain the full encoded result.
+
 - **Legacy fallback**
     - For older texts, there is a legacy mode that treats two zero‑width
         characters as raw 0/1 bits without headers, then attempts to interpret the
@@ -88,16 +102,24 @@ This section describes the current "v2" format that the app writes and reads.
 
 ---
 
+## File watermarking
+
+- Plain text and Markdown retain distributed Standard zero-width watermarks.
+- HTML uses a comment before the document; XML places the comment after its declaration, if present. Script, style, and element content are preserved.
+- JSON uses a Standard frame mapped to spaces and tabs on a final whitespace line. The original contents remain intact and the parsed JSON value is unchanged. Check watermark recognizes this trailer and still reads older zero-width watermarks. Older StegZero releases cannot read the new JSON whitespace trailer.
+- CSV inserts the watermark inside an existing field, respecting quotes, escaped quotes, and embedded newlines. It prefers a nonnumeric text field. Field content contains invisible characters; numeric-only files use the first field, so consumers must remove the watermark before treating that field as a number.
+- Invalid JSON and malformed CSV are rejected. Formatting, minification, or whitespace trimming can remove watermarks; verify the copy after transfer.
+
 ## Using the Web App
 
 1. Open the main page at https://stegzero.com.
 2. In the **Visible text** area, type or paste the text that should appear normal.
-3. In the **Secret message** area, enter the content you want to hide.
-4. Click **Encode** to generate text containing the hidden message.
+3. In the **Message to hide** area, enter the content you want to hide.
+4. Click **Hide message** to generate text containing the hidden message.
 5. Use the **Copy** button to place the encoded text on your clipboard and
     share it anywhere you would share normal text (chat, email, docs, etc.).
 6. To decode, paste any suspicious or previously encoded text into the
-    **Input / Encoded text** area and click **Decode** to reveal the message.
+    **Text to inspect** area and click **Reveal message** to reveal the message.
 
 Error states and basic validation (empty inputs, oversized text, etc.) are
 handled in‑browser and surfaced via inline messages.
@@ -130,9 +152,8 @@ Then open `http://localhost:8000/` in your browser.
 - HTML
 - CSS (no framework)
 - Vanilla JavaScript
-- Font Awesome icons (CDN)
 
-There is no build step; everything is plain static assets.
+There is no build step; everything deployed is plain static assets. The protocol engine is shared by the page and its tests. Development-only DOM tests use jsdom; no npm dependencies are loaded by the site.
 
 ### Unicode inspector development
 
@@ -153,8 +174,25 @@ npm run generate:unicode
 The generator downloads only version-pinned official Unicode data files, checks every SHA-256 digest, and refuses unexpected content. The deployed scanner performs no runtime data fetches. Run the automated tests with:
 
 ```bash
+npm ci
 npm test
 ```
+
+The suite covers protocol compatibility, output limits, structured-file watermarking, cleanup policies, and DOM interactions on both pages. Use Node.js 22.22.2+, 24.15.0+, or 26+.
+
+### Command-line interface
+
+The same encoding, decoding, Unicode inspection, cleanup, and file-watermarking
+features are available from a terminal:
+
+```bash
+npm install --global github:Clevis22/StegZero
+stegzero --help
+stegzero hide --cover "Visible text" --message "Hidden message"
+```
+
+See [CLI.md](CLI.md) for installation, commands, pipeline behavior, and exit
+codes. The package remains private and is not published to npm.
 
 ---
 

@@ -1,9 +1,30 @@
 {
   "name": "stegzero-static-site",
+  "version": "0.1.0",
   "private": true,
+  "bin": {
+    "stegzero": "./bin/stegzero.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "stegzero-protocol.js",
+    "unicode-inspector.js",
+    "unicode-inspector-data.js",
+    "CLI.md",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "node --test tests/*.test.mjs",
+    "test:cli": "node --test tests/cli-regression.test.mjs",
     "generate:unicode": "node scripts/generate-unicode-inspector-data.mjs",
     "sitemap": "node scripts/update-sitemap.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   }
 }
