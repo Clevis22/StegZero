@@ -135,8 +135,11 @@ stegzero inspect src/config.js --context source --format json > unicode-report.j
 
 ## Security
 
-StegZero passphrases provide obfuscation and mismatch detection, not encryption.
-They do not protect a message from a determined attacker.
+New passphrase-protected messages use PBKDF2-HMAC-SHA-256 and AES-256-GCM.
+Choose a strong, unique passphrase: a weak one can be guessed offline. Older
+version 1–3 messages used weak XOR obfuscation; versions 2 and 3 may reveal
+passphrase bytes. Re-encode those messages and change reused passphrases.
+Messages without a passphrase are only hidden, not encrypted.
 
 Current limits are unchanged from the website: at most 500,000 Unicode code
 points in encoded output, and at most 65,535 encoded bytes (including passphrase

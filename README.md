@@ -29,8 +29,9 @@ Live site: https://stegzero.com
 - To a casual reader, the text looks unchanged, but the hidden data can be
      recovered by a compatible decoder (like this app).
 
-> This is **obfuscation**, not cryptography: it hides that a message exists,
-> but does not strongly protect its contents.
+> Hiding text alone is **obfuscation**, not cryptography. New messages created
+> with a passphrase encrypt their contents; older protected messages used weak
+> XOR obfuscation and may have exposed passphrase bytes.
 
 ---
 
@@ -48,7 +49,7 @@ The shared engine in `stegzero-protocol.js` reads and writes Standard and Compat
         - 1 byte: format version
         - 2 bytes: random 16‑bit nonce
         - 2 bytes: message length in bytes
-        - 4 bytes: CRC32 of the message bytes
+        - 4 bytes: CRC32 of the framed payload bytes
     - The header is stored in clear (not obfuscated) so the decoder can quickly
         detect whether a message is present and how long it should be.
 
@@ -86,9 +87,10 @@ The shared engine in `stegzero-protocol.js` reads and writes Standard and Compat
     - Stores one bit per character using ZWSP and ZWNJ; Standard stores three bits per character.
 
 - **Passphrase versions**
-    - Unprotected frames use version 1. New passphrase frames use version 3, with a 12-byte wrapper containing a marker, a checksum of the full passphrase, and a checksum of the plaintext, followed by repeating-key XOR.
-    - The decoder retains support for older version 1 and version 2 passphrase messages.
-    - These checks detect mismatches; they are not cryptographic authentication or encryption.
+    - Unprotected frames use version 1. New passphrase frames use version 4: a random 16-byte salt, a random 12-byte IV, and AES-256-GCM ciphertext with a 16-byte authentication tag. The key is derived with PBKDF2-HMAC-SHA-256 and 200,000 iterations.
+    - The decoder retains support for older version 1, 2, and 3 passphrase messages. Version 2 and 3 used repeating-key XOR with known prefix bytes; anyone holding those encoded messages may be able to recover passphrase bytes. Re-encode them with version 4 and change any reused passphrases.
+    - Encryption protects message contents when the passphrase is strong. It does not hide that a StegZero frame is present, and weak passphrases can be guessed offline.
+    - Programmatic encode and decode calls involving a version 4 passphrase return a Promise and must be awaited.
 
 - **Size and preview limits**
     - A frame holds at most 65,535 payload bytes, including passphrase metadata.

@@ -24,40 +24,40 @@ const context = vm.createContext({
 vm.runInContext(source, context, { filename: 'index-inline.js' });
 const protocol = context.__protocol;
 
-test('Standard mode round-trips plain, Unicode, and passphrase payloads', () => {
+test('Standard mode round-trips plain, Unicode, and passphrase payloads', async () => {
   for (const passphrase of [null, 'correct horse']) {
     const hidden = 'Unicode secret 🔎';
-    const encoded = protocol.encodeMsg('Visible text', hidden, passphrase);
-    assert.equal(protocol.tryDecodeV2(encoded, passphrase), hidden);
+    const encoded = await protocol.encodeMsg('Visible text', hidden, passphrase);
+    assert.equal(await protocol.tryDecodeV2(encoded, passphrase), hidden);
     if (passphrase) {
-      assert.equal(protocol.getV2Header(encoded).version, 3);
+      assert.equal(protocol.getV2Header(encoded).version, 4);
       assert.equal(protocol.tryDecodeV2(encoded, null), null);
-      assert.equal(protocol.tryDecodeV2(encoded, 'wrong-passphrase'), null);
+      assert.equal(await protocol.tryDecodeV2(encoded, 'wrong-passphrase'), null);
     }
   }
 });
 
-test('Compatibility mode round-trips plain, Unicode, and passphrase payloads', () => {
+test('Compatibility mode round-trips plain, Unicode, and passphrase payloads', async () => {
   for (const passphrase of [null, 'correct horse']) {
     const hidden = 'Compatibility secret 🔎';
-    const encoded = protocol.encodeMsgBinary('Visible text', hidden, passphrase);
-    assert.equal(protocol.tryDecodeBinary(encoded, passphrase), hidden);
+    const encoded = await protocol.encodeMsgBinary('Visible text', hidden, passphrase);
+    assert.equal(await protocol.tryDecodeBinary(encoded, passphrase), hidden);
     if (passphrase) {
-      assert.equal(protocol.getBinaryHeader(encoded).version, 3);
+      assert.equal(protocol.getBinaryHeader(encoded).version, 4);
       assert.equal(protocol.tryDecodeBinary(encoded, null), null);
-      assert.equal(protocol.tryDecodeBinary(encoded, 'wrong-passphrase'), null);
+      assert.equal(await protocol.tryDecodeBinary(encoded, 'wrong-passphrase'), null);
     }
   }
 });
 
-test('authenticated passphrase payloads reject printable wrong-passphrase output', () => {
+test('authenticated passphrase payloads reject printable wrong-passphrase output', async () => {
   const hidden = 'Bring the blue notebook.';
-  const encoded = protocol.encodeMsg('Meet me by the old fountain at noon.', hidden, 'dinner-secret');
-  assert.equal(protocol.tryDecodeV2(encoded, 'wrong'), null);
-  assert.equal(protocol.tryDecodeV2(encoded, 'dinner-secret'), hidden);
+  const encoded = await protocol.encodeMsg('Meet me by the old fountain at noon.', hidden, 'dinner-secret');
+  assert.equal(await protocol.tryDecodeV2(encoded, 'wrong'), null);
+  assert.equal(await protocol.tryDecodeV2(encoded, 'dinner-secret'), hidden);
 });
 
-test('framed payloads preserve combining marks, complex scripts, and format characters', () => {
+test('framed payloads preserve combining marks, complex scripts, and format characters', async () => {
   const samples = [
     'e\u0301',
     'नमस्ते दुनिया',
@@ -68,23 +68,23 @@ test('framed payloads preserve combining marks, complex scripts, and format char
   ];
   for (const sample of samples) {
     for (const passphrase of [null, 'full-unicode-passphrase']) {
-      const standard = protocol.encodeMsg('Visible cover', sample, passphrase);
-      const compatibility = protocol.encodeMsgBinary('Visible cover', sample, passphrase);
-      assert.equal(protocol.tryDecodeV2(standard, passphrase), sample);
-      assert.equal(protocol.tryDecodeBinary(compatibility, passphrase), sample);
+      const standard = await protocol.encodeMsg('Visible cover', sample, passphrase);
+      const compatibility = await protocol.encodeMsgBinary('Visible cover', sample, passphrase);
+      assert.equal(await protocol.tryDecodeV2(standard, passphrase), sample);
+      assert.equal(await protocol.tryDecodeBinary(compatibility, passphrase), sample);
     }
   }
 });
 
-test('version 3 binds passphrase bytes that do not participate in repeating XOR', () => {
+test('version 4 authenticates the full passphrase', async () => {
   const correct = 'abcdefghijklmnopX';
   const wrongSuffix = 'abcdefghijklmnopY';
   for (const mode of ['standard', 'binary']) {
     const encode = mode === 'standard' ? protocol.encodeMsg : protocol.encodeMsgBinary;
     const decode = mode === 'standard' ? protocol.tryDecodeV2 : protocol.tryDecodeBinary;
-    const encoded = encode('Cover', 'a', correct);
-    assert.equal(decode(encoded, correct), 'a');
-    assert.equal(decode(encoded, wrongSuffix), null);
+    const encoded = await encode('Cover', 'a', correct);
+    assert.equal(await decode(encoded, correct), 'a');
+    assert.equal(await decode(encoded, wrongSuffix), null);
   }
 });
 
@@ -94,9 +94,9 @@ test('existing StegZero carrier characters in cover text or source files are rej
   assert.throws(() => protocol.wmEncode('file\u200Dtext', 'build:123', 'text'), /U\+200D/);
 });
 
-test('payloads that exceed the 16-bit framed length are rejected before encoding', () => {
+test('payloads that exceed the 16-bit framed length are rejected before encoding', async () => {
   assert.throws(() => protocol.encodeMsg('Cover', 'a'.repeat(65536), null), /65,535 encoded bytes/);
-  assert.throws(() => protocol.encodeMsgBinary('Cover', 'a'.repeat(65524), 'pass'), /65,535 encoded bytes/);
+  await assert.rejects(protocol.encodeMsgBinary('Cover', 'a'.repeat(65500), 'pass'), /65,535 encoded bytes/);
 });
 
 test('version 1 passphrase payloads remain decodable for backward compatibility', () => {
@@ -134,6 +134,43 @@ test('version 2 authenticated passphrase payloads remain decodable for backward 
   assert.equal(protocol.tryDecodeV2(standard, 'old-v2-pass'), 'old V2 standard secret');
   assert.equal(protocol.getBinaryHeader(compatibility).version, 2);
   assert.equal(protocol.tryDecodeBinary(compatibility, 'old-v2-pass'), 'old V2 compatibility secret');
+});
+
+test('older version 3 payloads remain readable, while new frames do not expose known-prefix passphrase bytes', async () => {
+  const passphrase = 'short';
+  const marker = new TextEncoder().encode('SZP3');
+  for (const mode of ['standard', 'binary']) {
+    const magic = mode === 'binary' ? 0xB100 : 0xA55A;
+    const encode = mode === 'binary' ? protocol.encodeMsgBinary : protocol.encodeMsg;
+    const decode = mode === 'binary' ? protocol.tryDecodeBinary : protocol.tryDecodeV2;
+    const extract = encoded => {
+      const carriers = [...encoded].filter(ch => mode === 'binary' ? ch === '\u200B' || ch === '\u200C' : '[\u200B\u200C\u200D\u2060\u2062\u2063\u2064\uFEFF]'.includes(ch)).join('');
+      const bits = mode === 'binary' ? context.binaryToBits(carriers) : context.alphabetToBits(carriers);
+      const header = context.parseHeader(context.bitsToBytes(bits.slice(0, 88)), magic);
+      const plainBits = context.obfuscateBits(bits.slice(88, 88 + header.len * 8), ((header.nonce << 16) | magic) >>> 0);
+      return { header, bytes: context.bitsToBytes(plainBits) };
+    };
+    const oldBytes = context.xorWithKey(context.wrapBoundPassphrasePayload(new TextEncoder().encode('secret'), passphrase), passphrase);
+    const oldHeader = context.buildHeader(1234, oldBytes, 3, magic);
+    const oldBits = context.bytesToBits(oldHeader) + context.obfuscateBits(context.bytesToBits(oldBytes), ((1234 << 16) | magic) >>> 0);
+    const oldEncoded = mode === 'binary' ? context.bitsToBinary(oldBits) : context.bitsToAlphabet(oldBits);
+    assert.equal(await decode(oldEncoded, passphrase), 'secret');
+    assert.equal(new TextDecoder().decode(extract(oldEncoded).bytes.slice(0, 4).map((byte, i) => byte ^ marker[i])), passphrase.slice(0, 4));
+
+    const fresh = await encode('', 'secret', passphrase);
+    const second = await encode('', 'secret', passphrase);
+    assert.equal(extract(fresh).header.version, 4);
+    assert.notDeepEqual([...extract(fresh).bytes], [...extract(second).bytes]);
+    assert.notDeepEqual([...extract(fresh).bytes.slice(0, 4)], [...oldBytes.slice(0, 4)]);
+    assert.equal(await decode(fresh, passphrase), 'secret');
+
+    const tampered = extract(fresh).bytes;
+    tampered[tampered.length - 1] ^= 1;
+    const forgedHeader = context.buildHeader(1234, tampered, 4, magic);
+    const forgedBits = context.bytesToBits(forgedHeader) + context.obfuscateBits(context.bytesToBits(tampered), ((1234 << 16) | magic) >>> 0);
+    const forged = mode === 'binary' ? context.bitsToBinary(forgedBits) : context.bitsToAlphabet(forgedBits);
+    assert.equal(await decode(forged, passphrase), null, 'GCM rejects a modified payload even when its frame checksum is repaired');
+  }
 });
 
 test('legacy fallback accepts valid UTF-8 and rejects malformed bytes', () => {
@@ -193,16 +230,16 @@ test('CSV watermark placement respects quoted commas, escaped quotes, and multil
   }
 });
 
-test('encoding limits include cover code points, byte size, and passphrase metadata', () => {
+test('encoding limits include cover code points, byte size, and passphrase metadata', async () => {
   const plain = protocol.encodeMsgBinary('', 'a'.repeat(62489), null);
   assert.equal(Array.from(plain).length, 500000);
   assert.equal(protocol.tryDecodeBinary(plain, null), 'a'.repeat(62489));
   assert.throws(() => protocol.encodeMsgBinary('x', 'a'.repeat(62489), null), /500,000/);
   assert.throws(() => protocol.encodeMsgBinary('Cover', 'a'.repeat(62500), null), /500,000/);
-  const protectedText = protocol.encodeMsgBinary('', 'a'.repeat(62477), 'pass');
+  const protectedText = await protocol.encodeMsgBinary('', 'a'.repeat(62445), 'pass');
   assert.equal(Array.from(protectedText).length, 500000);
-  assert.equal(protocol.tryDecodeBinary(protectedText, 'pass'), 'a'.repeat(62477));
-  assert.throws(() => protocol.encodeMsgBinary('', 'a'.repeat(62478), 'pass'), /500,000/);
+  assert.equal(await protocol.tryDecodeBinary(protectedText, 'pass'), 'a'.repeat(62445));
+  await assert.rejects(protocol.encodeMsgBinary('', 'a'.repeat(62446), 'pass'), /500,000/);
   const emojiCover = '😀'.repeat(500000 - 32);
   assert.equal(Array.from(protocol.encodeMsg(emojiCover, 'a', null)).length, 500000);
   assert.throws(() => protocol.encodeMsg(emojiCover + 'x', 'a', null), /500,000/);

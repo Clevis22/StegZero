@@ -41,7 +41,7 @@
           "Automatic hidden-message detection and decoding",
           "Compatibility mode using two zero-width characters",
           "Client-side text file watermarking",
-          "Optional passphrase obfuscation",
+          "Optional passphrase encryption",
           "Local browser processing"
         ],
         "sameAs": "https://github.com/Clevis22/StegZero/",
@@ -146,7 +146,7 @@
         <div class="passphrase-field" id="passphraseField">
           <label class="sr-only" for="passphraseInput">Message passphrase</label>
           <input type="password" id="passphraseInput" placeholder="Enter a passphrase…" autocomplete="off" aria-describedby="passphraseHint" oninput="invalidateEncodeResult(); clearEncodeFieldError()" style="margin-top:0.5rem">
-          <div class="field-hint" id="passphraseHint">The receiver will need the exact same passphrase. New messages verify that the passphrase is correct, but this remains obfuscation rather than encryption.</div>
+          <div class="field-hint" id="passphraseHint">The receiver will need the exact same passphrase. New protected messages are encrypted. Choose a strong, unique passphrase.</div>
         </div>
         <button class="btn btn-ghost advanced-test-btn" onclick="runRoundTrip()" type="button" title="Encode and immediately reveal the message in this browser">
           Test hiding and revealing
@@ -380,12 +380,11 @@
       </ul>
     </div>
     <div class="info-card">
-  <h3>Passphrase obfuscation layer</h3>
+  <h3>Passphrase protection</h3>
   <ul>
-    <li>The optional passphrase applies XOR obfuscation to the message bytes before they are encoded as zero-width characters</li>
-    <li>New passphrase-protected messages verify the passphrase before displaying decoded text; older StegZero messages may not support that verification</li>
-    <li>XOR obfuscation is not cryptographic encryption and should not be treated as such — it adds obscurity, not security</li>
-    <li>For genuinely sensitive content, encrypt with GPG or AES-256 first, then encode the ciphertext here with a passphrase on top</li>
+    <li>New protected messages derive a key from the passphrase and encrypt the message with AES-256-GCM before hiding it.</li>
+    <li>Older StegZero messages used weak XOR obfuscation. Versions 2 and 3 may expose passphrase bytes; re-encode them and change reused passphrases.</li>
+    <li>Choose a strong, unique passphrase. Weak passphrases can be guessed offline from an encoded message.</li>
   </ul>
 </div>
   </div>
@@ -397,9 +396,9 @@
     <div class="info-card">
       <h3>Is zero-width steganography secure?</h3>
       <ul>
-        <li>No — it's obfuscation, not encryption. Pasting into any decoder reveals the message.</li>
-        <li>For real security: encrypt with GPG or AES first, then hide the ciphertext here.</li>
-        <li>The optional passphrase adds XOR obfuscation but is not cryptographically strong.</li>
+        <li>Without a passphrase, anyone with a decoder can reveal the message.</li>
+        <li>New messages created with a strong passphrase are encrypted before hiding. The presence of a hidden frame can still be detected.</li>
+        <li>Older protected messages used weak obfuscation and should be re-encoded.</li>
       </ul>
     </div>
     <div class="info-card">
@@ -882,11 +881,12 @@ function rejectOversizedDecodeInput(text) {
   return false;
 }
 
-function showDecodeLoadError() {
+function showDecodeLoadError(error) {
+  const message = error && error.message ? error.message : 'Reload the page and try again.';
   document.getElementById('revealResultCard').setAttribute('aria-busy', 'false');
   document.getElementById('revealResultHeading').textContent = 'Unable to check text';
-  document.getElementById('decodedResult').textContent = 'Reload the page and try again.';
-  setStatus('decodeStatus', 'err', 'The Unicode inspector could not be loaded. Reload the page and try again.');
+  document.getElementById('decodedResult').textContent = message;
+  setStatus('decodeStatus', 'err', error ? message : 'The Unicode inspector could not be loaded. Reload the page and try again.');
 }
 
 function onDecodeInput() {
@@ -984,11 +984,12 @@ function invalidateEncodeResult() {
   setStatus('encodeStatus','warn','Settings changed — hide the message again to refresh the result.');
 }
 
-function handleEncode() {
+async function handleEncode() {
   const visible = document.getElementById('visibleText').value || '';
   const hidden = document.getElementById('hiddenMessage').value || '';
   const usePass = document.getElementById('passphraseToggle').checked;
   const pass = usePass ? (document.getElementById('passphraseInput').value || '') : '';
+  const mode = currentEncodeMode;
   const resultEl = document.getElementById('encodedResult');
   const metaEl = document.getElementById('encodedMeta');
   if (!hidden) {
@@ -1009,14 +1010,16 @@ function handleEncode() {
   document.getElementById('passphraseInput').removeAttribute('aria-invalid');
   let result;
   try {
-    result = currentEncodeMode === 'binary'
+    const pending = mode === 'binary'
       ? encodeMsgBinary(visible, hidden, pass || null)
       : encodeMsg(visible, hidden, pass || null);
+    result = pending instanceof Promise ? await pending : pending;
   } catch (error) {
     const message = error && error.message ? error.message : 'The message could not be encoded.';
     setStatus('encodeStatus','err',message);
     return;
   }
+  if (visible !== document.getElementById('visibleText').value || hidden !== document.getElementById('hiddenMessage').value || pass !== (document.getElementById('passphraseToggle').checked ? document.getElementById('passphraseInput').value : '') || mode !== currentEncodeMode) return;
   resultEl.textContent = result;
   resultEl.classList.remove('empty');
   resultEl.classList.add('has-content');
@@ -1080,7 +1083,7 @@ function showRevealInspector(report) {
   document.getElementById('revealInspectorSummary').textContent = `${count.toLocaleString()} finding${count === 1 ? '' : 's'} · ${assessment}`;
 }
 
-function handleDecode(silent = false, inspection = null) {
+async function handleDecode(silent = false, inspection = null) {
   clearTimeout(decodeScanTimer);
   const generation = ++decodeScanGeneration;
   const text = document.getElementById('encodedText').value || '';
@@ -1104,23 +1107,27 @@ function handleDecode(silent = false, inspection = null) {
   }
   if (rejectOversizedDecodeInput(text)) return;
   inspection = inspection || runDetect();
-  cardEl.setAttribute('aria-busy', 'false');
-
   let decoded = null;
   let usedMode = '';
   let usedHeader = null;
 
   // auto: try V2 first, then binary, then legacy
-  decoded = tryDecodeV2(text, pass || null);
+  try { const pending = tryDecodeV2(text, pass || null); decoded = pending instanceof Promise ? await pending : pending; }
+  catch (error) { if (generation === decodeScanGeneration) showDecodeLoadError(error); return; }
+  if (generation !== decodeScanGeneration) return;
   if (decoded) { usedMode = 'v2'; usedHeader = getV2Header(text); }
   else {
-    decoded = tryDecodeBinary(text, pass || null);
+    try { const pending = tryDecodeBinary(text, pass || null); decoded = pending instanceof Promise ? await pending : pending; }
+    catch (error) { if (generation === decodeScanGeneration) showDecodeLoadError(error); return; }
+    if (generation !== decodeScanGeneration) return;
     if (decoded) { usedMode = 'binary'; usedHeader = getBinaryHeader(text); }
     else {
       decoded = tryDecodeLegacy(text);
       if (decoded) usedMode = 'legacy';
     }
   }
+
+  cardEl.setAttribute('aria-busy', 'false');
 
   if (decoded) {
     const unverifiedLegacyPassphrase = !!pass && !!usedHeader && usedHeader.version === VERSION;
@@ -1145,8 +1152,8 @@ function handleDecode(silent = false, inspection = null) {
     }
   } else {
     const knownPayload = inspection.isV2 || inspection.isBinary || inspection.isLegacy;
-    const protectedPayload = (inspection.v2Header && (inspection.v2Header.version === PASSPHRASE_VERSION || inspection.v2Header.version === PASSPHRASE_BOUND_VERSION))
-      || (inspection.binaryHeader && (inspection.binaryHeader.version === PASSPHRASE_VERSION || inspection.binaryHeader.version === PASSPHRASE_BOUND_VERSION));
+    const protectedPayload = (inspection.v2Header && [PASSPHRASE_VERSION, PASSPHRASE_BOUND_VERSION, PASSPHRASE_ENCRYPTED_VERSION].includes(inspection.v2Header.version))
+      || (inspection.binaryHeader && [PASSPHRASE_VERSION, PASSPHRASE_BOUND_VERSION, PASSPHRASE_ENCRYPTED_VERSION].includes(inspection.binaryHeader.version));
     if (knownPayload && inspection.report && revealInspector) {
       inspection.report.stegzero.status = protectedPayload ? 'passphrase-required' : 'possible';
       revealInspector.render(inspection.report);
@@ -1222,7 +1229,7 @@ function set(id,val,cls){const el=document.getElementById(id);if(el){el.textCont
 // ════════════════════════════════════════
 // ROUND-TRIP TEST — mode-aware
 // ════════════════════════════════════════
-function runRoundTrip() {
+async function runRoundTrip() {
   const visible = document.getElementById('visibleText').value || '';
   const hidden = document.getElementById('hiddenMessage').value || '';
   const usePass = document.getElementById('passphraseToggle').checked;
@@ -1233,11 +1240,15 @@ function runRoundTrip() {
   let encoded, decoded;
   try {
   if (currentEncodeMode === 'binary') {
-    encoded = encodeMsgBinary(visible, hidden, pass || null);
-    decoded = tryDecodeBinary(encoded, pass || null);
+    const pending = encodeMsgBinary(visible, hidden, pass || null);
+    encoded = pending instanceof Promise ? await pending : pending;
+    const reveal = tryDecodeBinary(encoded, pass || null);
+    decoded = reveal instanceof Promise ? await reveal : reveal;
   } else {
-    encoded = encodeMsg(visible, hidden, pass || null);
-    decoded = tryDecodeV2(encoded, pass || null);
+    const pending = encodeMsg(visible, hidden, pass || null);
+    encoded = pending instanceof Promise ? await pending : pending;
+    const reveal = tryDecodeV2(encoded, pass || null);
+    decoded = reveal instanceof Promise ? await reveal : reveal;
   }
   } catch (error) {
     rtEl.textContent = error.message || 'Local verification could not run.';

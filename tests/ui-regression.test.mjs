@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
+import crypto from 'node:crypto';
 import { JSDOM, VirtualConsole, requestInterceptor } from 'jsdom';
 import { TextEncoder, TextDecoder } from 'node:util';
 
@@ -22,6 +23,7 @@ async function loadPage(t, page = 'index.html') {
   const { window } = dom;
   const document = window.document;
   Object.assign(window, { TextEncoder, TextDecoder });
+  Object.defineProperty(window, 'crypto', { value: crypto.webcrypto, configurable: true });
   Object.defineProperty(window.navigator, 'clipboard', { value: { writeText: async value => { copied.push(value); } } });
   window.URL.createObjectURL = value => { downloads.push(value); return 'blob:test'; };
   window.URL.revokeObjectURL = () => {};
@@ -255,7 +257,7 @@ test('Reveal reports checking before a protected result and never announces unve
   edit('hiddenMessage', 'Protected\nmessage');
   document.getElementById('passphraseToggle').click();
   edit('passphraseInput', 'correct passphrase');
-  document.getElementById('encodeSubmitBtn').click();
+  await window.handleEncode();
   document.getElementById('encodeRevealBtn').click();
   assert.equal(document.getElementById('revealResultHeading').textContent, 'Checking message…');
   assert.equal(document.getElementById('revealResultCard').getAttribute('aria-busy'), 'true');
@@ -266,8 +268,10 @@ test('Reveal reports checking before a protected result and never announces unve
   assert.equal(document.getElementById('revealResultCard').getAttribute('aria-busy'), 'false');
   document.getElementById('decodePassToggle').click();
   edit('decodePassInput', 'incorrect');
+  await window.handleDecode(true);
   assert.equal(document.getElementById('revealResultHeading').textContent, 'Passphrase not verified');
   edit('decodePassInput', 'correct passphrase');
+  await window.handleDecode(true);
   assert.equal(document.getElementById('decodedResult').textContent, 'Protected\nmessage');
   assert.equal(document.getElementById('decodeStatus').textContent, 'Hidden message revealed and verified.');
   assert.equal(document.getElementById('toast').textContent, '');

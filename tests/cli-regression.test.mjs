@@ -346,6 +346,26 @@ test('browser can decode CLI-generated standard and compatibility output', async
   assert.equal(protocol.tryDecodeBinary(compatibility.stdout, null), 'cli compat');
 });
 
+test('protected version 4 frames interoperate between CLI and shared protocol in both modes', async t => {
+  const dir = await withTempDir(t);
+  const passFile = path.join(dir, 'pass.txt');
+  await writeFile(passFile, 'unique long passphrase\n');
+  for (const [mode, encode, decode, getHeader] of [
+    ['standard', protocol.encodeMsg, protocol.tryDecodeV2, protocol.getV2Header],
+    ['compatibility', protocol.encodeMsgBinary, protocol.tryDecodeBinary, protocol.getBinaryHeader]
+  ]) {
+    const cli = await runCli(['hide', '--cover', 'Cover', '--message', 'from CLI', '--mode', mode, '--passphrase-file', passFile]);
+    assert.equal(cli.code, 0);
+    assert.equal(getHeader(cli.stdout).version, 4);
+    assert.equal(await decode(cli.stdout, 'unique long passphrase'), 'from CLI');
+
+    const browser = await encode('Cover', 'from browser', 'unique long passphrase');
+    const revealed = await runCli(['reveal', '--passphrase-file', passFile], { input: browser });
+    assert.equal(revealed.code, 0);
+    assert.equal(revealed.stdout, 'from browser');
+  }
+});
+
 test('--version and help are available', async () => {
   const version = await runCli(['--version']);
   assert.match(version.stdout, /^\d+\.\d+\.\d+/);
@@ -405,7 +425,7 @@ test('a confirmed StegZero payload is removed only under the security policy or 
 });
 
 test('damaged protected frames are reported as damaged', async () => {
-  const encoded = protocol.encodeMsg('', 'hidden', 'pw');
+  const encoded = await protocol.encodeMsg('', 'hidden', 'pw');
   const chars = [...encoded];
   const truncated = chars.slice(0, Math.floor(chars.length * 0.7)).join('');
   const result = await runCli(['reveal', '--format', 'json'], { input: truncated });

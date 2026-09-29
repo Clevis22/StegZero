@@ -2,7 +2,8 @@
 const MAX_ENCODED_CODE_POINTS = 500000;
 const ZW_ALPHABET = ['\u200B','\u200C','\u200D','\u2060','\u2062','\u2063','\u2064','\uFEFF'];
 const LEGACY_0 = '\u200B', LEGACY_1 = '\u200C';
-const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2, PASSPHRASE_BOUND_VERSION = 3;
+const MAGIC = 0xA55A, VERSION = 1, PASSPHRASE_VERSION = 2, PASSPHRASE_BOUND_VERSION = 3, PASSPHRASE_ENCRYPTED_VERSION = 4;
+const KDF_ITERATIONS = 200000, SALT_BYTES = 16, IV_BYTES = 12, GCM_TAG_BYTES = 16;
 const PASSPHRASE_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x32]); // "SZP2" (legacy authenticated wrapper)
 const PASSPHRASE_BOUND_MARKER = new Uint8Array([0x53, 0x5A, 0x50, 0x33]); // "SZP3" (binds the full passphrase)
 const te = new TextEncoder(), td = new TextDecoder();
@@ -17,7 +18,7 @@ function obfuscateBits(bits,seed){const next=xorshift32(seed);let acc=0,remain=0
 function bitsToAlphabet(bits){let out='';for(let i=0;i<bits.length;i+=3){const ch=bits.slice(i,i+3).padEnd(3,'0');out+=ZW_ALPHABET[parseInt(ch,2)];}return out;}
 function alphabetToBits(str){const map=new Map(ZW_ALPHABET.map((ch,i)=>[ch,i]));let bits='';for(const ch of Array.from(str)){if(map.has(ch))bits+=map.get(ch).toString(2).padStart(3,'0');}return bits;}
 function buildHeader(nonce,msgBytes,version=VERSION,magic=MAGIC){const len=msgBytes.length;if(len>0xFFFF)throw new RangeError('The hidden message is too large. StegZero supports at most 65,535 encoded bytes, including passphrase metadata.');const crc=crc32(msgBytes);return concatBytes(numToBytesBE(magic,2),numToBytesBE(version,1),numToBytesBE(nonce,2),numToBytesBE(len,2),numToBytesBE(crc,4));}
-function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION&&version!==PASSPHRASE_BOUND_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
+function parseHeader(h,expectedMagic=MAGIC){if(h.length<11)return null;const magic=(h[0]<<8)|h[1];if(magic!==(expectedMagic&0xFFFF))return null;const version=h[2];if(version!==VERSION&&version!==PASSPHRASE_VERSION&&version!==PASSPHRASE_BOUND_VERSION&&version!==PASSPHRASE_ENCRYPTED_VERSION)return null;const nonce=(h[3]<<8)|h[4],len=(h[5]<<8)|h[6],crc=(h[7]*2**24)|(h[8]<<16)|(h[9]<<8)|h[10];return{version,nonce,len,crc,magic};}
 function interleavePayload(visible,payload){if(!visible)return payload;const chars=Array.from(visible),pchars=Array.from(payload),n=chars.length;if(!pchars.length)return visible;const perSlot=Math.ceil(pchars.length/Math.max(1,n));let idx=0,out='';for(let i=0;i<n;i++){out+=chars[i];for(let k=0;k<perSlot&&idx<pchars.length;k++,idx++)out+=pchars[idx];}while(idx<pchars.length)out+=pchars[idx++];return out;}
 function xorWithKey(bytes,key){if(!key)return bytes;const kBytes=te.encode(key);const out=new Uint8Array(bytes.length);for(let i=0;i<bytes.length;i++)out[i]=bytes[i]^kBytes[i%kBytes.length];return out;}
 function decodeUtf8Payload(bytes){try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bytes);return Array.from(msg).length?msg:null;}catch{return null;}}
@@ -25,6 +26,11 @@ function wrapPassphrasePayload(bytes){return concatBytes(PASSPHRASE_MARKER,numTo
 function unwrapPassphrasePayload(bytes){if(bytes.length<8)return null;for(let i=0;i<PASSPHRASE_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_MARKER[i])return null;const expected=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];const payload=bytes.slice(8);return crc32(payload)===(expected>>>0)?payload:null;}
 function wrapBoundPassphrasePayload(bytes,passphrase){return concatBytes(PASSPHRASE_BOUND_MARKER,numToBytesBE(crc32(te.encode(passphrase)),4),numToBytesBE(crc32(bytes),4),bytes);}
 function unwrapBoundPassphrasePayload(bytes,passphrase){if(bytes.length<12)return null;for(let i=0;i<PASSPHRASE_BOUND_MARKER.length;i++)if(bytes[i]!==PASSPHRASE_BOUND_MARKER[i])return null;const expectedPassphrase=(bytes[4]*2**24)|(bytes[5]<<16)|(bytes[6]<<8)|bytes[7];if(crc32(te.encode(passphrase))!==(expectedPassphrase>>>0))return null;const expectedPayload=(bytes[8]*2**24)|(bytes[9]<<16)|(bytes[10]<<8)|bytes[11];const payload=bytes.slice(12);return crc32(payload)===(expectedPayload>>>0)?payload:null;}
+function requireCrypto(){const api=globalThis.crypto;if(!api?.subtle||!api?.getRandomValues)throw new Error('Passphrase protection requires Web Crypto in a secure browser context.');return api;}
+async function passphraseKey(passphrase,salt,usages){const api=requireCrypto();const material=await api.subtle.importKey('raw',te.encode(passphrase),'PBKDF2',false,['deriveKey']);return api.subtle.deriveKey({name:'PBKDF2',salt,iterations:KDF_ITERATIONS,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,usages);}
+function encryptedAad(magic){return new Uint8Array([magic>>>8,magic&0xFF,PASSPHRASE_ENCRYPTED_VERSION]);}
+async function encryptPassphrasePayload(bytes,passphrase,magic){const api=requireCrypto();const salt=api.getRandomValues(new Uint8Array(SALT_BYTES));const iv=api.getRandomValues(new Uint8Array(IV_BYTES));const key=await passphraseKey(passphrase,salt,['encrypt']);const encrypted=new Uint8Array(await api.subtle.encrypt({name:'AES-GCM',iv,additionalData:encryptedAad(magic)},key,bytes));return concatBytes(salt,iv,encrypted);}
+async function decryptPassphrasePayload(bytes,passphrase,magic){if(bytes.length<SALT_BYTES+IV_BYTES+GCM_TAG_BYTES)return null;const api=requireCrypto();const salt=bytes.slice(0,SALT_BYTES),iv=bytes.slice(SALT_BYTES,SALT_BYTES+IV_BYTES),encrypted=bytes.slice(SALT_BYTES+IV_BYTES);const key=await passphraseKey(passphrase,salt,['decrypt']);try{return new Uint8Array(await api.subtle.decrypt({name:'AES-GCM',iv,additionalData:encryptedAad(magic)},key,encrypted));}catch{return null;}}
 function assertCarrierFree(text,alphabet,label){const carrierSet=new Set(alphabet);for(const ch of Array.from(text)){if(!carrierSet.has(ch))continue;const codePoint='U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0');throw new Error(`${label} already contains StegZero carrier character ${codePoint}. Inspect or remove it before encoding so the new message can be decoded reliably.`);}}
 
 function assertOutputSize(visible, payloadBytes, bitsPerCarrier) {
@@ -35,10 +41,11 @@ function assertOutputSize(visible, payloadBytes, bitsPerCarrier) {
   if (remaining < 0) throw new RangeError('The encoded result would exceed 500,000 Unicode code points. Shorten the cover text or hidden message, or use Standard mode.');
 }
 
-function encodeMsg(visible,hidden,passphrase){assertCarrierFree(visible,ZW_ALPHABET,'The cover text');let msgBytes=te.encode(hidden),version=VERSION;if(passphrase){version=PASSPHRASE_BOUND_VERSION;msgBytes=xorWithKey(wrapBoundPassphrasePayload(msgBytes,passphrase),passphrase);}const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version);assertOutputSize(visible,msgBytes.length,3);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|MAGIC)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsToAlphabet(headerBits+obfBits);return interleavePayload(visible,payload);}
+function encodeMsg(visible,hidden,passphrase){assertCarrierFree(visible,ZW_ALPHABET,'The cover text');const bytes=te.encode(hidden);if(passphrase)return encryptPassphrasePayload(bytes,passphrase,MAGIC).then(encrypted=>encodeMsgFrame(visible,encrypted,PASSPHRASE_ENCRYPTED_VERSION,MAGIC,3));return encodeMsgFrame(visible,bytes,VERSION,MAGIC,3);}
+function encodeMsgFrame(visible,msgBytes,version,magic,bitsPerCarrier){const nonce=Math.floor(Math.random()*0x10000)&0xFFFF;const header=buildHeader(nonce,msgBytes,version,magic);assertOutputSize(visible,msgBytes.length,bitsPerCarrier);const headerBits=bytesToBits(header);const msgBits=bytesToBits(msgBytes);const seed=((nonce<<16)|magic)>>>0;const obfBits=obfuscateBits(msgBits,seed);const payload=bitsPerCarrier===3?bitsToAlphabet(headerBits+obfBits):bitsToBinary(headerBits+obfBits);return interleavePayload(visible,payload);}
 
 function getV2Header(text){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);return bits.length>=88?parseHeader(bitsToBytes(bits.slice(0,88))):null;}
-function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_BOUND_VERSION){if(!passphrase)return null;msgBytes=unwrapBoundPassphrasePayload(xorWithKey(msgBytes,passphrase),passphrase);if(!msgBytes)return null;}else if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
+function tryDecodeV2(text,passphrase){const alphaSet=new Set(ZW_ALPHABET);let extracted='';for(const ch of Array.from(text))if(alphaSet.has(ch))extracted+=ch;if(!extracted.length)return null;const bits=alphabetToBits(extracted);if(bits.length<88)return null;const headerBytes=bitsToBytes(bits.slice(0,88));const hdr=parseHeader(headerBytes);if(!hdr)return null;const needBits=hdr.len*8;const payloadBits=bits.slice(88,88+needBits);if(payloadBits.length<needBits)return null;const seed=((hdr.nonce<<16)|MAGIC)>>>0;const msgBits=obfuscateBits(payloadBits,seed);let msgBytes=bitsToBytes(msgBits);if(msgBytes.length!==hdr.len)return null;if(crc32(msgBytes)!==(hdr.crc>>>0))return null;if(hdr.version===PASSPHRASE_ENCRYPTED_VERSION){return passphrase?decryptPassphrasePayload(msgBytes,passphrase,MAGIC).then(bytes=>bytes&&decodeUtf8Payload(bytes)):null;}if(hdr.version===PASSPHRASE_BOUND_VERSION){if(!passphrase)return null;msgBytes=unwrapBoundPassphrasePayload(xorWithKey(msgBytes,passphrase),passphrase);if(!msgBytes)return null;}else if(hdr.version===PASSPHRASE_VERSION){if(!passphrase)return null;msgBytes=unwrapPassphrasePayload(xorWithKey(msgBytes,passphrase));if(!msgBytes)return null;}else if(passphrase)msgBytes=xorWithKey(msgBytes,passphrase);return decodeUtf8Payload(msgBytes);}
 
 function tryDecodeLegacy(text){const bits=Array.from(text).filter(c=>c===LEGACY_0||c===LEGACY_1).map(c=>c===LEGACY_0?'0':'1').join('');if(bits.length<8||bits.length%8!==0)return null;try{const msg=new TextDecoder('utf-8',{fatal:true}).decode(bitsToBytes(bits)).replace(/\x00+$/g,'');const chars=Array.from(msg);if(!chars.length)return null;const printable=chars.filter(c=>/[\p{Letter}\p{Mark}\p{Number}\p{Punctuation}\p{Symbol}\p{Separator}\p{Format}\t\r\n]/u.test(c)).length/chars.length;if(printable<0.85)return null;return msg;}catch{return null;}}
 
@@ -70,19 +77,9 @@ function binaryToBits(str) {
 
 function encodeMsgBinary(visible, hidden, passphrase) {
   assertCarrierFree(visible, [BIN_0, BIN_1], 'The cover text');
-  let msgBytes = te.encode(hidden);
-  let version = VERSION;
-  if (passphrase) { version = PASSPHRASE_BOUND_VERSION; msgBytes = xorWithKey(wrapBoundPassphrasePayload(msgBytes, passphrase), passphrase); }
-  const nonce = Math.floor(Math.random() * 0x10000) & 0xFFFF;
-  // Build header with BINARY_MAGIC
-  const header = buildHeader(nonce, msgBytes, version, BINARY_MAGIC);
-  assertOutputSize(visible, msgBytes.length, 1);
-  const headerBits = bytesToBits(header);
-  const msgBits = bytesToBits(msgBytes);
-  const seed = ((nonce << 16) | BINARY_MAGIC) >>> 0;
-  const obfBits = obfuscateBits(msgBits, seed);
-  const payload = bitsToBinary(headerBits + obfBits);
-  return interleavePayload(visible, payload);
+  const bytes = te.encode(hidden);
+  if (passphrase) return encryptPassphrasePayload(bytes,passphrase,BINARY_MAGIC).then(encrypted=>encodeMsgFrame(visible,encrypted,PASSPHRASE_ENCRYPTED_VERSION,BINARY_MAGIC,1));
+  return encodeMsgFrame(visible,bytes,VERSION,BINARY_MAGIC,1);
 }
 
 function tryDecodeBinary(text, passphrase) {
@@ -106,7 +103,9 @@ function tryDecodeBinary(text, passphrase) {
   let msgBytes = bitsToBytes(msgBits);
   if (msgBytes.length !== len) return null;
   if (crc32(msgBytes) !== (crc >>> 0)) return null;
-  if (version === PASSPHRASE_BOUND_VERSION) {
+  if (version === PASSPHRASE_ENCRYPTED_VERSION) {
+    return passphrase ? decryptPassphrasePayload(msgBytes,passphrase,BINARY_MAGIC).then(bytes=>bytes&&decodeUtf8Payload(bytes)) : null;
+  } else if (version === PASSPHRASE_BOUND_VERSION) {
     if (!passphrase) return null;
     msgBytes = unwrapBoundPassphrasePayload(xorWithKey(msgBytes, passphrase), passphrase);
     if (!msgBytes) return null;
@@ -237,7 +236,7 @@ function countCarrierBits(text, mode) {
 // `module` is undefined, so the existing globals and wire formats are untouched.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    VERSION, PASSPHRASE_VERSION, PASSPHRASE_BOUND_VERSION,
+    VERSION, PASSPHRASE_VERSION, PASSPHRASE_BOUND_VERSION, PASSPHRASE_ENCRYPTED_VERSION,
     encodeMsg, tryDecodeV2, getV2Header,
     encodeMsgBinary, tryDecodeBinary, getBinaryHeader,
     tryDecodeLegacy, getFileType, wmEncode, wmDecode, countCarrierBits
