@@ -188,13 +188,13 @@ The same encoding, decoding, Unicode inspection, cleanup, and file-watermarking
 features are available from a terminal:
 
 ```bash
-npm install --global github:Clevis22/StegZero
+npm install --global stegzero
 stegzero --help
 stegzero hide --cover "Visible text" --message "Hidden message"
 ```
 
 See [CLI.md](CLI.md) for installation, commands, pipeline behavior, and exit
-codes. The package remains private and is not published to npm.
+codes. The CLI is published on npm as [`stegzero`](https://www.npmjs.com/package/stegzero).
 
 ---
 

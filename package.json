@@ -1,9 +1,26 @@
 {
-  "name": "stegzero-static-site",
+  "name": "stegzero",
   "version": "0.1.0",
-  "private": true,
+  "description": "Hide secret messages in plain text with zero-width Unicode characters, and inspect or clean invisible characters",
+  "keywords": [
+    "steganography",
+    "zero-width",
+    "unicode",
+    "invisible-characters",
+    "watermark",
+    "cli"
+  ],
+  "homepage": "https://stegzero.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clevis22/StegZero.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Clevis22/StegZero/issues"
+  },
+  "license": "AGPL-3.0-only",
   "bin": {
-    "stegzero": "./bin/stegzero.js"
+    "stegzero": "bin/stegzero.js"
   },
   "files": [
     "bin/",

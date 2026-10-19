@@ -7,10 +7,10 @@ watermarks are interchangeable between the two.
 
 ## Installation
 
-Install the CLI directly from GitHub:
+Install the CLI from npm:
 
 ```bash
-npm install --global github:Clevis22/StegZero
+npm install --global stegzero
 stegzero --version
 ```
 
