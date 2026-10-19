@@ -438,3 +438,47 @@ test('inspect rejects input beyond the code-point limit', async () => {
   assert.equal(result.code, 5);
   assert.match(result.stderr, /500,000/);
 });
+
+const linuxOnly = { skip: process.platform !== 'linux' && 'clipboard fakes use Linux tool names' };
+
+async function fakeClipboard(t, { fail = false } = {}) {
+  const dir = await withTempDir(t);
+  const sink = path.join(dir, 'clipboard.txt');
+  // PATH holds only this directory, so the fake must not depend on other tools.
+  const copy = `process.stdin.pipe(require('fs').createWriteStream(${JSON.stringify(sink)}))`;
+  const script = fail ? '#!/bin/sh\nexit 1\n' : `#!/bin/sh\nexec "${process.execPath}" -e "${copy.replace(/"/g, '\\"')}"\n`;
+  await writeFile(path.join(dir, 'wl-copy'), script, { mode: 0o755 });
+  return { env: { PATH: dir, WAYLAND_DISPLAY: 'wayland-test' }, sink };
+}
+
+test('hide --copy sends the exact encoded text to the clipboard and nothing to stdout', linuxOnly, async t => {
+  const { env, sink } = await fakeClipboard(t);
+  const result = await runCli(['hide', '--cover', 'Visible', '--message', 'Secret', '--copy'], { env });
+  assert.equal(result.code, 0);
+  assert.equal(result.stdout, '');
+  assert.match(result.stderr, /Copied encoded text to the clipboard/);
+  const copied = await readFile(sink, 'utf8');
+  assert.ok(CARRIER_RE.test(copied));
+  const reveal = await runCli(['reveal'], { input: copied });
+  assert.equal(reveal.stdout, 'Secret');
+});
+
+test('hide --copy reports a missing clipboard tool as an I/O failure', linuxOnly, async t => {
+  const { env } = await fakeClipboard(t, { fail: true });
+  const result = await runCli(['hide', '--cover', 'Visible', '--message', 'Secret', '--copy'], { env });
+  assert.equal(result.code, 3);
+  assert.equal(result.stdout, '');
+  assert.match(result.stderr, /Could not copy to the clipboard/);
+});
+
+test('hide rejects --copy together with --output', async () => {
+  const result = await runCli(['hide', '--cover', 'Visible', '--message', 'Secret', '--copy', '--output', 'x.txt']);
+  assert.equal(result.code, 2);
+  assert.match(result.stderr, /either --copy or --output/);
+});
+
+test('hide does not warn about terminal copying when stdout is a pipe', async () => {
+  const result = await runCli(['hide', '--cover', 'Visible', '--message', 'Secret']);
+  assert.equal(result.code, 0);
+  assert.equal(result.stderr, '');
+});

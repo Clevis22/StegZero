@@ -56,6 +56,22 @@ cat encoded.txt | stegzero reveal
 stegzero reveal encoded.txt --format json
 ```
 
+### Copying encoded text
+
+Terminals drop zero-width characters when you select and copy text from the
+screen, so encoded text copied that way loses its hidden message. Send it to the
+clipboard directly instead:
+
+```bash
+stegzero hide --cover "Meet me at noon" --message "Use the east entrance" --copy
+stegzero hide --cover "Meet me at noon" --message "Use the east entrance" | wl-copy
+wl-paste | stegzero reveal
+```
+
+`--copy` uses `pbcopy` on macOS, PowerShell `Set-Clipboard` on Windows, and
+`wl-copy`, `xclip`, or `xsel` on Linux. When `hide` writes to a terminal it
+prints this reminder on stderr.
+
 ### Passphrases
 
 ```bash
