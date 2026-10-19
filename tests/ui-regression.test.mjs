@@ -307,3 +307,18 @@ test('detector options and diagnostics start collapsed and remain fully usable',
   assert.match(document.querySelector('.uzi-live').textContent, /Inspection complete: 1 finding/);
   assert.equal(buttonIn(document.getElementById('standaloneUnicodeInspector'), 'Copy text report').disabled, false);
 });
+
+test('Copy buttons confirm the copy visibly and restore their label', async t => {
+  const { window, document, edit, copied } = await loadPage(t);
+  edit('hiddenMessage', 'Copy me');
+  await window.handleEncode();
+  const button = document.getElementById('encodeCopyBtn');
+  button.click();
+  await new Promise(resolve => window.setTimeout(resolve, 0));
+  assert.equal(copied.at(-1), document.getElementById('encodedResult').textContent);
+  assert.equal(button.textContent, 'Copied ✓');
+  assert.equal(document.getElementById('toast').textContent, 'Copied!');
+  assert.equal(document.getElementById('toast').style.display, 'block');
+  await new Promise(resolve => window.setTimeout(resolve, 1600));
+  assert.equal(button.textContent, 'Copy encoded text');
+});

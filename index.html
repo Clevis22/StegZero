@@ -1277,7 +1277,8 @@ function pipeToDecoder() {
 // ════════════════════════════════════════
 // SHARED UTILITIES
 // ════════════════════════════════════════
-function copyResult(id){const text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Copy failed','error'));}
+function copyResult(id){const text=document.getElementById(id).textContent;const btn=document.querySelector(`[onclick="copyResult('${id}')"]`);navigator.clipboard.writeText(text).then(()=>{showToast('Copied!');flashButton(btn,'Copied ✓');}).catch(()=>showToast('Copy failed','error'));}
+function flashButton(btn,label){if(!btn)return;if(!btn.dataset.label)btn.dataset.label=btn.textContent;btn.textContent=label;clearTimeout(btn._flash);btn._flash=setTimeout(()=>{btn.textContent=btn.dataset.label;},1500);}
 function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste not supported in this browser','warn');return;}navigator.clipboard.readText().then(t=>{document.getElementById(id).value=t;onDecodeInput();}).catch(()=>showToast('Paste failed','error'));}
 function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
 async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}

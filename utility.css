@@ -1179,6 +1179,10 @@ footer {
 }
 
 #toast {
+  position: fixed;
+  z-index: 1000;
+  display: none;
+  padding: 10px 14px;
   right: 16px;
   bottom: 16px;
   max-width: min(320px, calc(100vw - 32px));
