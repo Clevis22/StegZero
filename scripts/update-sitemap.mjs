@@ -2,7 +2,8 @@ import { stat, writeFile } from 'node:fs/promises';
 
 const pages = [
   { loc: 'https://stegzero.com/', file: new URL('../index.html', import.meta.url) },
-  { loc: 'https://stegzero.com/invisible-character-detector/', file: new URL('../invisible-character-detector/index.html', import.meta.url) }
+  { loc: 'https://stegzero.com/invisible-character-detector/', file: new URL('../invisible-character-detector/index.html', import.meta.url) },
+  { loc: 'https://stegzero.com/invisible-prompt-injection/', file: new URL('../invisible-prompt-injection/index.html', import.meta.url) }
 ];
 
 const entries = await Promise.all(pages.map(async page => {

@@ -450,6 +450,14 @@
     <li>Open Unicode inspection details to see which invisible characters and message format were found</li>
   </ul>
 </div>
+<div class="info-card">
+  <h3>Can zero-width text be used for prompt injection?</h3>
+  <ul>
+    <li>Invisible prompt injection mostly relies on Unicode Tag characters ("ASCII smuggling"), which some AI models read as ordinary text. StegZero never emits them.</li>
+    <li>StegZero payloads are framed, scrambled binary rather than readable instructions, so they are not designed or effective as hidden prompts for a model.</li>
+    <li>To check a prompt or document before an LLM reads it, use the Unicode inspector. Read more about <a href="invisible-prompt-injection/index.html">invisible prompt injection and how to defend against it</a>.</li>
+  </ul>
+</div>
   </div>
 
 </main>
@@ -459,6 +467,7 @@
     <a href="https://github.com/Clevis22/StegZero/" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/Clevis22/StegZero/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
     <a href="invisible-character-detector/index.html">Unicode Detector</a>
+    <a href="invisible-prompt-injection/index.html">Invisible Prompt Injection</a>
     <a href="https://github.com/sponsors/Clevis22" target="_blank" rel="noopener">Sponsor</a>
     <a href="mailto:contact@stegzero.com">Contact</a>
   </div>

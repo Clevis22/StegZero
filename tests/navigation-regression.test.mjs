@@ -29,6 +29,15 @@ test('detector navigation uses explicit homepage files for local previews', () =
   assert.doesNotMatch(detector, /href="\.\.\/"/);
 });
 
+test('prompt injection page links resolve from both hosted and local-file previews', async () => {
+  const promptInjection = await readFile(new URL('invisible-prompt-injection/index.html', root), 'utf8');
+  assert.match(homepage, /href="invisible-prompt-injection\/index\.html"/);
+  assert.match(detector, /href="\.\.\/invisible-prompt-injection\/index\.html"/);
+  assert.match(promptInjection, /href="\.\.\/index\.html"/);
+  assert.match(promptInjection, /href="\.\.\/invisible-character-detector\/index\.html"/);
+  assert.doesNotMatch(promptInjection, /href="\.\.\/"/);
+});
+
 test('passphrase switches only move their thumb in the checked state', () => {
   assert.match(utilityCss, /\.toggle-track::after\s*\{[^}]*left:\s*2px;[^}]*background:\s*var\(--muted\);/s);
   assert.match(utilityCss, /\.toggle-switch input:checked \+ \.toggle-track::after\s*\{[^}]*left:\s*16px;[^}]*background:\s*#fff;/s);
