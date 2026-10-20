@@ -1,6 +1,6 @@
 {
   "name": "stegzero",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hide secret messages in plain text with zero-width Unicode characters, and inspect or clean invisible characters",
   "keywords": [
     "steganography",
