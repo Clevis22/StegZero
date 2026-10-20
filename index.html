@@ -53,7 +53,7 @@
       }
   </script>
   <link rel="stylesheet" href="utility.css?v=20260908-ux1">
-  <link rel="stylesheet" href="unicode-inspector.css?v=20260908-ux1">
+  <link rel="stylesheet" href="unicode-inspector.css?v=20261020-ux2">
 </head>
 <body>
 
@@ -254,7 +254,7 @@
 
     <details class="inspection-details reveal-inspector-details" id="revealInspectorDetails" hidden>
       <summary>
-        <span>Unicode inspection details</span>
+        <span>Hidden character details</span>
         <span class="summary-meta" id="revealInspectorSummary">No report yet</span>
       </summary>
       <div id="revealUnicodeInspector" hidden></div>
@@ -507,6 +507,7 @@ function mountRevealInspector() {
     advancedToggle: document.getElementById('revealUnicodeAdvanced'),
     fileInput: document.getElementById('revealUnicodeFile'),
     listen: false,
+    compact: true,
     pageSize: 20,
     getStegZero: text => {
       const alphaSet = new Set(ZW_ALPHABET);
@@ -534,7 +535,7 @@ function ensureUnicodeInspector() {
   if (!unicodeInspectorLoadPromise) {
     unicodeInspectorLoadPromise = loadLocalScript('unicode-inspector-data.js')
       .then(() => loadLocalScript('unicode-inspector.js?v=20260908-ux'))
-      .then(() => loadLocalScript('unicode-inspector-ui.js?v=20260908-ux'))
+      .then(() => loadLocalScript('unicode-inspector-ui.js?v=20261020-ux2'))
       .then(() => mountRevealInspector())
       .catch(error => {
         unicodeInspectorLoadPromise = null;
@@ -1089,7 +1090,7 @@ function showRevealInspector(report) {
     : 'None';
   document.getElementById('revealUnicodeInspector').hidden = false;
   document.getElementById('revealInspectorDetails').hidden = false;
-  document.getElementById('revealInspectorSummary').textContent = `${count.toLocaleString()} finding${count === 1 ? '' : 's'} · ${assessment}`;
+  document.getElementById('revealInspectorSummary').textContent = count ? `${count.toLocaleString()} hidden character${count === 1 ? '' : 's'} · highest: ${assessment.toLowerCase()}` : 'Nothing found';
 }
 
 async function handleDecode(silent = false, inspection = null) {
@@ -1168,23 +1169,39 @@ async function handleDecode(silent = false, inspection = null) {
       revealInspector.render(inspection.report);
       showRevealInspector(inspection.report);
     }
+    const hiddenText = !knownPayload && inspection.report ? inspection.report.candidates.find(c => c.decodedText !== null) : null;
+    if (hiddenText) {
+      const tagText = hiddenText.codec === 'unicode-tags-ascii';
+      resultEl.textContent = hiddenText.decodedText;
+      resultEl.className = 'result-box has-content';
+      cardEl.className = 'result-card reveal-result-card needs-attention';
+      headingEl.textContent = 'Hidden text found';
+      metaEl.textContent = tagText ? 'Unicode Tag characters · not a StegZero message' : 'Variation selectors · not a StegZero message';
+      document.getElementById('revealCopyBtn').disabled = false;
+      document.getElementById('revealExportBtn').disabled = false;
+      setStatus('decodeStatus', 'warn', tagText
+        ? 'Hidden text found in Unicode Tag characters, a common way to hide instructions from people but not from AI models.'
+        : 'Possible hidden text found in variation selectors. This byte convention is not a Unicode standard.');
+      showRevealInspector(inspection.report);
+      return;
+    }
     resultEl.textContent = inspection.zw === 0 ? 'No inspected hidden Unicode found.'
       : protectedPayload
         ? (pass ? 'The passphrase did not match this message. Check it and try again.' : 'This StegZero message requires a passphrase before it can be revealed.')
         : knownPayload
           ? 'StegZero-like data was found, but no message could be verified. It may be an older passphrase message or damaged text.'
-          : 'Unicode characters were found, but they do not match a StegZero message or validated payload.';
+          : 'Hidden characters were found, but they are not a StegZero message. Open the details below to see what they are.';
     resultEl.className = 'result-box empty';
     cardEl.className = 'result-card reveal-result-card' + (inspection.zw > 0 ? ' needs-attention' : '');
     headingEl.textContent = protectedPayload ? (pass ? 'Passphrase not verified' : 'Passphrase required')
       : knownPayload ? 'StegZero message needs attention'
-        : inspection.zw > 0 ? 'Unicode findings present' : 'No hidden message found';
+        : inspection.zw > 0 ? 'Hidden characters found' : 'No hidden message found';
     metaEl.textContent = '';
     document.getElementById('revealCopyBtn').disabled = true;
     document.getElementById('revealExportBtn').disabled = true;
     const statusText = protectedPayload ? (pass ? 'Passphrase did not verify.' : 'A passphrase is required.')
       : knownPayload ? 'StegZero-like data needs review.'
-        : inspection.zw > 0 ? 'Unicode findings are present; no hidden payload was decoded.' : 'No inspected hidden Unicode found.';
+        : inspection.zw > 0 ? 'Hidden characters found, but no message was decoded.' : 'No inspected hidden Unicode found.';
     setStatus('decodeStatus', inspection.zw > 0 ? 'warn' : '', statusText);
     if (inspection.report) showRevealInspector(inspection.report);
   }

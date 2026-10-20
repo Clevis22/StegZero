@@ -18,10 +18,6 @@
     'orphan-combining-mark': 'Orphan combining marks'
   };
   const FORMAT_LABELS = { v2: 'Standard', binary: 'Compatibility', legacy: 'Legacy' };
-  const CODEC_LABELS = {
-    'unicode-tags-ascii': 'Unicode Tag characters interpreted as ASCII',
-    'variation-selector-bytes': 'Variation selectors interpreted with the common byte convention'
-  };
 
   function el(tag, className, textValue) {
     const node = document.createElement(tag);
@@ -50,6 +46,13 @@
     await navigator.clipboard.writeText(value);
   }
 
+  function flashButton(node, label) {
+    if (!node.dataset.label) node.dataset.label = node.textContent;
+    node.textContent = label;
+    clearTimeout(node._flash);
+    node._flash = setTimeout(() => { node.textContent = node.dataset.label; }, 1500);
+  }
+
   function decodeLocalFile(buffer) {
     const bytes = new Uint8Array(buffer);
     let encoding = 'utf-8', offset = 0;
@@ -68,6 +71,25 @@
     return value ? value.charAt(0).toUpperCase() + value.slice(1) : 'None';
   }
 
+
+  const RANK = { expected: 0, review: 1, suspicious: 2 };
+  const MARKED_LIMIT = 20000;
+  const STEGZERO_CARRIERS = new Set(['\u200B', '\u200C', '\u200D', '\u2060', '\u2062', '\u2063', '\u2064', '\uFEFF']);
+  const PAYLOAD_LABELS = { 'unicode-tags-ascii': 'Unicode Tag text', 'variation-selector-bytes': 'Variation-selector bytes' };
+  const PRESET_DESCRIPTIONS = {
+    conservative: 'Removes only broken or pointless characters. Emoji, multilingual text, spaces and bidi controls are kept.',
+    security: 'Also removes bidi controls, payload-like characters and confirmed StegZero carriers. Joiners and unusual spaces are kept.',
+    custom: 'Removes only the character types you choose below.',
+    aggressive: 'Removes every hidden character and turns unusual spaces into ordinary ones.'
+  };
+
+  function plural(count, one, many) { return `${count.toLocaleString()} ${count === 1 ? one : (many || one + 's')}`; }
+  function chipText(token) { return token.replace(/^\[|\]$/g, ''); }
+  function highestOf(findings) {
+    return findings.reduce((best, f) => RANK[f.assessment] > RANK[best] ? f.assessment : best, 'expected');
+  }
+  function truncate(value, max) { return value.length > max ? value.slice(0, max - 1) + '…' : value; }
+
   function mount(options) {
     options = options || {};
     const scanner = root.StegZeroUnicode;
@@ -77,7 +99,7 @@
     if (!host || !input) throw new Error('Inspector root and input are required.');
 
     const pageSize = Math.max(1, Number(options.pageSize) || PAGE_SIZE);
-    const state = { report: null, sourceText: null, timer: null, generation: 0, visible: pageSize, category: 'all', fileName: null };
+    const state = { report: null, sourceText: null, timer: null, generation: 0, visible: pageSize, category: 'all', fileName: null, groups: new Map(), presetChosen: false };
     host.classList.add('uzi');
     host.textContent = '';
 
@@ -86,51 +108,40 @@
     const error = el('div', 'uzi-notice uzi-notice-error');
     error.hidden = true;
 
-    const summarySection = el('section', 'uzi-section');
-    summarySection.append(el('h3', 'uzi-heading', 'Unicode inspection summary'));
-    const verdict = el('div', 'uzi-verdict', 'No inspected hidden Unicode found');
-    const summary = el('dl', 'uzi-summary');
-    const technicalDetails = el('details', 'uzi-technical-summary');
-    technicalDetails.append(el('summary', '', 'Technical summary'));
-    const technicalSummary = el('dl', 'uzi-summary uzi-summary-technical');
-    technicalDetails.append(technicalSummary);
-    summarySection.append(verdict, summary, technicalDetails);
+    // Verdict: the answer first, with any decoded payload right underneath.
+    const verdict = el('section', 'uzi-verdict');
+    const verdictTitle = el('h3', 'uzi-verdict-title', 'No current inspection');
+    const verdictDetail = el('p', 'uzi-verdict-detail');
+    const verdictCounts = el('p', 'uzi-verdict-counts');
+    const payloads = el('div', 'uzi-payloads');
+    verdict.append(verdictTitle, verdictDetail, verdictCounts, payloads);
+    // Hosts with their own result card (the Reveal panel) already state the verdict.
+    if (options.compact) verdict.hidden = true;
 
-    const hiddenSection = el('details', 'uzi-section uzi-diagnostic');
-    hiddenSection.append(el('summary', 'uzi-heading', 'Show hidden characters'));
-    const hiddenHelp = el('p', 'uzi-help', 'This logical-order escaped view is diagnostic and may not reproduce the original text shaping. Raw bidirectional controls are never rendered here.');
-    const escaped = el('pre', 'uzi-escaped');
-    escaped.dir = 'ltr';
-    hiddenSection.append(hiddenHelp, escaped);
+    const markedSection = el('section', 'uzi-section');
+    markedSection.append(el('h3', 'uzi-heading', 'Your text with hidden characters marked'));
+    const marked = el('div', 'uzi-marked');
+    marked.dir = 'ltr';
+    const markedNote = el('p', 'uzi-help');
+    markedSection.append(marked, markedNote);
 
     const findingsSection = el('section', 'uzi-section');
-    findingsSection.append(el('h3', 'uzi-heading', 'Findings'));
-    const findingsIntro = el('p', 'uzi-findings-intro');
-    const chartHeader = el('div', 'uzi-chart-header');
-    chartHeader.append(el('h4', '', 'Findings by category'));
-    const showAllFindings = button('Show all', 'uzi-chart-reset', () => selectCategory('all'));
-    showAllFindings.hidden = true;
-    chartHeader.append(showAllFindings);
-    const chart = el('div', 'uzi-chart');
-    chart.setAttribute('aria-label', 'Findings by category. Select a bar to filter the detailed findings.');
-    const rows = el('div', 'uzi-findings');
-    const more = button(`Show next ${pageSize} types`, 'uzi-button uzi-button-secondary', () => { state.visible += pageSize; renderRows(); });
-    findingsSection.append(findingsIntro, chartHeader, chart, rows, more);
-
-    const candidatesSection = el('section', 'uzi-section');
-    candidatesSection.append(el('h3', 'uzi-heading', 'Possible hidden payloads'));
-    const candidates = el('div', 'uzi-candidates');
-    candidatesSection.append(candidates);
-    candidatesSection.hidden = true;
+    findingsSection.append(el('h3', 'uzi-heading', 'What was found'));
+    const filters = el('div', 'uzi-filters');
+    filters.setAttribute('role', 'group');
+    filters.setAttribute('aria-label', 'Filter findings by type');
+    const rows = el('div', 'uzi-groups');
+    const more = button('Show more', 'uzi-button uzi-button-secondary uzi-more', () => { state.visible += pageSize; renderRows(); });
+    findingsSection.append(filters, rows, more);
 
     const cleanupSection = el('section', 'uzi-section');
-    cleanupSection.append(el('h3', 'uzi-heading', 'Create a cleaned copy'));
-    const cleanupHelp = el('p', 'uzi-help', 'Choose what StegZero should change. Your source text above is never modified.');
+    cleanupSection.append(el('h3', 'uzi-heading', 'Remove hidden characters'));
+    const cleanupHelp = el('p', 'uzi-help', 'Creates a cleaned copy. The text you pasted is not changed.');
     const cleanupControls = el('div', 'uzi-cleanup-controls');
     const presetLabel = el('label', 'uzi-control');
-    presetLabel.append(el('span', '', 'Cleanup level'));
+    presetLabel.append(el('span', '', 'What to remove'));
     const preset = el('select', 'uzi-select');
-    [['conservative','Recommended (low impact)'],['security','Security-focused'],['custom','Custom'],['aggressive','Aggressive (may alter text)']].forEach(([value, label]) => {
+    [['conservative', 'Recommended'], ['security', 'Security-focused'], ['custom', 'Custom'], ['aggressive', 'Everything (may alter text)']].forEach(([value, label]) => {
       const option = el('option', '', label); option.value = value; preset.append(option);
     });
     presetLabel.append(preset);
@@ -139,40 +150,41 @@
     removeCarrierLabel.append(removeCarrier, el('span', '', 'Also remove StegZero carrier characters'));
     removeCarrierLabel.hidden = true;
     cleanupControls.append(presetLabel, removeCarrierLabel);
-    const cleanupDescription = el('p', 'uzi-cleanup-description');
+    const cleanupDescription = el('p', 'uzi-help uzi-cleanup-description');
+    const aggressiveWarning = el('p', 'uzi-warning', 'This can change how emoji, non-Latin scripts, line breaks and maths render. Check the preview before using the copy.');
+    aggressiveWarning.hidden = true;
     const cleanupAdvanced = el('details', 'uzi-cleanup-advanced');
-    const cleanupAdvancedSummary = el('summary', '', 'Choose additional character types');
+    const cleanupAdvancedSummary = el('summary', '', 'Choose character types');
     const categoryChecks = el('fieldset', 'uzi-category-checks');
-    const legend = el('legend', '', 'Character types to remove');
+    const legend = el('legend', 'sr-only', 'Character types to remove');
     categoryChecks.append(legend);
     cleanupAdvanced.append(cleanupAdvancedSummary, categoryChecks);
-    const changeSummary = el('div', 'uzi-change-summary');
-    changeSummary.append(el('h4', '', 'What will change'));
-    const cleanupMeta = el('p', 'uzi-cleanup-meta', 'Recommended cleanup would not change this text.');
-    const changeList = el('ul', 'uzi-change-list');
-    changeSummary.append(cleanupMeta, changeList);
-    const cleanupPreview = el('div', 'uzi-cleanup-preview');
-    cleanupPreview.append(el('h4', '', 'Affected preview'));
-    const cleanupPreviewMeta = el('p', 'uzi-help');
-    const cleanupPreviewList = el('div', 'uzi-preview-list');
-    cleanupPreview.append(cleanupPreviewMeta, cleanupPreviewList);
+    const cleanupMeta = el('p', 'uzi-cleanup-meta');
+    const cleanupPreview = el('div', 'uzi-marked uzi-marked-diff');
+    cleanupPreview.dir = 'ltr';
     cleanupPreview.hidden = true;
     const cleanupActions = el('div', 'uzi-actions');
     const copyClean = button('Copy cleaned text', 'uzi-button', () => applyCleanup('copy'));
     const downloadClean = button('Download cleaned .txt', 'uzi-button uzi-button-secondary', () => applyCleanup('download'));
     cleanupActions.append(copyClean, downloadClean);
-    cleanupSection.append(cleanupHelp, cleanupControls, cleanupDescription, cleanupAdvanced, changeSummary, cleanupPreview, cleanupActions);
+    cleanupSection.append(cleanupHelp, cleanupControls, cleanupDescription, aggressiveWarning, cleanupAdvanced, cleanupMeta, cleanupPreview, cleanupActions);
 
-    const reportSection = el('section', 'uzi-section uzi-report-section');
-    reportSection.append(el('h3', 'uzi-heading', 'Export inspection report'));
-    reportSection.append(el('p', 'uzi-help', 'Reports include every finding, including occurrences not expanded above.'));
+    // Specialist detail and exports stay available without crowding the result.
+    const technical = el('details', 'uzi-section uzi-diagnostic');
+    technical.append(el('summary', 'uzi-heading', 'Technical details and reports'));
+    const technicalBody = el('div', 'uzi-diagnostic-body');
+    const escapedHelp = el('p', 'uzi-help', 'Escaped text in logical order. Raw bidi controls are never rendered here.');
+    const escaped = el('pre', 'uzi-escaped');
+    escaped.dir = 'ltr';
+    const technicalSummary = el('dl', 'uzi-stats');
     const reportActions = el('div', 'uzi-actions');
     const copyTextReport = button('Copy text report', 'uzi-button uzi-button-secondary', () => copyReport('text'));
     const downloadJson = button('Download JSON report', 'uzi-button uzi-button-secondary', () => downloadReport());
     reportActions.append(copyTextReport, downloadJson);
-    reportSection.append(reportActions);
+    technicalBody.append(escapedHelp, escaped, technicalSummary, el('p', 'uzi-help', 'Reports list every finding, including ones not expanded above.'), reportActions);
+    technical.append(technicalBody);
 
-    host.append(live, error, summarySection, hiddenSection, findingsSection, candidatesSection, cleanupSection, reportSection);
+    host.append(live, error, verdict, markedSection, findingsSection, cleanupSection, technical);
 
     function currentContext() {
       return options.contextSelect ? options.contextSelect.value : (options.context || 'plain');
@@ -198,7 +210,7 @@
         });
         if (generation !== state.generation) return null;
         render(report);
-        if (options.announceInspection !== false) announce(`Inspection complete: ${report.summary.findingCount.toLocaleString()} finding${report.summary.findingCount === 1 ? '' : 's'}.`, false);
+        if (options.announceInspection !== false) announce(`Inspection complete: ${plural(report.summary.findingCount, 'finding')}.`, false);
         return report;
       } catch (scanError) {
         if (generation !== state.generation) return null;
@@ -221,41 +233,47 @@
     function render(report) {
       state.report = report;
       state.sourceText = input.value;
-      copyTextReport.disabled = false;
-      downloadJson.disabled = false;
       state.visible = pageSize;
       state.category = 'all';
-      renderSummary();
-      renderEscaped();
+      state.groups = buildGroups(report);
+      // Suspicious characters usually need more than the low-impact preset removes.
+      if (!state.presetChosen) preset.value = report.findings.some(f => f.assessment === 'suspicious') ? 'security' : 'conservative';
+      copyTextReport.disabled = false;
+      downloadJson.disabled = false;
+      const hasFindings = report.summary.findingCount > 0;
+      markedSection.hidden = !hasFindings;
+      findingsSection.hidden = !hasFindings;
+      cleanupSection.hidden = !hasFindings;
+      renderVerdict();
+      renderMarked();
       renderFilters();
       renderRows();
-      renderCandidates();
       renderCleanupChecks();
       renderCleanup();
+      renderTechnical();
       host.hidden = false;
     }
 
     function renderEmpty() {
       invalidate();
-      verdict.textContent = 'No current inspection';
-      candidatesSection.hidden = true;
-      summary.textContent = '';
-      technicalSummary.textContent = '';
-      escaped.textContent = '';
-      findingsIntro.textContent = '';
-      chart.textContent = '';
-      chartHeader.hidden = true;
-      showAllFindings.hidden = true;
+      verdictTitle.textContent = 'No current inspection';
+      verdictDetail.textContent = '';
+      verdictCounts.textContent = '';
+      verdict.dataset.assessment = 'none';
+      payloads.textContent = '';
+      marked.textContent = '';
+      filters.textContent = '';
       rows.textContent = '';
-      candidates.textContent = '';
       categoryChecks.replaceChildren(legend);
       cleanupAdvanced.hidden = true;
-      cleanupMeta.textContent = 'Recommended cleanup would not change this text.';
-      changeList.textContent = '';
+      cleanupMeta.textContent = '';
       cleanupPreview.hidden = true;
-      cleanupPreviewList.textContent = '';
-      copyClean.disabled = true;
-      downloadClean.disabled = true;
+      cleanupPreview.textContent = '';
+      escaped.textContent = '';
+      technicalSummary.textContent = '';
+      markedSection.hidden = true;
+      findingsSection.hidden = true;
+      cleanupSection.hidden = true;
       more.hidden = true;
     }
 
@@ -268,7 +286,8 @@
       downloadClean.disabled = true;
       copyTextReport.disabled = true;
       downloadJson.disabled = true;
-      verdict.textContent = 'Text changed; a new inspection is needed.';
+      payloads.querySelectorAll('button').forEach(node => { node.disabled = true; });
+      verdictTitle.textContent = 'Checking the current text…';
       cleanupMeta.textContent = 'Inspect the current text before creating a cleaned copy.';
     }
 
@@ -276,162 +295,271 @@
       return !!state.report && state.sourceText === input.value;
     }
 
-    function addSummary(target, label, value) {
-      const item = el('div'); item.append(el('dt', '', label), el('dd', '', value));
-      target.append(item);
+    // Findings in a decoded payload are one group; everything else groups by code point.
+    function buildGroups(report) {
+      const groups = new Map(), byFinding = new Map();
+      report.candidates.forEach((candidate, index) => {
+        const ids = new Set(candidate.findingIds);
+        const findings = report.findings.filter(f => ids.has(f.id));
+        if (!findings.length) return;
+        const key = 'payload:' + index;
+        groups.set(key, { key, candidate, finding: findings[0], findings, category: findings[0].category });
+        findings.forEach(f => byFinding.set(f.id, key));
+      });
+      report.findings.forEach(f => {
+        if (byFinding.has(f.id)) return;
+        const key = `${f.category}|${f.codePoint}`;
+        if (!groups.has(key)) groups.set(key, { key, candidate: null, finding: f, findings: [], category: f.category });
+        groups.get(key).findings.push(f);
+        byFinding.set(f.id, key);
+      });
+      groups.forEach(group => { group.assessment = highestOf(group.findings); });
+      groups.byFinding = byFinding;
+      return groups;
     }
 
-    function renderSummary() {
+    function payloadLabel(candidate) {
+      return candidate.decodedText !== null ? `“${truncate(candidate.decodedText.trim(), 32)}”` : `${candidate.escapedBytes.split(' ').length} bytes`;
+    }
+
+    function renderVerdict() {
       const report = state.report;
       const count = report.summary.findingCount;
-      let verdictText = 'No inspected hidden Unicode found';
-      if (report.stegzero.status === 'decoded') verdictText = 'Hidden message found';
-      else if (report.stegzero.status === 'passphrase-required') verdictText = 'StegZero data found; a passphrase may be required';
-      else if (report.candidates.length) verdictText = 'Non-StegZero hidden-data candidate found';
-      else if (count) verdictText = 'Unicode findings present; no decodable payload found';
-      verdict.textContent = verdictText;
-      verdict.dataset.assessment = report.summary.highestAssessment || 'none';
-      summary.textContent = '';
-      technicalSummary.textContent = '';
-      addSummary(summary, 'Findings', count.toLocaleString());
-      addSummary(summary, 'Highest assessment', assessmentLabel(report.summary.highestAssessment));
-      addSummary(summary, 'StegZero format', FORMAT_LABELS[report.stegzero.format] || 'Not detected');
-      addSummary(summary, 'StegZero status', report.stegzero.status === 'none' ? 'None' : report.stegzero.status.replaceAll('-', ' '));
-      addSummary(technicalSummary, 'Unicode code points', report.input.codePoints.toLocaleString());
-      addSummary(technicalSummary, 'UTF-16 code units', report.input.utf16Units.toLocaleString());
-      addSummary(technicalSummary, 'Distinct code points', report.summary.distinctCodePoints.toLocaleString());
-      addSummary(technicalSummary, 'Categories', Object.keys(report.summary.categories).length.toLocaleString());
-      addSummary(technicalSummary, 'Unicode data', report.unicodeVersion);
+      const counts = { suspicious: 0, review: 0, expected: 0 };
+      report.findings.forEach(f => { counts[f.assessment]++; });
+      const status = report.stegzero.status;
+      let title, detail, assessment = report.summary.highestAssessment || 'none';
+      if (status === 'decoded') {
+        title = 'Hidden StegZero message found';
+        detail = 'This text carries a StegZero message.';
+      } else if (status === 'passphrase-required') {
+        title = 'StegZero message found — passphrase needed';
+        detail = 'Enter the passphrase to read it.';
+      } else if (status === 'possible') {
+        title = 'Possible StegZero message';
+        detail = 'The characters look like a StegZero message, but it could not be verified.';
+      } else if (report.candidates.some(c => c.codec === 'unicode-tags-ascii')) {
+        title = 'Hidden text found';
+        detail = 'It is written in invisible Unicode Tag characters, a common way to smuggle instructions to AI models.';
+        assessment = 'suspicious';
+      } else if (report.candidates.length) {
+        title = 'Possible hidden data found';
+        detail = 'Variation selectors are arranged like encoded bytes. This is a common convention, not a Unicode standard.';
+      } else if (!count) {
+        title = 'No hidden characters found';
+        detail = 'Nothing invisible or unusual was detected in this text.';
+      } else if (counts.suspicious) {
+        title = 'Suspicious hidden characters found';
+        detail = 'Some characters are rarely legitimate here. Check them below before trusting this text.';
+      } else if (counts.review) {
+        title = 'Hidden characters found';
+        detail = 'They have legitimate uses, but are worth checking.';
+      } else {
+        title = 'Only normal formatting characters';
+        detail = 'These are expected in emoji and some writing systems.';
+      }
+      verdictTitle.textContent = title;
+      verdictDetail.textContent = detail;
+      verdict.dataset.assessment = assessment;
+      const parts = [];
+      if (counts.suspicious) parts.push(`${counts.suspicious.toLocaleString()} suspicious`);
+      if (counts.review) parts.push(`${counts.review.toLocaleString()} to review`);
+      if (counts.expected) parts.push(`${counts.expected.toLocaleString()} expected`);
+      verdictCounts.textContent = count ? `${plural(count, 'hidden character')} · ${parts.join(' · ')}` : '';
+      payloads.textContent = '';
+      report.candidates.forEach(candidate => {
+        const card = el('div', 'uzi-payload');
+        card.append(el('p', 'uzi-payload-label', candidate.decodedText !== null ? `Decoded ${PAYLOAD_LABELS[candidate.codec] || 'payload'}` : `${PAYLOAD_LABELS[candidate.codec] || 'Payload'} (could not be read as text)`));
+        const value = el('pre', 'uzi-payload-value');
+        if (candidate.decodedText !== null) {
+          value.textContent = scanner.escapedView(candidate.decodedText, scanner.inspect(candidate.decodedText, { context: 'plain', includeAdvanced: true }));
+        } else value.textContent = candidate.escapedBytes;
+        const actions = el('div', 'uzi-actions');
+        if (candidate.decodedText !== null) actions.append(copyButton('Copy decoded text', () => candidate.decodedText));
+        actions.append(copyButton('Copy escaped bytes', () => candidate.escapedBytes));
+        card.append(value, actions);
+        payloads.append(card);
+      });
     }
 
-    function renderEscaped() { escaped.textContent = scanner.escapedView(input.value, state.report); }
+    function copyButton(label, value) {
+      const node = button(label, 'uzi-button uzi-button-secondary', () => {
+        if (!hasCurrentReport()) return;
+        copy(value()).then(() => flashButton(node, 'Copied ✓')).catch(e => announce(e.message, true));
+      });
+      return node;
+    }
+
+    // Render text with hidden characters as visible chips. Adjacent findings that share
+    // a state collapse into one chip so payloads and long carrier runs stay readable.
+    function renderMarkedText(target, text, report, stateFor, onChip) {
+      target.textContent = '';
+      const byOffset = new Map(report.findings.map(f => [f.utf16Offset, f]));
+      let buffer = '', run = null, offset = 0, seen = 0, truncated = false;
+      const flushText = () => { if (buffer) { target.append(document.createTextNode(buffer)); buffer = ''; } };
+      const flushRun = () => {
+        if (!run) return;
+        const group = state.groups.get(run.groupKey);
+        const candidate = group && group.candidate && run.findings.every(f => state.groups.byFinding.get(f.id) === run.groupKey) ? group.candidate : null;
+        let label;
+        if (candidate) label = `${candidate.codec === 'unicode-tags-ascii' ? 'TAG' : 'VS'} ${payloadLabel(candidate)}`;
+        else if (run.state.carrier) label = '';
+        else if (run.findings.length <= 2) label = run.findings.map(f => chipText(f.token)).join(' ');
+        else label = `${run.findings.length.toLocaleString()} hidden`;
+        if (run.state.replacement !== undefined) label += ` → ${run.state.replacement}`;
+        const chip = el(onChip ? 'button' : 'span', `uzi-chip is-${run.state.kind}${run.state.carrier ? ' uzi-chip-dot' : ''}`, label);
+        const groupKey = run.groupKey;
+        if (onChip) { chip.type = 'button'; chip.addEventListener('click', () => onChip(groupKey)); }
+        const names = Array.from(new Set(run.findings.map(f => f.name)));
+        chip.title = `${run.state.carrier ? 'StegZero carriers: ' : ''}${names.slice(0, 6).join(', ')}${names.length > 6 ? '…' : ''} (${plural(run.findings.length, 'character')})`;
+        if (!label) chip.setAttribute('aria-label', chip.title);
+        target.append(chip);
+        run = null;
+      };
+      for (const value of text) {
+        if (++seen > MARKED_LIMIT) { truncated = true; break; }
+        const finding = byOffset.get(offset);
+        offset += value.length;
+        if (!finding) {
+          if (run) flushRun();
+          buffer += value;
+          continue;
+        }
+        const itemState = stateFor(finding);
+        const groupKey = state.groups.byFinding.get(finding.id);
+        const isPayload = groupKey.startsWith('payload:');
+        const runKey = itemState.key + (isPayload ? groupKey : '');
+        if (run && run.key === runKey) {
+          run.findings.push(finding);
+          if (RANK[itemState.kind] > RANK[run.state.kind]) run.state = itemState;
+        } else {
+          flushRun(); flushText();
+          run = { key: runKey, state: itemState, groupKey, findings: [finding] };
+        }
+      }
+      flushRun(); flushText();
+      return truncated;
+    }
+
+    function renderMarked() {
+      const carriers = state.report.stegzero && state.report.stegzero.format ? STEGZERO_CARRIERS : null;
+      const truncated = renderMarkedText(marked, input.value, state.report, f => carriers && carriers.has(f.value)
+        ? { key: 'carrier', kind: f.assessment, carrier: true }
+        : { key: 'hidden', kind: f.assessment }, openGroup);
+      markedNote.textContent = truncated
+        ? `Showing the first ${MARKED_LIMIT.toLocaleString()} characters. Every character is still inspected.`
+        : 'Select a marker to see what it is.';
+    }
 
     function renderFilters() {
-      chart.textContent = '';
-      showAllFindings.hidden = true;
+      filters.textContent = '';
       const counts = state.report.summary.categories;
       const categories = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || (CATEGORY_LABELS[a] || a).localeCompare(CATEGORY_LABELS[b] || b));
-      const categoryCount = categories.length;
-      findingsIntro.textContent = state.report.summary.findingCount
-        ? `${state.report.summary.findingCount.toLocaleString()} hidden Unicode character${state.report.summary.findingCount === 1 ? '' : 's'} found across ${categoryCount.toLocaleString()} categor${categoryCount === 1 ? 'y' : 'ies'}. Select a bar to filter the grouped findings.`
-        : 'No inspected hidden Unicode characters were found.';
-      const maximum = Math.max(1, ...Object.values(counts));
-      categories.forEach(category => {
-        const label = CATEGORY_LABELS[category] || category;
-        const chartButton = button('', 'uzi-chart-row', () => selectCategory(state.category === category ? 'all' : category));
-        chartButton.dataset.category = category;
-        chartButton.setAttribute('aria-label', `${label}: ${counts[category].toLocaleString()} finding${counts[category] === 1 ? '' : 's'}`);
-        chartButton.setAttribute('aria-pressed', 'false');
-        chartButton.append(el('span', 'uzi-chart-label', label));
-        const track = el('span', 'uzi-chart-track');
-        const bar = el('span', 'uzi-chart-bar');
-        bar.style.width = `${Math.max(4, (counts[category] / maximum) * 100)}%`;
-        track.append(bar);
-        chartButton.append(track, el('span', 'uzi-chart-count', counts[category].toLocaleString()));
-        chart.append(chartButton);
-      });
-      chartHeader.hidden = !categories.length;
+      filters.hidden = categories.length < 2;
+      const add = (category, label, count) => {
+        const chip = button('', 'uzi-filter', () => selectCategory(state.category === category ? 'all' : category));
+        chip.dataset.category = category;
+        chip.setAttribute('aria-pressed', String(state.category === category));
+        chip.append(el('span', '', label), el('span', 'uzi-filter-count', count.toLocaleString()));
+        filters.append(chip);
+      };
+      add('all', 'All', state.report.summary.findingCount);
+      categories.forEach(category => add(category, CATEGORY_LABELS[category] || category, counts[category]));
     }
 
     function selectCategory(category) {
       if (!hasCurrentReport()) return;
       state.category = category; state.visible = pageSize;
-      chart.querySelectorAll('button').forEach(node => {
-        const active = node.dataset.category === category;
-        node.classList.toggle('is-active', active);
-        node.setAttribute('aria-pressed', String(active));
-      });
-      showAllFindings.hidden = category === 'all';
+      filters.querySelectorAll('button').forEach(node => node.setAttribute('aria-pressed', String(node.dataset.category === category)));
       renderRows();
     }
 
-    function filteredFindings() {
-      return state.category === 'all' ? state.report.findings : state.report.findings.filter(f => f.category === state.category);
+    function openGroup(key) {
+      if (!hasCurrentReport()) return;
+      const group = state.groups.get(key);
+      if (!group) return;
+      if (state.category !== 'all' && state.category !== group.category) selectCategory('all');
+      const find = () => Array.from(rows.children).find(node => node.dataset.group === key);
+      let node = find();
+      while (!node && !more.hidden) { state.visible += pageSize; renderRows(); node = find(); }
+      if (!node) return;
+      node.open = true;
+      node.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      node.querySelector('summary').focus({ preventScroll: true });
     }
 
     function renderRows() {
       if (!hasCurrentReport()) return;
-      const findings = filteredFindings();
       rows.textContent = '';
-      if (!findings.length) {
-        rows.append(el('p', 'uzi-empty', 'No findings in this category.'));
-        more.hidden = true;
-        return;
-      }
-      const groups = new Map();
-      findings.forEach(f => {
-        const key = `${f.category}|${f.codePoint}`;
-        if (!groups.has(key)) groups.set(key, { finding: f, findings: [] });
-        groups.get(key).findings.push(f);
-      });
-      const grouped = Array.from(groups.values()).sort((a, b) => b.findings.length - a.findings.length || a.finding.codePoint.localeCompare(b.finding.codePoint));
-      grouped.slice(0, state.visible).forEach(group => {
-        const finding = group.finding;
-        const highest = group.findings.reduce((value, item) => {
-          const rank = { expected: 0, review: 1, suspicious: 2 };
-          return rank[item.assessment] > rank[value] ? item.assessment : value;
-        }, 'expected');
-        const details = el('details', 'uzi-finding uzi-finding-group');
-        const head = el('summary');
-        const identity = el('span', 'uzi-finding-identity');
-        identity.append(el('span', 'uzi-finding-name', finding.name), el('span', 'uzi-finding-codepoint', `${finding.codePoint} · ${CATEGORY_LABELS[finding.category] || finding.category}`));
-        head.append(el('code', 'uzi-token', finding.token), identity, el('span', 'uzi-occurrence-count', `${group.findings.length.toLocaleString()} occurrence${group.findings.length === 1 ? '' : 's'}`), el('span', `uzi-assessment is-${highest}`, assessmentLabel(highest)));
-        const body = el('div', 'uzi-finding-body');
-        body.append(el('p', 'uzi-help', 'Expand an occurrence for its exact position, context, explanation, and cleanup treatment.'));
-        const occurrenceList = el('div', 'uzi-occurrences');
-        body.append(occurrenceList);
-        let occurrenceVisible = Math.min(20, pageSize);
-        const renderOccurrences = () => {
-          if (!hasCurrentReport()) return;
-          occurrenceList.textContent = '';
-          group.findings.slice(0, occurrenceVisible).forEach(item => occurrenceList.append(renderOccurrence(item)));
-          if (group.findings.length > occurrenceVisible) {
-            const remaining = group.findings.length - occurrenceVisible;
-            occurrenceList.append(button(`Show next ${Math.min(20, remaining)} occurrences (${remaining.toLocaleString()} remaining)`, 'uzi-button uzi-button-secondary uzi-occurrence-more', () => { occurrenceVisible += 20; renderOccurrences(); }));
-          }
-        };
-        details.addEventListener('toggle', () => {
-          if (details.open && !details.dataset.rendered) { details.dataset.rendered = 'true'; renderOccurrences(); }
-        });
-        details.append(head, body); rows.append(details);
-      });
+      const grouped = Array.from(state.groups.values())
+        .filter(group => state.category === 'all' || group.category === state.category)
+        .sort((a, b) => RANK[b.assessment] - RANK[a.assessment] || b.findings.length - a.findings.length || a.finding.codePoint.localeCompare(b.finding.codePoint));
+      grouped.slice(0, state.visible).forEach(group => rows.append(renderGroup(group)));
       more.hidden = grouped.length <= state.visible;
-      if (!more.hidden) {
-        const remaining = grouped.length - state.visible;
-        more.textContent = `Show next ${Math.min(pageSize, remaining).toLocaleString()} types (${remaining.toLocaleString()} remaining)`;
-      }
+      if (!more.hidden) more.textContent = `Show ${Math.min(pageSize, grouped.length - state.visible).toLocaleString()} more (${(grouped.length - state.visible).toLocaleString()} remaining)`;
     }
 
-    function renderOccurrence(finding) {
-      const details = el('details', 'uzi-occurrence');
+    function renderGroup(group) {
+      const finding = group.finding;
+      const details = el('details', 'uzi-group');
+      details.dataset.group = group.key;
       const head = el('summary');
-      head.append(el('span', 'uzi-position', `Position ${finding.codePointIndex} · line ${finding.line}, column ${finding.column}`), el('span', `uzi-assessment is-${finding.assessment}`, assessmentLabel(finding.assessment)));
-      const body = el('div', 'uzi-occurrence-body');
-      const context = el('pre', 'uzi-context'); context.dir = 'ltr'; context.textContent = scanner.contextFor(input.value, finding, 20);
-      const treatment = finding.cleanupDefault === 'remove' ? 'Recommended cleanup removes this occurrence.' : 'Recommended cleanup preserves this occurrence.';
-      body.append(el('p', '', finding.reason), context, el('p', 'uzi-treatment', treatment), el('p', 'uzi-position', `UTF-16 offset ${finding.utf16Offset}`));
+      const identity = el('span', 'uzi-group-identity');
+      if (group.candidate) {
+        head.append(el('code', 'uzi-token', group.candidate.codec === 'unicode-tags-ascii' ? 'TAG' : 'VS'));
+        identity.append(el('span', 'uzi-group-name', group.candidate.decodedText !== null ? `Hidden text ${payloadLabel(group.candidate)}` : 'Hidden byte payload'),
+          el('span', 'uzi-group-meta', `${PAYLOAD_LABELS[group.candidate.codec] || group.candidate.codec} · ${plural(group.findings.length, 'character')}`));
+      } else {
+        head.append(el('code', 'uzi-token', chipText(finding.token)));
+        identity.append(el('span', 'uzi-group-name', finding.name), el('span', 'uzi-group-meta', `${finding.codePoint} · ${CATEGORY_LABELS[finding.category] || finding.category}`));
+      }
+      const count = el('span', 'uzi-group-count', group.candidate ? '' : `×${group.findings.length.toLocaleString()}`);
+      head.append(identity, count, el('span', `uzi-assessment is-${group.assessment}`, assessmentLabel(group.assessment)));
+      const body = el('div', 'uzi-group-body');
       details.append(head, body);
+      details.addEventListener('toggle', () => {
+        if (details.open && !details.dataset.rendered) { details.dataset.rendered = 'true'; renderGroupBody(group, body); }
+      });
       return details;
     }
 
-    function renderCandidates() {
-      candidates.textContent = '';
-      const list = state.report.candidates;
-      candidatesSection.hidden = !list.length;
-      list.forEach(candidate => {
-        const card = el('article', 'uzi-candidate');
-        card.append(el('h4', '', candidate.label), el('p', 'uzi-help', `Carrier: ${CODEC_LABELS[candidate.codec] || candidate.codec}. This is a possible decoded payload, not a definitive attribution.`));
-        card.append(el('p', 'uzi-help', `Validation: ${candidate.validation.join('; ')}.`));
-        if (candidate.decodedText !== null) {
-          const decoded = el('pre', 'uzi-candidate-value');
-          const decodedReport = scanner.inspect(candidate.decodedText, { context: 'plain', includeAdvanced: true });
-          decoded.textContent = scanner.escapedView(candidate.decodedText, decodedReport);
-          card.append(decoded, button('Copy decoded text', 'uzi-button uzi-button-secondary', () => copy(candidate.decodedText).catch(e => announce(e.message, true))));
-        }
-        const bytes = el('pre', 'uzi-candidate-value'); bytes.textContent = candidate.escapedBytes;
-        card.append(bytes, button('Copy escaped bytes', 'uzi-button uzi-button-secondary', () => copy(candidate.escapedBytes).catch(e => announce(e.message, true))));
-        candidates.append(card);
-      });
+    function renderGroupBody(group, body) {
+      if (!hasCurrentReport()) return;
+      if (group.candidate) {
+        const first = group.findings[0], last = group.findings[group.findings.length - 1];
+        body.append(el('p', '', group.candidate.codec === 'unicode-tags-ascii'
+          ? 'Unicode Tag characters mirror ASCII but are invisible. Many AI models still read them as text.'
+          : 'Variation selectors arranged like bytes. This is a possible payload, not a definitive attribution.'));
+        body.append(el('p', 'uzi-help', `Line ${first.line}, column ${first.column}${last !== first ? ` to line ${last.line}, column ${last.column}` : ''}. Checks passed: ${group.candidate.validation.join('; ')}.`));
+        const bytes = el('pre', 'uzi-context'); bytes.textContent = group.candidate.escapedBytes;
+        body.append(bytes);
+        return;
+      }
+      const reasons = Array.from(new Set(group.findings.map(f => f.reason)));
+      reasons.forEach(reason => body.append(el('p', '', reason)));
+      const removes = group.findings.filter(f => f.cleanupDefault === 'remove').length;
+      body.append(el('p', 'uzi-help', removes === group.findings.length ? 'Recommended cleanup removes these.' : removes ? `Recommended cleanup removes ${removes.toLocaleString()} of these.` : 'Recommended cleanup keeps these.'));
+      const list = el('ol', 'uzi-occurrences');
+      body.append(list);
+      let visible = 20;
+      const moreOccurrences = button('', 'uzi-button uzi-button-secondary uzi-more', () => { visible += 20; renderList(); });
+      body.append(moreOccurrences);
+      const renderList = () => {
+        if (!hasCurrentReport()) return;
+        list.textContent = '';
+        group.findings.slice(0, visible).forEach(f => {
+          const item = el('li');
+          item.append(el('span', 'uzi-occurrence-position', `Line ${f.line}, col ${f.column}`));
+          const context = el('code', 'uzi-context-inline'); context.textContent = scanner.contextFor(input.value, f, 16);
+          item.append(context);
+          if (f.assessment !== group.assessment) item.append(el('span', `uzi-assessment is-${f.assessment}`, assessmentLabel(f.assessment)));
+          list.append(item);
+        });
+        const remaining = group.findings.length - visible;
+        moreOccurrences.hidden = remaining <= 0;
+        moreOccurrences.textContent = `Show ${Math.min(20, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+      };
+      renderList();
     }
 
     function renderCleanupChecks() {
@@ -458,104 +586,87 @@
 
     function renderCleanup() {
       if (!hasCurrentReport()) return;
-      const descriptions = {
-        conservative: 'Recommended cleanup removes only malformed, deprecated, or ineffectual characters. Legitimate formatting, emoji, multilingual shaping, spaces, and bidi controls are preserved.',
-        security: 'Security-focused cleanup also removes bidi controls, suspicious payload-like characters, and confirmed StegZero carriers. Join controls and unusual spaces remain unless you add them below.',
-        custom: 'Custom cleanup changes only the character types you select below.',
-        aggressive: 'Aggressive cleanup removes every detected category and normalizes unusual spaces. It can change emoji, multilingual shaping, line breaking, collation, and mathematical meaning.'
-      };
-      cleanupDescription.textContent = descriptions[preset.value];
-      cleanupAdvancedSummary.textContent = preset.value === 'custom' ? 'Choose character types to remove' : 'Choose additional character types';
+      cleanupDescription.textContent = PRESET_DESCRIPTIONS[preset.value];
+      aggressiveWarning.hidden = preset.value !== 'aggressive';
+      cleanupAdvancedSummary.textContent = preset.value === 'custom' ? 'Choose character types' : 'Also remove other character types';
       if (preset.value === 'custom') cleanupAdvanced.open = true;
       const hasStegZero = !!(state.report.stegzero && state.report.stegzero.format && state.report.stegzero.status !== 'none');
       removeCarrierLabel.hidden = !hasStegZero;
       if (!hasStegZero) removeCarrier.checked = false;
       const result = cleaned();
-      cleanupHelp.textContent = 'Choose what StegZero should change. Your source text above is never modified.';
-      changeList.textContent = '';
-      changeSummary.dataset.empty = String(result.changes === 0);
       if (!result.changes) {
-        const levelName = preset.options[preset.selectedIndex].text.replace(/\s*\(.+\)$/, '');
-        cleanupMeta.textContent = `${levelName} cleanup would not change this text.`;
+        cleanupMeta.textContent = `${preset.options[preset.selectedIndex].text.replace(/\s*\(.+\)$/, '')} cleanup would not change this text.`;
       } else {
-        cleanupMeta.textContent = `This will make ${result.changes.toLocaleString()} change${result.changes === 1 ? '' : 's'} to a new copy.`;
+        const removed = new Map(), replaced = new Map();
         result.changeDetails.forEach(detail => {
-          const category = CATEGORY_LABELS[detail.category] || (detail.category === 'stegzero-carrier' ? 'StegZero carriers' : detail.category);
-          const count = detail.count.toLocaleString();
-          const item = el('li');
-          if (detail.action === 'replace') {
-            const replacement = detail.replacement === '\n' ? 'line feed' : detail.replacement === ' ' ? 'ordinary space' : 'replacement text';
-            item.textContent = `Replace ${count} × ${detail.token} with ${replacement} (${category}).`;
-          } else item.textContent = `Remove ${count} × ${detail.token} (${category}).`;
-          changeList.append(item);
+          const label = CATEGORY_LABELS[detail.category] || (detail.category === 'stegzero-carrier' ? 'StegZero carriers' : detail.category);
+          const target = detail.action === 'replace' ? replaced : removed;
+          target.set(label, (target.get(label) || 0) + detail.count);
         });
-        const changedFindingCount = new Set(result.changedFindingIds).size;
-        const preserved = Math.max(0, state.report.findings.length - changedFindingCount);
-        if (preserved) changeList.append(el('li', 'uzi-preserved', `Keep ${preserved.toLocaleString()} other finding${preserved === 1 ? '' : 's'} unchanged.`));
+        const describe = map => Array.from(map, ([label, count]) => `${label} (${count.toLocaleString()})`).join(', ');
+        const sentences = [];
+        if (removed.size) sentences.push(`Removes ${describe(removed)}.`);
+        if (replaced.size) sentences.push(`Replaces ${describe(replaced)} with ordinary spaces or line breaks.`);
+        const preserved = Math.max(0, state.report.findings.length - new Set(result.changedFindingIds).size);
+        if (preserved) sentences.push(`Keeps ${plural(preserved, 'other character')}.`);
+        cleanupMeta.textContent = sentences.join(' ');
       }
       renderCleanupPreview(result);
       copyClean.disabled = result.changes === 0;
       downloadClean.disabled = result.changes === 0;
-      const disabledTitle = result.changes === 0 ? 'The selected cleanup level makes no changes.' : '';
+      const disabledTitle = result.changes === 0 ? 'The selected cleanup makes no changes.' : '';
       copyClean.title = disabledTitle;
       downloadClean.title = disabledTitle;
     }
 
-    function replacementToken(value) {
-      if (value === ' ') return '[SPACE]';
-      if (value === '\n') return '[LF]';
-      return value;
-    }
+    function replacementLabel(value) { return value === '\n' ? '⏎' : value === ' ' ? '␠' : value; }
 
     function renderCleanupPreview(result) {
-      cleanupPreviewList.textContent = '';
       cleanupPreview.hidden = result.changes === 0;
-      if (!result.changes) return;
-      const detailsByFinding = new Map();
-      result.changeDetails.forEach(detail => detail.findingIds.forEach(id => detailsByFinding.set(id, detail)));
-      const affected = state.report.findings.filter(finding => detailsByFinding.has(finding.id)).slice(0, 5);
-      cleanupPreviewMeta.textContent = affected.length
-        ? `Showing ${affected.length.toLocaleString()} affected context${affected.length === 1 ? '' : 's'}${result.changes > affected.length ? ` from ${result.changes.toLocaleString()} total changes` : ''}. Escaped tokens make invisible characters readable.`
-        : 'StegZero carrier characters will be removed throughout the cleaned copy.';
-      affected.forEach(finding => {
-        const detail = detailsByFinding.get(finding.id);
-        const before = scanner.contextFor(input.value, finding, 12);
-        const replacement = detail.action === 'replace' ? `⟦${replacementToken(detail.replacement)}⟧` : '';
-        const highlighted = `⟦${finding.token}⟧`;
-        const after = before.includes(highlighted) ? before.replace(highlighted, replacement) : before.replace(finding.token, replacement);
-        const item = el('article', 'uzi-preview-change');
-        item.append(el('p', 'uzi-preview-label', `${finding.token} at position ${finding.codePointIndex}`));
-        const comparison = el('div', 'uzi-preview-comparison');
-        const beforeLine = el('div'); beforeLine.append(el('span', '', 'Before'), el('code', '', before));
-        const afterLine = el('div'); afterLine.append(el('span', '', 'After'), el('code', '', after));
-        comparison.append(beforeLine, afterLine);
-        item.append(comparison);
-        cleanupPreviewList.append(item);
+      if (!result.changes) { cleanupPreview.textContent = ''; return; }
+      const actions = new Map();
+      result.changeDetails.forEach(detail => detail.findingIds.forEach(id => actions.set(id, detail)));
+      const carriers = state.report.stegzero && state.report.stegzero.format ? STEGZERO_CARRIERS : null;
+      renderMarkedText(cleanupPreview, input.value, state.report, f => {
+        const detail = actions.get(f.id);
+        const carrier = !!(carriers && carriers.has(f.value));
+        if (!detail) return { key: 'kept' + carrier, kind: 'kept', carrier };
+        if (detail.action === 'replace') return { key: 'replaced' + detail.replacement, kind: 'replaced', replacement: replacementLabel(detail.replacement) };
+        return { key: 'removed' + carrier, kind: 'removed', carrier };
       });
     }
 
-    function confirmAggressive() {
-      return preset.value !== 'aggressive' || root.confirm('Aggressive cleanup can change emoji appearance, multilingual shaping, line breaking, collation, and mathematical meaning. Continue with the cleaned copy?');
-    }
-
     function applyCleanup(action) {
-      if (!hasCurrentReport() || !confirmAggressive()) return;
+      if (!hasCurrentReport()) return;
       const result = cleaned();
       if (!result.changes) return;
-      if (action === 'copy') copy(result.text).then(() => announce('Cleaned text copied; the source input was not changed.', false)).catch(e => announce(e.message, true));
+      if (action === 'copy') copy(result.text).then(() => { flashButton(copyClean, 'Copied ✓'); announce('Cleaned text copied; the source input was not changed.', false); }).catch(e => announce(e.message, true));
       else download((state.fileName ? state.fileName.replace(/(\.[^.]+)?$/, '.cleaned.txt') : 'stegzero-cleaned.txt'), result.text);
+    }
+
+    function renderTechnical() {
+      const report = state.report;
+      escaped.textContent = scanner.escapedView(input.value, report);
+      technicalSummary.textContent = '';
+      const add = (label, value) => { const item = el('div'); item.append(el('dt', '', label), el('dd', '', value)); technicalSummary.append(item); };
+      add('Code points', report.input.codePoints.toLocaleString());
+      add('UTF-16 units', report.input.utf16Units.toLocaleString());
+      add('Distinct hidden code points', report.summary.distinctCodePoints.toLocaleString());
+      add('StegZero format', FORMAT_LABELS[report.stegzero.format] || 'Not detected');
+      add('StegZero status', report.stegzero.status === 'none' ? 'None' : report.stegzero.status.replaceAll('-', ' '));
+      add('Unicode data', report.unicodeVersion);
     }
 
     function copyReport(format) {
       if (!hasCurrentReport()) return;
-      copy(scanner.formatReport(state.report, format)).then(() => announce('Report copied.', false)).catch(e => announce(e.message, true));
+      copy(scanner.formatReport(state.report, format)).then(() => { flashButton(copyTextReport, 'Copied ✓'); announce('Report copied.', false); }).catch(e => announce(e.message, true));
     }
     function downloadReport() {
       if (!hasCurrentReport()) return;
       download('stegzero-unicode-report.json', scanner.formatReport(state.report, 'json'), 'application/json');
     }
 
-    preset.addEventListener('change', renderCleanup);
+    preset.addEventListener('change', () => { state.presetChosen = true; renderCleanup(); });
     removeCarrier.addEventListener('change', renderCleanup);
     if (options.contextSelect) options.contextSelect.addEventListener('change', inspectNow);
     if (options.advancedToggle) options.advancedToggle.addEventListener('change', inspectNow);
@@ -580,10 +691,13 @@
       options.dropZone.addEventListener('dragover', event => { event.preventDefault(); options.dropZone.classList.add('is-dragging'); });
       options.dropZone.addEventListener('dragleave', () => options.dropZone.classList.remove('is-dragging'));
       options.dropZone.addEventListener('drop', event => {
-        event.preventDefault(); options.dropZone.classList.remove('is-dragging');
         const files = event.dataTransfer && event.dataTransfer.files;
-        if (files && files.length > 1) { announce('Choose one file at a time.', true); return; }
-        processFile(files && files[0], options.fileInput);
+        options.dropZone.classList.remove('is-dragging');
+        // Dropped text keeps the browser's default insertion; only files are intercepted.
+        if (!files || !files.length) return;
+        event.preventDefault();
+        if (files.length > 1) { announce('Choose one file at a time.', true); return; }
+        processFile(files[0], options.fileInput);
       });
     }
 
