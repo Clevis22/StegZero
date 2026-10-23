@@ -166,7 +166,7 @@
         <div class="callout">
           <p><strong>It does not emit Unicode Tag characters.</strong> The encoder only uses zero-width and invisible-operator characters (<code>U+200B</code>, <code>U+200C</code>, <code>U+200D</code>, <code>U+2060</code>, <code>U+2062</code>–<code>U+2064</code>, <code>U+FEFF</code>), never the ASCII-mirroring tag range behind ASCII smuggling.</p>
           <p><strong>Its payloads are not readable text.</strong> Every message is wrapped in a binary frame with a header and checksum, and the message bits are scrambled with a per-message seed before they are hidden. With a passphrase, the message is also encrypted with AES-256-GCM. Unlike the Sneaky Bits scheme, where each character is one bit of a plain ASCII letter, decoding StegZero's bits gives scrambled bytes, not plain-language instructions.</p>
-          <p><strong>It makes hidden text easier to find, not harder.</strong> The same project ships the Unicode detector and a cleaner, and the Reveal tab flags any StegZero frame automatically.</p>
+          <p><strong>It makes hidden text easier to find, not harder.</strong> The same project ships the Unicode detector and a cleaner, and the Reveal tab flags any StegZero frame it finds.</p>
           <p><strong>It is open source and local.</strong> The <a href="https://github.com/Clevis22/StegZero/">source code</a> is public, and encoding and decoding run in your browser, so anyone can check what it produces.</p>
         </div>
         <p>No text format can stop every misuse: someone could paste any text into a chatbot along with a request to decode it. That would be a visible instruction, though, and the kind of input the defenses above are built to catch.</p>

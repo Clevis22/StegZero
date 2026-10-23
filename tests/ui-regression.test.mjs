@@ -75,6 +75,7 @@ for (const page of ['index.html', 'invisible-character-detector/index.html']) {
     // A stale filter click must neither crash nor cancel the pending inspection.
     const categoryButton = host.querySelector('.uzi-filter');
     if (categoryButton) categoryButton.click();
+    if (home) window.handleDecode();
     await new Promise(resolve => window.setTimeout(resolve, 220));
     assert.match(host.querySelector('.uzi-verdict').textContent, /No hidden characters found/);
     assert.equal(copy.disabled, true);
@@ -259,16 +260,18 @@ test('Reveal reports checking before a protected result and never announces unve
   edit('passphraseInput', 'correct passphrase');
   await window.handleEncode();
   document.getElementById('encodeRevealBtn').click();
-  assert.equal(document.getElementById('revealResultHeading').textContent, 'Checking message…');
-  assert.equal(document.getElementById('revealResultCard').getAttribute('aria-busy'), 'true');
-  assert.equal(document.getElementById('revealCopyBtn').disabled, true);
-  assert.equal(document.getElementById('toast').textContent, '');
-  await new Promise(resolve => window.setTimeout(resolve, 220));
+  await new Promise(resolve => window.setTimeout(resolve, 0));
   assert.equal(document.getElementById('revealResultHeading').textContent, 'Passphrase required');
   assert.equal(document.getElementById('revealResultCard').getAttribute('aria-busy'), 'false');
+  assert.equal(document.getElementById('revealCopyBtn').disabled, true);
+  assert.equal(document.getElementById('toast').textContent, '');
   document.getElementById('decodePassToggle').click();
   edit('decodePassInput', 'incorrect');
-  await window.handleDecode(true);
+  assert.equal(document.getElementById('revealResultHeading').textContent, 'Passphrase required', 'Typing a passphrase does not reveal on its own');
+  const pending = window.handleDecode(true);
+  assert.equal(document.getElementById('revealResultHeading').textContent, 'Checking message…');
+  assert.equal(document.getElementById('revealResultCard').getAttribute('aria-busy'), 'true');
+  await pending;
   assert.equal(document.getElementById('revealResultHeading').textContent, 'Passphrase not verified');
   edit('decodePassInput', 'correct passphrase');
   await window.handleDecode(true);
@@ -280,7 +283,9 @@ test('Reveal reports checking before a protected result and never announces unve
   edit('encodedText', 'New ordinary text');
   assert.equal(document.getElementById('revealCopyBtn').disabled, true);
   assert.equal(document.getElementById('revealExportBtn').disabled, true);
-  assert.equal(document.getElementById('decodedResult').textContent, 'Checking the current text…');
+  assert.equal(document.getElementById('decodedResult').textContent, 'Press Reveal message to check this text.');
+  await new Promise(resolve => window.setTimeout(resolve, 220));
+  assert.equal(document.getElementById('decodedResult').textContent, 'Press Reveal message to check this text.', 'Editing does not reveal on its own');
   window.clearDecode();
   await new Promise(resolve => window.setTimeout(resolve, 220));
   assert.equal(document.getElementById('decodedResult').textContent, 'Paste text above to begin.');

@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zero-Width Steganography Decoder &amp; Encoder Online — Reveal Hidden Text | StegZero</title>
-  <meta name="description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
+  <meta name="description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and inspector. 100% in your browser, nothing sent to any server.">
   <meta name="keywords" content="zero width steganography, zero-width characters, Unicode steganography, invisible text, hidden message encoder, ZWSP ZWNJ ZWJ steganography, text steganography online, steganography tool, zero width space encoder, invisible unicode">
   <link rel="canonical" href="https://stegzero.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://stegzero.com/">
   <meta property="og:title" content="Zero-Width Steganography Decoder &amp; Encoder Online — Reveal Hidden Text | StegZero">
-  <meta property="og:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
+  <meta property="og:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and inspector. 100% in your browser, nothing sent to any server.">
   <meta property="og:image" content="https://stegzero.com/preview-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Zero-Width Steganography Decoder &amp; Encoder Online | StegZero">
-  <meta name="twitter:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and automatic inspector. 100% in your browser, nothing sent to any server.">
+  <meta name="twitter:description" content="Instantly hide and reveal zero-width steganography messages in ordinary text. Free encoder and inspector. 100% in your browser, nothing sent to any server.">
   <meta name="twitter:image" content="https://stegzero.com/preview-image.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -170,7 +170,7 @@
         <button class="btn btn-ghost" id="encodeCopyBtn" onclick="copyResult('encodedResult')" disabled>Copy encoded text</button>
         <button class="btn btn-ghost" onclick="shareResult()" id="shareBtn" style="display:none">Share</button>
         <button class="btn btn-ghost" id="encodeExportBtn" onclick="exportTxt('encodedResult','stegzero_encoded.txt')" disabled>Export .txt</button>
-        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Check this text in Reveal message" disabled>Test message</button>
+        <button class="pipe-btn" id="encodeRevealBtn" onclick="pipeToDecoder()" title="Paste this encoded text into the Reveal tab to check it decodes" disabled>Open in decoder</button>
       </div>
     </section>
     <details class="technical-preview preview-section" id="encodePreviewSection" style="display:none">
@@ -187,15 +187,14 @@
   <div class="panel" id="panel-decode" role="tabpanel" aria-labelledby="tab-decode">
 
     <div class="decode-empty-state" id="decodeEmptyState">
-      <p><strong>Paste text below and StegZero will inspect it automatically.</strong><br>If it contains a hidden message, it will appear right away.</p>
+      <p><strong>Paste text below, then press Reveal message.</strong><br>StegZero checks it for hidden messages and invisible characters.</p>
       <div class="example-btns">
         <button class="example-btn" onclick="loadDecodeExample('tweet')">Try a hidden message</button>
-        <button class="example-btn" onclick="loadDecodeExample('binary')">Try compatibility mode</button>
       </div>
     </div>
     <div class="field">
       <label for="encodedText">Text to inspect</label>
-      <textarea id="encodedText" rows="4" placeholder="Paste text here. We’ll check it automatically…" oninput="onDecodeInput()"></textarea>
+      <textarea id="encodedText" rows="4" placeholder="Paste text here, then press Reveal message…" oninput="onDecodeInput()"></textarea>
       <div class="field-hint">Hidden characters are invisible, so suspicious text may look completely normal.</div>
     </div>
     <details class="advanced-options reveal-options">
@@ -230,7 +229,7 @@
       </label>
       <div class="passphrase-field" id="decodePassField">
         <label class="sr-only" for="decodePassInput">Reveal passphrase</label>
-        <input type="password" id="decodePassInput" placeholder="Enter the passphrase…" autocomplete="off" aria-describedby="decodePassHint" style="margin-top:0.5rem" oninput="handleDecode(true)">
+        <input type="password" id="decodePassInput" placeholder="Enter the passphrase…" autocomplete="off" aria-describedby="decodePassHint" style="margin-top:0.5rem" onkeydown="if(event.key==='Enter'){event.preventDefault();handleDecode();}">
         <div class="field-hint" id="decodePassHint">Current passphrase-protected messages verify the passphrase before showing a result. Older messages may not support verification.</div>
       </div>
     </div>
@@ -411,7 +410,7 @@
     <div class="info-card">
       <h3>How do I decode a steganography message?</h3>
       <ul>
-        <li>Paste the text into the Reveal tab above. StegZero automatically inspects it and extracts hidden messages in Standard, Compatibility, and legacy formats.</li>
+        <li>Paste the text into the Reveal tab above and press Reveal message. StegZero inspects it and extracts hidden messages in Standard, Compatibility, and legacy formats.</li>
       </ul>
     </div>
     <div class="info-card">
@@ -445,7 +444,7 @@
   <ul>
     <li><strong>Step 1:</strong> Copy the text you suspect contains a hidden message — it will look completely normal</li>
     <li><strong>Step 2:</strong> Open the Reveal tab above and paste the text into the input field</li>
-    <li><strong>Step 3:</strong> StegZero automatically inspects the text and reveals Standard, Compatibility, and legacy messages</li>
+    <li><strong>Step 3:</strong> Press Reveal message. StegZero inspects the text and reveals Standard, Compatibility, and legacy messages</li>
     <li><strong>Step 4:</strong> If the message was encoded with a passphrase, toggle the passphrase option and enter it before decoding</li>
     <li>Open Unicode inspection details to see which invisible characters and message format were found</li>
   </ul>
@@ -484,7 +483,6 @@
 // INSPECTOR LOADING
 // ════════════════════════════════════════
 let revealInspector = null;
-let decodeScanTimer = null;
 let decodeScanGeneration = 0;
 let unicodeInspectorLoadPromise = null;
 
@@ -523,8 +521,8 @@ function mountRevealInspector() {
     announceInspection: false,
     onInputLoaded: () => onDecodeInput()
   });
-  document.getElementById('revealUnicodeContext').addEventListener('change', () => handleDecode(true));
-  document.getElementById('revealUnicodeAdvanced').addEventListener('change', () => handleDecode(true));
+  document.getElementById('revealUnicodeContext').addEventListener('change', () => onDecodeInput());
+  document.getElementById('revealUnicodeAdvanced').addEventListener('change', () => onDecodeInput());
 }
 
 function ensureUnicodeInspector() {
@@ -739,8 +737,7 @@ const EXAMPLES = {
   decode: {
     tweet: { cover: "Just shipped a new feature. Loving how this project is coming together 🚀", hidden: "stegzero was here" },
     email: { cover: "Thanks for getting back to me — I'll circle back once I've had a chance to review.", hidden: "watermark:v1:doc42" },
-    watermark: { cover: "This document is confidential and intended solely for the named recipient.", hidden: "leak-check:user:7841" },
-    binary: { cover: "This message uses Compatibility mode with a smaller carrier alphabet.", hidden: "compatibility mode!" }
+    watermark: { cover: "This document is confidential and intended solely for the named recipient.", hidden: "leak-check:user:7841" }
   },
   cover: {
     tweet: "Just shipped a new feature. Loving how this project is coming together 🚀",
@@ -752,7 +749,6 @@ const EXAMPLES = {
 
 function getEncodedExample(key) {
   const ex = EXAMPLES.decode[key];
-  if (key === 'binary') return encodeMsgBinary(ex.cover, ex.hidden, null);
   return encodeMsg(ex.cover, ex.hidden, null);
 }
 
@@ -863,6 +859,7 @@ function loadDecodeExample(key) {
   document.getElementById('encodedText').value = encoded;
   document.getElementById('decodeEmptyState').style.display = 'none';
   onDecodeInput();
+  handleDecode(true);
 }
 
 function rejectOversizedDecodeInput(text) {
@@ -870,7 +867,6 @@ function rejectOversizedDecodeInput(text) {
   for (const _ of text) {
     codePoints++;
     if (codePoints > StegZeroUnicode.MAX_CODE_POINTS) {
-      clearTimeout(decodeScanTimer);
       decodeScanGeneration++;
       document.getElementById('decodedResult').textContent = 'Input exceeds 500,000 Unicode code points. Shorten the text before inspecting it.';
       document.getElementById('decodedResult').className = 'result-box empty';
@@ -901,7 +897,6 @@ function showDecodeLoadError(error) {
 
 function onDecodeInput() {
   const val = document.getElementById('encodedText').value;
-  clearTimeout(decodeScanTimer);
   const generation = ++decodeScanGeneration;
   if (revealInspector) revealInspector.invalidate();
   document.getElementById('revealCopyBtn').disabled = true;
@@ -926,23 +921,26 @@ function onDecodeInput() {
     return;
   }
   document.getElementById('decodeEmptyState').style.display = 'none';
+  document.getElementById('revealResultCard').setAttribute('aria-busy', 'false');
+  document.getElementById('decodedResult').textContent = 'Press Reveal message to check this text.';
+  document.getElementById('decodedResult').className = 'result-box empty';
+  document.getElementById('decodedMeta').textContent = '';
+  document.getElementById('revealResultHeading').textContent = 'Reveal result';
+  document.getElementById('revealResultCard').className = 'result-card reveal-result-card';
+  document.getElementById('decodeStatus').textContent = '';
+  document.getElementById('decodeStatus').className = 'status-line';
+  // Warm the inspector so the first Reveal click is fast.
+  ensureUnicodeInspector().catch(() => {});
+}
+
+function showDecodeChecking() {
+  document.getElementById('revealResultCard').setAttribute('aria-busy', 'true');
   document.getElementById('decodedResult').textContent = 'Checking the current text…';
   document.getElementById('decodedResult').className = 'result-box empty';
   document.getElementById('decodedMeta').textContent = '';
   document.getElementById('revealResultHeading').textContent = 'Checking message…';
   document.getElementById('revealResultCard').className = 'result-card reveal-result-card';
   setStatus('decodeStatus', '', 'Checking message…');
-  if (!window.StegZeroUnicode || !revealInspector) {
-    ensureUnicodeInspector()
-      .then(() => { if (generation === decodeScanGeneration) onDecodeInput(); })
-      .catch(() => { if (generation === decodeScanGeneration) showDecodeLoadError(); });
-    return;
-  }
-  if (rejectOversizedDecodeInput(val)) return;
-  decodeScanTimer = setTimeout(() => {
-    if (generation !== decodeScanGeneration || document.getElementById('encodedText').value !== val) return;
-    handleDecode(true);
-  }, 180);
 }
 
 // ════════════════════════════════════════
@@ -1094,9 +1092,9 @@ function showRevealInspector(report) {
 }
 
 async function handleDecode(silent = false, inspection = null) {
-  clearTimeout(decodeScanTimer);
   const generation = ++decodeScanGeneration;
   const text = document.getElementById('encodedText').value || '';
+  if (text) showDecodeChecking();
   if (!window.StegZeroUnicode) {
     ensureUnicodeInspector()
       .then(() => { if (generation === decodeScanGeneration) handleDecode(silent, inspection); })
@@ -1297,6 +1295,7 @@ function pipeToDecoder() {
   document.getElementById('decodeEmptyState').style.display = 'none';
   switchTab('decode');
   onDecodeInput();
+  handleDecode(true);
   document.getElementById('encodedText').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
@@ -1309,7 +1308,7 @@ function pasteClipboard(id){if(!navigator.clipboard?.readText){showToast('Paste 
 function exportTxt(id,filename){const text=document.getElementById(id).textContent;if(!text||text.includes('will appear here')){showToast('Nothing to export','warn');return;}const blob=new Blob([text],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();showToast('Exported!');}
 async function shareResult(){const text=document.getElementById('encodedResult').textContent;if(!text||text.includes('will appear'))return;try{await navigator.share({text});showToast('Shared!');}catch{}}
 function togglePassphrase(){const on=document.getElementById('passphraseToggle').checked;const input=document.getElementById('passphraseInput');document.getElementById('passphraseField').classList.toggle('visible',on);input.required=on;if(!on){input.value='';input.removeAttribute('aria-invalid');}invalidateEncodeResult();}
-function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);if(!on)document.getElementById('decodePassInput').value='';if(document.getElementById('encodedText').value)handleDecode(true);}
+function toggleDecodePass(){const on=document.getElementById('decodePassToggle').checked;document.getElementById('decodePassField').classList.toggle('visible',on);if(!on)document.getElementById('decodePassInput').value='';}
 function setStatus(id,cls,msg){const el=document.getElementById(id);el.textContent=msg;el.className='status-line'+(cls?' '+cls:'');}
 function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast-${type}`;t.style.display='block';clearTimeout(t._timeout);t._timeout=setTimeout(()=>{t.style.display='none';},3000);}
 
